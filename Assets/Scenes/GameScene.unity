@@ -199,6 +199,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room1
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomG1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1461618268184966466}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1627867848}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -213,6 +229,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 8466616}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8466618 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 8466616}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,6 +580,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room2
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomF2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1859900775}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1533215852}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5606637903266836617}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -567,6 +614,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 480381486}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &480381488 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 480381486}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1001 &505459778
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -652,9 +710,25 @@ PrefabInstance:
       value: Room4
       objectReference: {fileID: 0}
     - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomF4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1859900775}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 5606637903266836617}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -669,6 +743,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 505459778}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &505459780 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 505459778}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,6 +1064,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room3
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomF3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 480381488}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1857263370}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -993,6 +1094,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 1533215850}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1533215852 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 1533215850}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1001 &1627867846
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1078,9 +1190,25 @@ PrefabInstance:
       value: Room4
       objectReference: {fileID: 0}
     - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomG4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8466618}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 5606637903266836617}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1095,6 +1223,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 1627867846}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1627867848 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 1627867846}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1001 &1742063128
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1171,6 +1310,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room3
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomG3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1461618268184966466}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1975713370}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1185,6 +1340,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 1742063128}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1742063130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 1742063128}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1 &1834823125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,9 +1468,25 @@ PrefabInstance:
       value: Room5
       objectReference: {fileID: 0}
     - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomF5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1533215852}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 5606637903266836617}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1319,6 +1501,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 1857263368}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1857263370 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 1857263368}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1001 &1859900773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1399,6 +1592,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room1
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomF1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 480381488}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 505459780}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1413,6 +1622,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 1859900773}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1859900775 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 1859900773}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1001 &1975713368
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1498,9 +1718,25 @@ PrefabInstance:
       value: Room5
       objectReference: {fileID: 0}
     - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomG5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1742063130}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 5606637903266836617}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1515,6 +1751,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
   m_PrefabInstance: {fileID: 1975713368}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1975713370 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 1975713368}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!1001 &1461618268184966465
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1591,6 +1838,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room2
       objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: roomId
+      value: RoomG2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8466618}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1742063130}
+    - target: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+      propertyPath: 'connectedRooms.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5606637903266836617}
     - target: {fileID: 7956166069324380225, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1600,6 +1867,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+--- !u!114 &1461618268184966466 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7580813215717978698, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
+  m_PrefabInstance: {fileID: 1461618268184966465}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
 --- !u!4 &4334395453417562964 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3992107722363499394, guid: cb7c0fa9fdae5474aa7cc58b5b5ea406, type: 3}
@@ -1613,6 +1891,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 456658784261498064, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+      propertyPath: connectedRooms.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 456658784261498064, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+      propertyPath: 'connectedRooms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1461618268184966466}
+    - target: {fileID: 456658784261498064, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+      propertyPath: 'connectedRooms.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1627867848}
+    - target: {fileID: 456658784261498064, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+      propertyPath: 'connectedRooms.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1975713370}
+    - target: {fileID: 456658784261498064, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+      propertyPath: 'connectedRooms.Array.data[3]'
+      value: 
+      objectReference: {fileID: 480381488}
+    - target: {fileID: 456658784261498064, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+      propertyPath: 'connectedRooms.Array.data[4]'
+      value: 
+      objectReference: {fileID: 505459780}
+    - target: {fileID: 456658784261498064, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+      propertyPath: 'connectedRooms.Array.data[5]'
+      value: 
+      objectReference: {fileID: 1857263370}
     - target: {fileID: 4739298788254898853, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
       propertyPath: m_Name
       value: Stairs
@@ -1660,8 +1966,51 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7591078622790555701, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6164188715397753962}
   m_SourcePrefab: {fileID: 100100000, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+--- !u!114 &5606637903266836617 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 456658784261498064, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+  m_PrefabInstance: {fileID: 5606637903266836616}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
+--- !u!1 &6164188715397753961 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7591078622790555701, guid: 01d487be1b2b10c42bc0e464b7c91c58, type: 3}
+  m_PrefabInstance: {fileID: 5606637903266836616}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6164188715397753962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6164188715397753961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Room
+  northWall: {fileID: 0}
+  northDoor: {fileID: 0}
+  southWall: {fileID: 0}
+  southDoor: {fileID: 0}
+  eastWall: {fileID: 0}
+  eastDoor: {fileID: 0}
+  westWall: {fileID: 0}
+  westDoor: {fileID: 0}
+  roomId: Stairs
+  playerSpawnPoint: {fileID: 0}
+  monsterPoint: {fileID: 0}
+  connectedRooms: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

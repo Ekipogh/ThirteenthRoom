@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Room : MonoBehaviour
@@ -10,4 +11,9 @@ public class Room : MonoBehaviour
     public GameObject eastDoor;
     public GameObject westWall;
     public GameObject westDoor;
+
+    public string roomId;
+    public Transform playerSpawnPoint;
+    public Transform monsterPoint;
+    public List<Room> connectedRooms = new();
 }

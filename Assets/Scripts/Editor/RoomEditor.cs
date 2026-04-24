@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using Codice.Client.BaseCommands.WkStatus.Printers;
 
 [CustomEditor(typeof(Room))]
 public class RoomEditor : Editor
@@ -21,6 +22,8 @@ public class RoomEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
+
+        GUILayout.Space(10);
 
         if (GUILayout.Button("Toggle North"))
         {
