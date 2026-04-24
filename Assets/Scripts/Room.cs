@@ -3,17 +3,22 @@ using UnityEngine;
 
 public class Room : MonoBehaviour
 {
-    public GameObject northWall;
-    public GameObject northDoor;
-    public GameObject southWall;
-    public GameObject southDoor;
-    public GameObject eastWall;
-    public GameObject eastDoor;
-    public GameObject westWall;
-    public GameObject westDoor;
+    public GameObject NorthWall;
+    public GameObject NorthDoor;
+    public GameObject SouthWall;
+    public GameObject SouthDoor;
+    public GameObject EastWall;
+    public GameObject EastDoor;
+    public GameObject WestWall;
+    public GameObject WestDoor;
 
-    public string roomId;
-    public Transform playerSpawnPoint;
-    public Transform monsterPoint;
-    public List<Room> connectedRooms = new();
+    public string RoomId;
+    public Transform PlayerSpawnPoint;
+    public Transform MonsterPoint;
+    public List<Room> ConnectedRooms = new();
+
+    public override string ToString()
+    {
+        return $"Room {RoomId}";
+    }
 }

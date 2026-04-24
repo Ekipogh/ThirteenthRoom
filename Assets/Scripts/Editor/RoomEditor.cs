@@ -25,34 +25,34 @@ public class RoomEditor : Editor
 
         GUILayout.Space(10);
 
-        if (room.northWall != null && room.northDoor != null)
+        if (room.NorthWall != null && room.NorthDoor != null)
         {
             if (GUILayout.Button("Toggle North"))
             {
-                ToggleWall(room.northWall, room.northDoor);
+                ToggleWall(room.NorthWall, room.NorthDoor);
             }
         }
-        if (room.southWall != null && room.southDoor != null)
+        if (room.SouthWall != null && room.SouthDoor != null)
         {
             if (GUILayout.Button("Toggle South"))
             {
-                ToggleWall(room.southWall, room.southDoor);
+                ToggleWall(room.SouthWall, room.SouthDoor);
             }
         }
-        if (room.eastWall != null && room.eastDoor != null)
+        if (room.EastWall != null && room.EastDoor != null)
         {
             if (GUILayout.Button("Toggle East"))
             {
                 {
-                    ToggleWall(room.eastWall, room.eastDoor);
+                    ToggleWall(room.EastWall, room.EastDoor);
                 }
             }
         }
-        if (room.westWall != null && room.westDoor != null)
+        if (room.WestWall != null && room.WestDoor != null)
         {
             if (GUILayout.Button("Toggle West"))
             {
-                ToggleWall(room.westWall, room.westDoor);
+                ToggleWall(room.WestWall, room.WestDoor);
             }
         }
     }
