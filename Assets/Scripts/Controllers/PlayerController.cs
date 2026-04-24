@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     public InputActionAsset InputActions;
@@ -13,21 +14,36 @@ public class PlayerController : MonoBehaviour
     float _moveSpeed = 5f;
     float _lookSpeed = 0.150f;
 
+    bool _isSprinting = false;
+    float _sprintMultiplier = 2f;
+
     float _maxPitch = 50f;
     float _pitch;
 
     public bool IsHeadBobEnabled = true;
 
-    float headHeight;
-    float headBobFrequency = 10f;
-    float headBobAmplitude = 0.01f;
+    float _headHeight;
+    float _headBobFrequency = 10f;
+    float _headBobAmplitude = 0.005f;
+
+    // Stats
+    float _stamina = _maxStamina;
+
+    public float Stamina => _stamina;
+    const float _maxStamina = 100f;
+
+    const float _staminaRegenRate = 5f;
+
+    CharacterController _characterController;
+
+    Vector3 _velocity;
 
     void Start()
     {
         _pitch = NormalizePitch(GetPitchTransform().localEulerAngles.x);
         Cursor.lockState = CursorLockMode.Locked;
 
-        headHeight = GetPitchTransform().localPosition.y;
+        _headHeight = GetPitchTransform().localPosition.y;
 
         if (InputActions == null)
         {
@@ -40,6 +56,10 @@ public class PlayerController : MonoBehaviour
             map.Disable();
         }
         InputActions.FindActionMap("Player").Enable();
+
+        _characterController = GetComponent<CharacterController>();
+
+        _velocity = Vector3.zero;
     }
 
     void Update()
@@ -50,12 +70,30 @@ public class PlayerController : MonoBehaviour
 
     private void ProcessMovement()
     {
-        Vector3 move = new(_moveInput.x, 0, _moveInput.y);
-        transform.Translate(_moveSpeed * Time.deltaTime * move);
+        _stamina = _isSprinting
+            ? Mathf.Max(0, _stamina - Time.deltaTime * 10f)
+            : Mathf.Min(_maxStamina, _stamina + Time.deltaTime * _staminaRegenRate);
+
+        if (_stamina <= 0) _isSprinting = false;
+
+        float speed = _isSprinting ? _moveSpeed * _sprintMultiplier : _moveSpeed;
+
+        // Build movement in world space (transform.right/forward respects yaw rotation)
+        Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
+
+        // Apply gravity
+        if (_characterController.isGrounded)
+            _velocity.y = -2f; // small downward force to keep grounded
+        else
+            _velocity.y += Physics.gravity.y * Time.deltaTime;
+
+        Vector3 delta = (move * speed + _velocity) * Time.deltaTime;
+        _characterController.Move(delta);
     }
 
     void ProcessLook(InputValue value)
     {
+        if (Cursor.lockState != CursorLockMode.Locked) return;
         Vector2 input = value.Get<Vector2>();
         float mouseX = input.x * _lookSpeed;
         float mouseY = input.y * _lookSpeed;
@@ -75,11 +113,11 @@ public class PlayerController : MonoBehaviour
         float bobAmount = 0f;
         if (_moveInput.magnitude > 0.1f)
         {
-            bobAmount = Mathf.Sin(Time.time * headBobFrequency) * headBobAmplitude;
+            bobAmount = Mathf.Sin(Time.time * _headBobFrequency) * _headBobAmplitude;
         }
         else
         {
-            headJointPosition.y = Mathf.Lerp(headJointPosition.y, headHeight, Time.deltaTime * headBobFrequency);
+            headJointPosition.y = Mathf.Lerp(headJointPosition.y, _headHeight, Time.deltaTime * _headBobFrequency);
         }
         headJointPosition.y += bobAmount;
         GetPitchTransform().localPosition = headJointPosition;
@@ -94,6 +132,11 @@ public class PlayerController : MonoBehaviour
     void OnLook(InputValue value)
     {
         ProcessLook(value);
+    }
+
+    void OnSprint(InputValue value)
+    {
+        _isSprinting = value.isPressed;
     }
 
     Transform GetPitchTransform()
