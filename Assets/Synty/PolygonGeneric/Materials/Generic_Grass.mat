@@ -66,7 +66,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Normal_Map:
         m_Texture: {fileID: 2800000, guid: 61ec974f61e6f8b4594aa2e3fb46704c, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 50, y: 50}
         m_Offset: {x: 0, y: 0}
     - _Skin_Mask:
         m_Texture: {fileID: 0}
