@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Door : MonoBehaviour, IInteractable
+public class DoorInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField] float openingTime = 1f;
     const float OpenAngle = 90f;
@@ -13,7 +13,7 @@ public class Door : MonoBehaviour, IInteractable
 
     public string GetInteractionPrompt()
     {
-        return IsOpen() ? "Press E to close the door." : "Press E to open the door.";
+        return IsOpen() ? "close the door" : "open the door";
     }
 
     public void Interact(PlayerInteractor playerInteractor)

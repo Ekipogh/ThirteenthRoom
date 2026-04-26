@@ -34,17 +34,29 @@ public class PlayerInteractor : MonoBehaviour
     void CheckForInteractables()
     {
         Ray ray = new(headTransform.position, headTransform.forward);
+        Debug.DrawRay(ray.origin, ray.direction * interactionRange, Color.green);
         if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactableLayerMask))
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
                 _currentTarget = interactable;
-                interactionPrompt.text = interactable.GetInteractionPrompt();
+                interactionPrompt.text = FormatInteractionPrompt(interactable.GetInteractionPrompt());
                 interactionPrompt.gameObject.SetActive(true);
                 return;
             }
         }
         _currentTarget = null;
         interactionPrompt.gameObject.SetActive(false);
+    }
+
+    static string FormatInteractionPrompt(string interactionAction)
+    {
+        if (string.IsNullOrWhiteSpace(interactionAction))
+        {
+            return "Press E to interact.";
+        }
+
+        string normalizedAction = interactionAction.Trim().TrimEnd('.');
+        return $"Press E to {normalizedAction}.";
     }
 }
