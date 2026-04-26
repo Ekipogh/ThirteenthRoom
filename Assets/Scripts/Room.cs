@@ -16,9 +16,4 @@ public class Room : MonoBehaviour
     public Transform PlayerSpawnPoint;
     public Transform MonsterPoint;
     public List<Room> ConnectedRooms = new();
-
-    public override string ToString()
-    {
-        return $"Room {RoomId}";
-    }
 }

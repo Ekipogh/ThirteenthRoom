@@ -271,6 +271,7 @@ GameObject:
   - component: {fileID: 1272935303200780609}
   - component: {fileID: 7623902882703288952}
   - component: {fileID: 1260587270278275602}
+  - component: {fileID: 5248298109816725722}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -366,3 +367,21 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5248298109816725722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981012657986814069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 899d6179677f130428b3184f704843ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
+  interactionRange: 3
+  interactableLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  headTransform: {fileID: 6587007256068389955}
+  interactionPrompt: {fileID: 0}

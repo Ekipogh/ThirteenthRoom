@@ -4,9 +4,11 @@ using UnityEngine.InputSystem;
 public class PlayerInteractor : MonoBehaviour
 {
     [SerializeField] float interactionRange = 3f;
-    [SerializeField] LayerMask interactableLayerMask;
+    [SerializeField] LayerMask interactableLayerMask = ~0; // Default to everything
     [SerializeField] Transform headTransform;
     IInteractable _currentTarget;
+
+    [SerializeField] TMPro.TextMeshProUGUI interactionPrompt;
 
     void Awake()
     {
@@ -37,11 +39,12 @@ public class PlayerInteractor : MonoBehaviour
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
                 _currentTarget = interactable;
-                // Optionally show interaction prompt here using _currentTarget.GetInteractionPrompt()
+                interactionPrompt.text = interactable.GetInteractionPrompt();
+                interactionPrompt.gameObject.SetActive(true);
                 return;
             }
         }
         _currentTarget = null;
-        // Optionally hide interaction prompt here
+        interactionPrompt.gameObject.SetActive(false);
     }
 }
