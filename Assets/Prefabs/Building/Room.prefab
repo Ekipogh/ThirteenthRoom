@@ -206,18 +206,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  northWall: {fileID: 6189682866776874225}
-  northDoor: {fileID: 4060941253084034011}
-  southWall: {fileID: 7956166069324380225}
-  southDoor: {fileID: 2658628008111250415}
-  eastWall: {fileID: 3299577679377661960}
-  eastDoor: {fileID: 3384196183014507598}
-  westWall: {fileID: 5403586741686232128}
-  westDoor: {fileID: 5624344424287787222}
-  roomId: 
-  playerSpawnPoint: {fileID: 9051464101368929473}
-  monsterPoint: {fileID: 3011036701003858712}
-  connectedRooms: []
+  NorthWall: {fileID: 6189682866776874225}
+  NorthDoor: {fileID: 4060941253084034011}
+  SouthWall: {fileID: 7956166069324380225}
+  SouthDoor: {fileID: 2658628008111250415}
+  EastWall: {fileID: 3299577679377661960}
+  EastDoor: {fileID: 3384196183014507598}
+  WestWall: {fileID: 5403586741686232128}
+  WestDoor: {fileID: 5624344424287787222}
+  RoomId: 
+  PlayerSpawnPoint: {fileID: 9051464101368929473}
+  MonsterPoint: {fileID: 3011036701003858712}
+  ConnectedRooms: []
 --- !u!1001 &964347375736042880
 PrefabInstance:
   m_ObjectHideFlags: 0
