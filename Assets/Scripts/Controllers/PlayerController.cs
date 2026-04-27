@@ -151,10 +151,6 @@ public class PlayerController : MonoBehaviour
     {
         bool isSprinting = _isSprinting && IsMoving() && _stamina > 0f;
 
-        // _stamina = isSprinting
-        //     ? Mathf.Max(0, _stamina - Time.deltaTime * _staminaDrainRate)
-        //     : Mathf.Min(_maxStamina, _stamina + Time.deltaTime * _staminaRegenRate);
-
         // Drain stamin if sprinting
         // Regen stamina if not sprinting, but only after a delay
         if (isSprinting)
