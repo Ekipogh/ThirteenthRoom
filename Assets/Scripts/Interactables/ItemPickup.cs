@@ -3,6 +3,8 @@ using UnityEngine;
 class ItemPickup : MonoBehaviour, IInteractable
 {
     [SerializeField] string itemName;
+    [SerializeField] float scoreReward = 5f;
+    [SerializeField] ScoreManger scoreManager;
 
     public string GetInteractionPrompt()
     {
@@ -11,7 +13,7 @@ class ItemPickup : MonoBehaviour, IInteractable
 
     public void Interact(PlayerInteractor playerInteractor)
     {
-        Debug.Log($"Picked up {itemName}!");
+        scoreManager.AddScore(scoreReward);
         Destroy(gameObject);
     }
 }

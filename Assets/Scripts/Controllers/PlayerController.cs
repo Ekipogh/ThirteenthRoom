@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] Room StartingRoom;
+    [SerializeField] RoomTracker RoomTracker;
+
     public InputActionAsset InputActions;
 
     public Transform HeadJoint;
@@ -17,7 +20,7 @@ public class PlayerController : MonoBehaviour
     bool _isSprinting = false;
     float _sprintMultiplier = 2f;
 
-    float _maxPitch = 50f;
+    float _maxPitch = 70f;
     float _pitch;
 
     public bool IsHeadBobEnabled = true;
@@ -38,8 +41,35 @@ public class PlayerController : MonoBehaviour
 
     Vector3 _velocity;
 
+    void InitializeStartingRoom()
+    {
+        if (StartingRoom == null)
+        {
+            Debug.LogWarning("PlayerController: StartingRoom is not assigned.");
+            return;
+        }
+        if (RoomTracker == null)
+        {
+            Debug.LogWarning("PlayerController: RoomTracker is not assigned.");
+            return;
+        }
+
+        RoomTracker.Initialize(StartingRoom);
+
+        if (StartingRoom.PlayerSpawnPoint != null)
+        {
+            transform.position = StartingRoom.PlayerSpawnPoint.position;
+            transform.rotation = StartingRoom.PlayerSpawnPoint.rotation;
+        }
+        else
+        {
+            Debug.LogWarning($"PlayerController: StartingRoom '{StartingRoom.name}' has no PlayerSpawnPoint assigned.");
+        }
+    }
+
     void Start()
     {
+        InitializeStartingRoom();
         _pitch = NormalizePitch(GetPitchTransform().localEulerAngles.x);
         Cursor.lockState = CursorLockMode.Locked;
 
