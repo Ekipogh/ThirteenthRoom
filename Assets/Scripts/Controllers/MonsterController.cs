@@ -6,11 +6,16 @@ public class MonsterController : MonoBehaviour
     [SerializeField] RoomTracker RoomTracker;
     [SerializeField] float moveInterval = 5f;
 
+    [SerializeField] GameManager GameManager;
+
+    GameState _currentGameState;
+
     Room _currentRoom;
 
     void Start()
     {
         _currentRoom = StartingRoom;
+        _currentGameState = GameManager != null ? GameManager.currentState : GameState.Playing;
         MoveVisualToRoom();
         StartCoroutine(Roam());
     }
@@ -28,7 +33,7 @@ public class MonsterController : MonoBehaviour
 
     void MoveVisualToRoom()
     {
-        if (_currentRoom.MonsterPoint != null)
+        if (_currentRoom != null && _currentRoom.MonsterPoint != null)
         {
             transform.position = _currentRoom.MonsterPoint.position;
         }
@@ -36,25 +41,48 @@ public class MonsterController : MonoBehaviour
 
     void CheckIfInSameRoomAsPlayer()
     {
+        if (RoomTracker == null || _currentRoom == null || _currentGameState != GameState.Playing)
+        {
+            return;
+        }
+
         if (RoomTracker.CurrentRoom == _currentRoom)
         {
-            Debug.Log("The monster is in the same room as the player!");
+            if (GameManager != null)
+            {
+                GameManager.OnPlayerDeath();
+            }
         }
     }
 
     System.Collections.IEnumerator Roam()
     {
-        while (true)
+        while (_currentGameState == GameState.Playing)
         {
             yield return new WaitForSeconds(moveInterval);
+
+            UpdateGameState();
+            if (_currentGameState != GameState.Playing)
+            {
+                yield break;
+            }
+
             ChooseNextRoom();
             MoveVisualToRoom();
-            CheckIfInSameRoomAsPlayer();
+        }
+    }
+
+    void UpdateGameState()
+    {
+        if (GameManager != null)
+        {
+            _currentGameState = GameManager.currentState;
         }
     }
 
     void Update()
     {
+        UpdateGameState();
         CheckIfInSameRoomAsPlayer();
     }
 }

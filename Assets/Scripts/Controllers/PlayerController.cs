@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     bool _isSprinting = false;
     float _sprintMultiplier = 2f;
 
-    float _maxPitch = 50f;
+    float _maxPitch = 70f;
     float _pitch;
 
     public bool IsHeadBobEnabled = true;
