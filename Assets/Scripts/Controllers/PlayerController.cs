@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
 
     Vector3 _velocity;
 
+    public Microlight.MicroBar.MicroBar StaminaBar;
+
     void InitializeStartingRoom()
     {
         if (StartingRoom == null)
@@ -90,12 +92,34 @@ public class PlayerController : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
 
         _velocity = Vector3.zero;
+
+        if (StaminaBar != null)
+        {
+            StaminaBar.Initialize(_maxStamina);
+        }
+    }
+
+    void UpdateStaminaBar()
+    {
+        if (StaminaBar == null) return;
+
+        StaminaBar.UpdateBar(_stamina, Microlight.MicroBar.UpdateAnim.Damage);
+
+        if (_stamina >= _maxStamina)
+        {
+            StaminaBar.gameObject.SetActive(false);
+        }
+        else
+        {
+            StaminaBar.gameObject.SetActive(true);
+        }
     }
 
     void Update()
     {
         ProcessMovement();
         HeadBob();
+        UpdateStaminaBar();
     }
 
     private void ProcessMovement()
