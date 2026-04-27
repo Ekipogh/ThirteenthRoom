@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,11 +30,17 @@ public class PlayerController : MonoBehaviour
 
     // Stats
     float _stamina = _maxStamina;
+    float _lastDisplayedStamina = -1f;
 
     public float Stamina => _stamina;
     const float _maxStamina = 100f;
-
     const float _staminaRegenRate = 5f;
+    const float _staminaDrainRate = 10f;
+    const float _staminaChangeEpsilon = 0.01f;
+
+    const float _staminaRegenDelay = 2f; // in seconds
+    const float _exhaustedStaminaRegenDelay = 5f; // longer delay when stamina is fully drained
+    float _staminaRegenTimer = 0f;
 
     CharacterController _characterController;
 
@@ -96,6 +101,9 @@ public class PlayerController : MonoBehaviour
         if (StaminaBar != null)
         {
             StaminaBar.Initialize(_maxStamina);
+            StaminaBar.UpdateBar(_stamina, true);
+            StaminaBar.gameObject.SetActive(false);
+            _lastDisplayedStamina = _stamina;
         }
     }
 
@@ -103,16 +111,33 @@ public class PlayerController : MonoBehaviour
     {
         if (StaminaBar == null) return;
 
-        StaminaBar.UpdateBar(_stamina, Microlight.MicroBar.UpdateAnim.Damage);
-
-        if (_stamina >= _maxStamina)
+        if (Mathf.Abs(_stamina - _lastDisplayedStamina) <= _staminaChangeEpsilon)
         {
-            StaminaBar.gameObject.SetActive(false);
+            return;
         }
-        else
+
+        bool shouldShowBar = _stamina < _maxStamina;
+        if (shouldShowBar && !StaminaBar.gameObject.activeSelf)
         {
             StaminaBar.gameObject.SetActive(true);
         }
+
+        Microlight.MicroBar.UpdateAnim updateAnim = _stamina < _lastDisplayedStamina
+            ? Microlight.MicroBar.UpdateAnim.Damage
+            : Microlight.MicroBar.UpdateAnim.Heal;
+
+        StaminaBar.UpdateBar(_stamina, updateAnim);
+        _lastDisplayedStamina = _stamina;
+
+        if (!shouldShowBar && StaminaBar.gameObject.activeSelf)
+        {
+            StaminaBar.gameObject.SetActive(false);
+        }
+    }
+
+    bool IsMoving()
+    {
+        return _moveInput.sqrMagnitude > 0.01f;
     }
 
     void Update()
@@ -124,13 +149,35 @@ public class PlayerController : MonoBehaviour
 
     private void ProcessMovement()
     {
-        _stamina = _isSprinting
-            ? Mathf.Max(0, _stamina - Time.deltaTime * 10f)
-            : Mathf.Min(_maxStamina, _stamina + Time.deltaTime * _staminaRegenRate);
+        bool isSprinting = _isSprinting && IsMoving() && _stamina > 0f;
+
+        // _stamina = isSprinting
+        //     ? Mathf.Max(0, _stamina - Time.deltaTime * _staminaDrainRate)
+        //     : Mathf.Min(_maxStamina, _stamina + Time.deltaTime * _staminaRegenRate);
+
+        // Drain stamin if sprinting
+        // Regen stamina if not sprinting, but only after a delay
+        if (isSprinting)
+        {
+            _stamina = Mathf.Max(0, _stamina - Time.deltaTime * _staminaDrainRate);
+            _staminaRegenTimer = 0f; // reset regen timer when sprinting
+        }
+        else
+        {
+            if (_stamina < _maxStamina)
+            {
+                _staminaRegenTimer += Time.deltaTime;
+                float regenDelay = _stamina <= 0 ? _exhaustedStaminaRegenDelay : _staminaRegenDelay;
+                if (_staminaRegenTimer >= regenDelay)
+                {
+                    _stamina = Mathf.Min(_maxStamina, _stamina + Time.deltaTime * _staminaRegenRate);
+                }
+            }
+        }
 
         if (_stamina <= 0) _isSprinting = false;
 
-        float speed = _isSprinting ? _moveSpeed * _sprintMultiplier : _moveSpeed;
+        float speed = isSprinting ? _moveSpeed * _sprintMultiplier : _moveSpeed;
 
         // Build movement in world space (transform.right/forward respects yaw rotation)
         Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
@@ -190,7 +237,7 @@ public class PlayerController : MonoBehaviour
 
     void OnSprint(InputValue value)
     {
-        _isSprinting = value.isPressed;
+        _isSprinting = value.isPressed && _stamina > 0f;
     }
 
     Transform GetPitchTransform()
