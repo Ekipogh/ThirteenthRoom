@@ -342,7 +342,7 @@ GameObject:
   - component: {fileID: 111866221}
   - component: {fileID: 111866222}
   m_Layer: 5
-  m_Name: HealthBar
+  m_Name: StaminaBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,7 +357,7 @@ RectTransform:
   m_GameObject: {fileID: 111866220}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1000126466}
@@ -390,13 +390,13 @@ MonoBehaviour:
     _uiPrimaryBar: {fileID: 583703987}
     _uiGhostBar: {fileID: 55010133}
     _adaptiveColor: 1
-    _barPrimaryColor: {r: 0.9716981, g: 0.9430219, b: 0.132921, a: 1}
-    _barAdaptiveColor: {r: 0.3694954, g: 0.4056604, b: 0.1473389, a: 1}
+    _barPrimaryColor: {r: 1, g: 0.9470248, b: 0, a: 1}
+    _barAdaptiveColor: {r: 0.4245283, g: 0.41584298, b: 0.26633143, a: 1}
     _useGhostBar: 1
     _dualGhostBars: 0
     _ghostBarDamageColor: {r: 1, g: 0.759434, b: 0.759434, a: 1}
     _ghostBarHealColor: {r: 0.6404338, g: 1, b: 0.3537736, a: 1}
-    _damageAnim: 3
+    _damageAnim: 1
     _damageAnimDuration: 0.5
     _damageAnimDelay: 0.1
     _damageFlashColor: {r: 1, g: 1, b: 1, a: 1}
@@ -404,7 +404,7 @@ MonoBehaviour:
     _healAnim: 2
     _healAnimDuration: 0.5
     _healAnimDelay: 0.1
-    _healFlashColor: {r: 1, g: 1, b: 1, a: 1}
+    _healFlashColor: {r: 0.94743955, g: 1, b: 0.514151, a: 1}
     _healAnimStrength: 0
   editorMode: 1
   animations:
@@ -3685,6 +3685,10 @@ PrefabInstance:
       propertyPath: m_Center.y
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1272935303200780609, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: StaminaBar
+      value: 
+      objectReference: {fileID: 111866222}
     - target: {fileID: 1272935303200780609, guid: aed74157deb286a439609395499a4060, type: 3}
       propertyPath: RoomTracker
       value: 

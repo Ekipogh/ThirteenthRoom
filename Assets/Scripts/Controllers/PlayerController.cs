@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void UpdateStaminBar()
+    void UpdateStaminaBar()
     {
         if (StaminaBar == null) return;
 
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         ProcessMovement();
         HeadBob();
-        UpdateStaminBar();
+        UpdateStaminaBar();
     }
 
     private void ProcessMovement()
