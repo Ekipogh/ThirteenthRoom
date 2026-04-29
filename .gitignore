@@ -74,6 +74,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 .vscode/
 
+Assets/Assets.zip
 # Third-party plugins and packages
 Synty/
 TextMesh Pro/

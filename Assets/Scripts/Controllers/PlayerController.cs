@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public bool IsHeadBobEnabled = true;
 
     float _headHeight;
+    readonly float _sprintHeadForwardOffset = 0.1f;
     float _headBobFrequency = 10f;
     float _headBobAmplitude = 0.005f;
 
@@ -60,8 +61,7 @@ public class PlayerController : MonoBehaviour
 
         if (StartingRoom.PlayerSpawnPoint != null)
         {
-            transform.position = StartingRoom.PlayerSpawnPoint.position;
-            transform.rotation = StartingRoom.PlayerSpawnPoint.rotation;
+            transform.SetPositionAndRotation(StartingRoom.PlayerSpawnPoint.position, StartingRoom.PlayerSpawnPoint.rotation);
         }
         else
         {
@@ -118,8 +118,19 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         ProcessMovement();
+        //SprintingHeadForwardOffset();
         HeadBob();
         UpdateStaminaBar();
+    }
+
+    void SprintingHeadForwardOffset()
+    {
+        if (HeadJoint == null) return;
+
+        Vector3 localPosition = HeadJoint.localPosition;
+        float targetZ = _isSprinting ? _sprintHeadForwardOffset : 0f;
+        localPosition.z = Mathf.Lerp(localPosition.z, targetZ, Time.deltaTime * 5f);
+        HeadJoint.localPosition = localPosition;
     }
 
     private void ProcessMovement()
@@ -201,5 +212,24 @@ public class PlayerController : MonoBehaviour
     float NormalizePitch(float pitch)
     {
         return pitch > 180f ? pitch - 360f : pitch;
+    }
+
+    public int CurrentGait
+    {
+        get
+        {
+            if (_moveInput.magnitude < 0.1f)
+                return 0; // Idle
+            else if (_isSprinting)
+                return 2; // Run
+            else
+                return 1; // Walk
+        }
+    }
+
+    public float Speed()
+    {
+        Debug.Log($"Current velocity: {_velocity}");
+        return new Vector3(_moveInput.x * _moveSpeed, 0 , _moveInput.y * _moveSpeed).magnitude;
     }
 }

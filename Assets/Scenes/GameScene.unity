@@ -787,6 +787,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95591080237398288, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6c3ffad2f4e96a34992af95045f41651, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1166,7 +1170,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &686328551
 Transform:
   m_ObjectHideFlags: 0
@@ -1198,7 +1202,13 @@ MonoBehaviour:
   StartingRoom: {fileID: 505459780}
   RoomTracker: {fileID: 5398166369954464030}
   moveInterval: 5
+  escapeWindowDuration: 2
   GameManager: {fileID: 156132637}
+--- !u!95 &696190820 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3316018331260727839, guid: aed74157deb286a439609395499a4060, type: 3}
+  m_PrefabInstance: {fileID: 5398166369954464028}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &743283661
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,7 +1243,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 801.5, y: 418.25}
+  m_AnchoredPosition: {x: 806.25, y: 404.75}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &743283663
@@ -3352,7 +3362,7 @@ Canvas:
   m_GameObject: {fileID: 1874722950}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -3697,6 +3707,18 @@ PrefabInstance:
       propertyPath: StartingRoom
       value: 
       objectReference: {fileID: 5606637903266836617}
+    - target: {fileID: 3316018331260727839, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: bf2322023268a254ebe0f913921f5c0e, type: 2}
+    - target: {fileID: 3316018331260727839, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_CullingMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3316018331260727839, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3404934259842870257, guid: aed74157deb286a439609395499a4060, type: 3}
       propertyPath: m_LocalScale.x
       value: 0
@@ -3777,6 +3799,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 9176419440095447107, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: _animator
+      value: 
+      objectReference: {fileID: 696190820}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3039453995887856242, guid: aed74157deb286a439609395499a4060, type: 3}
