@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     public bool IsHeadBobEnabled = true;
 
     float _headHeight;
-    readonly float _sprintHeadForwardOffset = 0.1f;
+    readonly float _sprintHeadForwardOffset = 0.7f;
     float _headBobFrequency = 10f;
     float _headBobAmplitude = 0.005f;
 
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         ProcessMovement();
-        //SprintingHeadForwardOffset();
+        SprintingHeadForwardOffset();
         HeadBob();
         UpdateStaminaBar();
     }
@@ -127,10 +127,10 @@ public class PlayerController : MonoBehaviour
     {
         if (HeadJoint == null) return;
 
-        Vector3 localPosition = HeadJoint.localPosition;
-        float targetZ = _isSprinting ? _sprintHeadForwardOffset : 0f;
+        Vector3 localPosition = GetPitchTransform().localPosition;
+        float targetZ = _moveInput.magnitude > 0.1f ? _sprintHeadForwardOffset : 0f;
         localPosition.z = Mathf.Lerp(localPosition.z, targetZ, Time.deltaTime * 5f);
-        HeadJoint.localPosition = localPosition;
+        GetPitchTransform().localPosition = localPosition;
     }
 
     private void ProcessMovement()
