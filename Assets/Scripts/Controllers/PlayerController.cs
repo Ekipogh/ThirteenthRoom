@@ -39,10 +39,12 @@ public class PlayerController : MonoBehaviour
     const float _staminaRegenRate = 5f;
 
     CharacterController _characterController;
+    private float _colliderRadius;
 
     Vector3 _velocity;
 
     public Microlight.MicroBar.MicroBar StaminaBar;
+
 
     void InitializeStartingRoom()
     {
@@ -90,6 +92,7 @@ public class PlayerController : MonoBehaviour
         InputActions.FindActionMap("Player").Enable();
 
         _characterController = GetComponent<CharacterController>();
+        _colliderRadius = _characterController.radius;
 
         _velocity = Vector3.zero;
 
@@ -131,6 +134,8 @@ public class PlayerController : MonoBehaviour
         float targetZ = _moveInput.magnitude > 0.1f ? _sprintHeadForwardOffset : 0f;
         localPosition.z = Mathf.Lerp(localPosition.z, targetZ, Time.deltaTime * 5f);
         GetPitchTransform().localPosition = localPosition;
+        // if moving widen the collider to match the head forward offset, otherwise reset it
+        _characterController.radius = Mathf.Lerp(_characterController.radius, _moveInput.magnitude > 0.1f ? _colliderRadius + _sprintHeadForwardOffset : _colliderRadius, Time.deltaTime * 5f);
     }
 
     private void ProcessMovement()
@@ -230,6 +235,6 @@ public class PlayerController : MonoBehaviour
     public float Speed()
     {
         Debug.Log($"Current velocity: {_velocity}");
-        return new Vector3(_moveInput.x * _moveSpeed, 0 , _moveInput.y * _moveSpeed).magnitude;
+        return new Vector3(_moveInput.x * _moveSpeed, 0, _moveInput.y * _moveSpeed).magnitude;
     }
 }
