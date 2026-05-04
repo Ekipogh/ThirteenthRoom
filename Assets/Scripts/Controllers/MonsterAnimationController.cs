@@ -7,6 +7,7 @@ public class MonsterAnimationController : MonoBehaviour
     [SerializeField] MonsterController monsterController;
 
     readonly int _isAttackingHash = Animator.StringToHash("Attack");
+    readonly int _isGroundedHash = Animator.StringToHash("IsGrounded");
 
     MonsterState _currentState;
 
@@ -20,11 +21,12 @@ public class MonsterAnimationController : MonoBehaviour
         {
             monsterController = GetComponent<MonsterController>();
         }
+        _animator.SetBool(_isGroundedHash, true);
     }
 
     void UpdateAnimator()
     {
-        _animator.SetBool(_isAttackingHash, monsterController.CurrentState == MonsterState.Attacking);
+        _animator.SetBool(_isAttackingHash, monsterController.CurrentState == MonsterState.EscapeWindow || monsterController.CurrentState == MonsterState.Attacking);
     }
 
     void Update()

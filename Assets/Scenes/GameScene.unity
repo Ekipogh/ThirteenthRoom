@@ -790,7 +790,7 @@ PrefabInstance:
     - target: {fileID: 95591080237398288, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: a3a348fc313b53a44ab5b8f348e2a5eb, type: 2}
+      objectReference: {fileID: 9100000, guid: 8da3f3856ff82914399a0ec3143650db, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1164,6 +1164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 686328551}
   - component: {fileID: 686328552}
+  - component: {fileID: 686328553}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -1204,6 +1205,20 @@ MonoBehaviour:
   moveInterval: 5
   escapeWindowDuration: 2
   GameManager: {fileID: 156132637}
+--- !u!114 &686328553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686328550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58616a5b9eefc364eaf67bcc8587da5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterAnimationController
+  _animator: {fileID: 1085432947}
+  monsterController: {fileID: 686328552}
 --- !u!95 &696190820 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3316018331260727839, guid: aed74157deb286a439609395499a4060, type: 3}
@@ -1976,6 +1991,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1015799860}
   m_CullTransparentMesh: 1
+--- !u!95 &1085432947 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 95591080237398288, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
+  m_PrefabInstance: {fileID: 292261319}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1125830374
 GameObject:
   m_ObjectHideFlags: 0
