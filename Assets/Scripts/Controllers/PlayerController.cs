@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public bool IsHeadBobEnabled = true;
 
     float _headHeight;
+    readonly float _sprintHeadForwardOffset = 0.7f;
     float _headBobFrequency = 10f;
     float _headBobAmplitude = 0.005f;
 
@@ -43,10 +44,12 @@ public class PlayerController : MonoBehaviour
     float _staminaRegenTimer = 0f;
 
     CharacterController _characterController;
+    private float _colliderRadius;
 
     Vector3 _velocity;
 
     public Microlight.MicroBar.MicroBar StaminaBar;
+
 
     void InitializeStartingRoom()
     {
@@ -65,8 +68,7 @@ public class PlayerController : MonoBehaviour
 
         if (StartingRoom.PlayerSpawnPoint != null)
         {
-            transform.position = StartingRoom.PlayerSpawnPoint.position;
-            transform.rotation = StartingRoom.PlayerSpawnPoint.rotation;
+            transform.SetPositionAndRotation(StartingRoom.PlayerSpawnPoint.position, StartingRoom.PlayerSpawnPoint.rotation);
         }
         else
         {
@@ -95,6 +97,7 @@ public class PlayerController : MonoBehaviour
         InputActions.FindActionMap("Player").Enable();
 
         _characterController = GetComponent<CharacterController>();
+        _colliderRadius = _characterController.radius;
 
         _velocity = Vector3.zero;
 
@@ -143,8 +146,21 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         ProcessMovement();
+        SprintingHeadForwardOffset();
         HeadBob();
         UpdateStaminaBar();
+    }
+
+    void SprintingHeadForwardOffset()
+    {
+        if (HeadJoint == null) return;
+
+        Vector3 localPosition = GetPitchTransform().localPosition;
+        float targetZ = _moveInput.magnitude > 0.1f ? _sprintHeadForwardOffset : 0f;
+        localPosition.z = Mathf.Lerp(localPosition.z, targetZ, Time.deltaTime * 5f);
+        GetPitchTransform().localPosition = localPosition;
+        // if moving widen the collider to match the head forward offset, otherwise reset it
+        _characterController.radius = Mathf.Lerp(_characterController.radius, _moveInput.magnitude > 0.1f ? _colliderRadius + _sprintHeadForwardOffset : _colliderRadius, Time.deltaTime * 5f);
     }
 
     private void ProcessMovement()
@@ -244,5 +260,24 @@ public class PlayerController : MonoBehaviour
     float NormalizePitch(float pitch)
     {
         return pitch > 180f ? pitch - 360f : pitch;
+    }
+
+    public int CurrentGait
+    {
+        get
+        {
+            if (_moveInput.magnitude < 0.1f)
+                return 0; // Idle
+            else if (_isSprinting)
+                return 2; // Run
+            else
+                return 1; // Walk
+        }
+    }
+
+    public float Speed()
+    {
+        Debug.Log($"Current velocity: {_velocity}");
+        return new Vector3(_moveInput.x * _moveSpeed, 0, _moveInput.y * _moveSpeed).magnitude;
     }
 }
