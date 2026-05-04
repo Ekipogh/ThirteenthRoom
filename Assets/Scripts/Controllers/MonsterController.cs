@@ -12,7 +12,8 @@ public class MonsterController : MonoBehaviour
     [SerializeField] Room StartingRoom;
     [SerializeField] RoomTracker RoomTracker;
     [SerializeField] float moveInterval = 5f;
-    [SerializeField] float escapeWindowDuration = 2f;
+    [SerializeField] float escapeWindowDuration = 5f;
+    [SerializeField] float travelTime = 2f;
 
     [SerializeField] GameManager GameManager;
 
@@ -22,9 +23,18 @@ public class MonsterController : MonoBehaviour
     MonsterState _currentState;
     Coroutine _roamCoroutine;
     Coroutine _escapeCoroutine;
+    Renderer[] _renderers;
+    Collider[] _colliders;
+    bool _isTraveling;
 
     public Room CurrentRoom => _currentRoom;
     public MonsterState CurrentState => _currentState;
+
+    void Awake()
+    {
+        _renderers = GetComponentsInChildren<Renderer>(true);
+        _colliders = GetComponentsInChildren<Collider>(true);
+    }
 
     void Start()
     {
@@ -32,19 +42,22 @@ public class MonsterController : MonoBehaviour
         _currentState = MonsterState.Roaming;
         _currentGameState = GameManager != null ? GameManager.currentState : GameState.Playing;
         MoveVisualToRoom();
+        SetMonsterVisible(true);
         _roamCoroutine = StartCoroutine(Roam());
         CheckIfInSameRoomAsPlayer();
     }
 
-    void ChooseNextRoom()
+    bool TryGetNextRoom(out Room nextRoom)
     {
+        nextRoom = null;
         if (_currentRoom == null || _currentRoom.ConnectedRooms.Count == 0)
         {
-            return;
+            return false;
         }
+
         int index = Random.Range(0, _currentRoom.ConnectedRooms.Count);
-        _currentRoom = _currentRoom.ConnectedRooms[index];
-        Debug.Log($"Monster moved to room: {_currentRoom.name}");
+        nextRoom = _currentRoom.ConnectedRooms[index];
+        return true;
     }
 
     void MoveVisualToRoom()
@@ -52,12 +65,14 @@ public class MonsterController : MonoBehaviour
         if (_currentRoom != null && _currentRoom.MonsterPoint != null)
         {
             transform.position = _currentRoom.MonsterPoint.position;
+            float randomYRotation = Random.Range(0f, 360f);
+            transform.rotation = Quaternion.Euler(0f, randomYRotation, 0f);
         }
     }
 
     void CheckIfInSameRoomAsPlayer()
     {
-        if (RoomTracker == null || _currentRoom == null || _currentGameState != GameState.Playing)
+        if (RoomTracker == null || _currentRoom == null || _currentGameState != GameState.Playing || _isTraveling)
         {
             return;
         }
@@ -79,7 +94,19 @@ public class MonsterController : MonoBehaviour
         _currentState = MonsterState.EscapeWindow;
         Debug.Log("Monster spotted player. Escape window started.");
         StopRoaming();
+        LookAtPlayer();
         StartEscapeWindow();
+    }
+
+    void LookAtPlayer()
+    {
+        if (RoomTracker == null) return;
+        Vector3 direction = RoomTracker.transform.position - transform.position;
+        direction.y = 0f;
+        if (direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
     }
 
     void ResumeRoamingAfterEscape()
@@ -104,6 +131,37 @@ public class MonsterController : MonoBehaviour
         {
             StopCoroutine(_roamCoroutine);
             _roamCoroutine = null;
+        }
+
+        if (_isTraveling)
+        {
+            _isTraveling = false;
+            SetMonsterVisible(true);
+        }
+    }
+
+    void SetMonsterVisible(bool isVisible)
+    {
+        if (_renderers != null)
+        {
+            foreach (Renderer rendererComponent in _renderers)
+            {
+                if (rendererComponent != null)
+                {
+                    rendererComponent.enabled = isVisible;
+                }
+            }
+        }
+
+        if (_colliders != null)
+        {
+            foreach (Collider colliderComponent in _colliders)
+            {
+                if (colliderComponent != null)
+                {
+                    colliderComponent.enabled = isVisible;
+                }
+            }
         }
     }
 
@@ -136,11 +194,41 @@ public class MonsterController : MonoBehaviour
                 yield break;
             }
 
-            ChooseNextRoom();
-            MoveVisualToRoom();
+            yield return TravelToNextRoom();
         }
 
         _roamCoroutine = null;
+    }
+
+    System.Collections.IEnumerator TravelToNextRoom()
+    {
+        if (!TryGetNextRoom(out Room nextRoom))
+        {
+            yield break;
+        }
+
+        _isTraveling = true;
+        SetMonsterVisible(false);
+
+        float effectiveTravelTime = Mathf.Max(0f, travelTime);
+        if (effectiveTravelTime > 0f)
+        {
+            yield return new WaitForSeconds(effectiveTravelTime);
+        }
+
+        UpdateGameState();
+        if (_currentGameState != GameState.Playing || _currentState != MonsterState.Roaming)
+        {
+            _isTraveling = false;
+            SetMonsterVisible(true);
+            yield break;
+        }
+
+        _currentRoom = nextRoom;
+        MoveVisualToRoom();
+        SetMonsterVisible(true);
+        _isTraveling = false;
+        Debug.Log($"Monster moved to room: {_currentRoom.name}");
     }
 
     System.Collections.IEnumerator HandleEscapeWindow()
@@ -205,5 +293,10 @@ public class MonsterController : MonoBehaviour
         }
 
         CheckIfInSameRoomAsPlayer();
+
+        if (_currentState == MonsterState.EscapeWindow || _currentState == MonsterState.Attacking)
+        {
+            LookAtPlayer();
+        }
     }
 }
