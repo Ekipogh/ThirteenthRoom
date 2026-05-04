@@ -19,7 +19,8 @@ $3rdPartyList = @(
     "Assets/FPSFont",
     "Assets/PolygonHorrorMansion",
     "Assets/Microlight",
-    "Assets/TextMesh Pro"
+    "Assets/TextMesh Pro",
+    "Assets/Kevin Iglesias"
 )
 $zipFilePath = "Assets.zip"
 if (Test-Path $zipFilePath) {
@@ -29,4 +30,9 @@ Compress-Archive -Path $3rdPartyList -DestinationPath $zipFilePath
 
 
 # Upload the Assets.zip file to Nexus Repository Manager using PowerShell
-Invoke-WebRequest -Uri "$env:NEXUS_URL/repository/teamcity-raw/thirteenthroom/Assets.zip" -Headers @{ Authorization = "Basic " + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$env:NEXUS_USERNAME:$env:NEXUS_PASSWORD")) } -OutFile "Assets.zip"
+Write-Output "Uploading Assets.zip to Nexus Repository Manager..."
+
+$loginPassword = "{0}:{1}" -f $env:NEXUS_USERNAME, $env:NEXUS_PASSWORD
+$encodedCredentials = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($loginPassword))
+
+Invoke-WebRequest -Uri "$env:NEXUS_URL/repository/teamcity-raw/thirteenthroom/Assets.zip" -Headers @{ Authorization = "Basic " + $encodedCredentials } -Method Put -InFile "Assets.zip" -ContentType "application/zip" -UseBasicParsing
