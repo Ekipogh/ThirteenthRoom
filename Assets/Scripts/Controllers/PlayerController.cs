@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour
 
     public Microlight.MicroBar.MicroBar StaminaBar;
 
+    // Audio
+    [SerializeField] PlayerAudioManager AudioManager;
 
     void InitializeStartingRoom()
     {
@@ -166,6 +168,12 @@ public class PlayerController : MonoBehaviour
     private void ProcessMovement()
     {
         bool isSprinting = _isSprinting && IsMoving() && _stamina > 0f;
+
+        // Update audio based on sprinting state
+        if (AudioManager != null)
+        {
+            AudioManager.SetSprinting(isSprinting);
+        }
 
         // Drain stamin if sprinting
         // Regen stamina if not sprinting, but only after a delay
