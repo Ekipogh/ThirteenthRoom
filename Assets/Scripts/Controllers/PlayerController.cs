@@ -50,6 +50,10 @@ public class PlayerController : MonoBehaviour
 
     public Microlight.MicroBar.MicroBar StaminaBar;
 
+    // Audio
+    [SerializeField] PlayerAudioManager AudioManager;
+    float _distanceTraveled = 0f;
+    const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
 
     void InitializeStartingRoom()
     {
@@ -167,6 +171,12 @@ public class PlayerController : MonoBehaviour
     {
         bool isSprinting = _isSprinting && IsMoving() && _stamina > 0f;
 
+        // Update audio based on sprinting state
+        if (AudioManager != null)
+        {
+            AudioManager.SetSprinting(isSprinting);
+        }
+
         // Drain stamin if sprinting
         // Regen stamina if not sprinting, but only after a delay
         if (isSprinting)
@@ -193,6 +203,17 @@ public class PlayerController : MonoBehaviour
 
         // Build movement in world space (transform.right/forward respects yaw rotation)
         Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
+
+        // Footstep audio
+        if (AudioManager != null && IsMoving())
+        {
+            _distanceTraveled += speed * Time.deltaTime;
+            if (_distanceTraveled >= FootstepDistanceThreshold)
+            {
+                AudioManager.PlayRandomFootstep();
+                _distanceTraveled = 0f;
+            }
+        }
 
         // Apply gravity
         if (_characterController.isGrounded)
