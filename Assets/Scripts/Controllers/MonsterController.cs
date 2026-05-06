@@ -16,6 +16,7 @@ public class MonsterController : MonoBehaviour
     [SerializeField] float travelTime = 2f;
 
     [SerializeField] GameManager GameManager;
+    [SerializeField] PlayerAudioManager PlayerAudioManager;
 
     GameState _currentGameState;
 
@@ -94,6 +95,7 @@ public class MonsterController : MonoBehaviour
         _currentState = MonsterState.EscapeWindow;
         Debug.Log("Monster spotted player. Escape window started.");
         StopRoaming();
+        SetMonsterEncounterAudioActive(true);
         LookAtPlayer();
         StartEscapeWindow();
     }
@@ -113,8 +115,17 @@ public class MonsterController : MonoBehaviour
     {
         _currentState = MonsterState.Roaming;
         Debug.Log("Player escaped room. Monster resumed roaming.");
+        SetMonsterEncounterAudioActive(false);
         StopEscapeWindow();
         StartRoaming();
+    }
+
+    void SetMonsterEncounterAudioActive(bool isActive)
+    {
+        if (PlayerAudioManager != null)
+        {
+            PlayerAudioManager.SetMonsterEncounterActive(isActive);
+        }
     }
 
     void StartRoaming()
@@ -246,6 +257,7 @@ public class MonsterController : MonoBehaviour
         {
             _currentState = MonsterState.Attacking;
             Debug.Log("Player failed to escape. Monster attacks.");
+            SetMonsterEncounterAudioActive(false);
             if (GameManager != null)
             {
                 GameManager.OnPlayerDeath();
@@ -254,6 +266,7 @@ public class MonsterController : MonoBehaviour
         else if (_currentState == MonsterState.EscapeWindow)
         {
             _currentState = MonsterState.Roaming;
+            SetMonsterEncounterAudioActive(false);
             StartRoaming();
         }
 
@@ -275,6 +288,10 @@ public class MonsterController : MonoBehaviour
 
         if (_currentGameState != GameState.Playing)
         {
+            if (_currentState == MonsterState.EscapeWindow)
+            {
+                SetMonsterEncounterAudioActive(false);
+            }
             StopRoaming();
             StopEscapeWindow();
             return;
