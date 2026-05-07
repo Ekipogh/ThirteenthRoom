@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     float _lookSpeed = 0.150f;
 
     bool _isSprinting = false;
-    float _sprintMultiplier = 2f;
+    readonly float _sprintMultiplier = 2f;
 
     float _maxPitch = 70f;
     float _pitch;
@@ -54,7 +54,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerAudioManager AudioManager;
     float _distanceTraveled = 0f;
     const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
-    const float SprintDistanceThreshold = 2.5f; // distance threshold for faster footstep sounds when sprinting
 
     void InitializeStartingRoom()
     {
@@ -172,13 +171,7 @@ public class PlayerController : MonoBehaviour
     {
         bool isSprinting = _isSprinting && IsMoving() && _stamina > 0f;
 
-        // Update audio based on sprinting state
-        if (AudioManager != null)
-        {
-            AudioManager.SetSprinting(isSprinting);
-        }
-
-        // Drain stamin if sprinting
+        // Drain stamina if sprinting
         // Regen stamina if not sprinting, but only after a delay
         if (isSprinting)
         {
@@ -200,6 +193,14 @@ public class PlayerController : MonoBehaviour
 
         if (_stamina <= 0) _isSprinting = false;
 
+        // Breathing audio follows stamina state:
+        // full stamina = normal, draining stamina = sprinting, below full = recovering.
+        if (AudioManager != null)
+        {
+            AudioManager.SetSprinting(isSprinting);
+            AudioManager.SetRecovering(!isSprinting && _stamina < _maxStamina, _stamina / _maxStamina);
+        }
+
         float speed = isSprinting ? _moveSpeed * _sprintMultiplier : _moveSpeed;
 
         // Build movement in world space (transform.right/forward respects yaw rotation)
@@ -208,11 +209,11 @@ public class PlayerController : MonoBehaviour
         // Footstep audio
         if (AudioManager != null && IsMoving())
         {
-            _distanceTraveled += speed * Time.deltaTime;
-            float currentFootstepThreshold = isSprinting ? SprintDistanceThreshold : FootstepDistanceThreshold;
+            _distanceTraveled += speed * Time.deltaTime * (_isSprinting ? 1 / _sprintMultiplier : 1f);
+            float currentFootstepThreshold = FootstepDistanceThreshold;
             if (_distanceTraveled >= currentFootstepThreshold)
             {
-                AudioManager.PlayRandomFootstep();
+                AudioManager.PlayRandomFootstep(isSprinting);
                 _distanceTraveled = 0f;
             }
         }
@@ -300,7 +301,6 @@ public class PlayerController : MonoBehaviour
 
     public float Speed()
     {
-        Debug.Log($"Current velocity: {_velocity}");
         return new Vector3(_moveInput.x * _moveSpeed, 0, _moveInput.y * _moveSpeed).magnitude;
     }
 }

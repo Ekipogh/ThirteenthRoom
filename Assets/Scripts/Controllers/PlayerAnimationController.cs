@@ -37,7 +37,6 @@ public class PlayerAnimationController : MonoBehaviour
     void UpdateAnimator()
     {
         float speed = playerController.Speed();
-        Debug.Log($"Player speed: {speed}");
         _currentGait = (Gait)playerController.CurrentGait;
         _animator.SetBool(_movementInputHeldHash, speed > 0.1f);
         _animator.SetInteger(_currentGaitHash, (int)_currentGait);

@@ -22,7 +22,8 @@ $3rdPartyList = @(
     "Assets/TextMesh Pro",
     "Assets/Kevin Iglesias",
     "Assets/Voices - Essentials",
-    "Assets/Footsteps - Essentials"
+    "Assets/Footsteps - Essentials",
+    "Assets/Doors Small Sound Pack"
 )
 $zipFilePath = "Assets.zip"
 if (Test-Path $zipFilePath) {

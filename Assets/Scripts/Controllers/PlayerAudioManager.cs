@@ -5,31 +5,46 @@ public class PlayerAudioManager : MonoBehaviour
 {
     [SerializeField] AudioSource NormalBreathingAudioSource;
     [SerializeField] AudioSource SprintingBreathingAudioSource;
+    [SerializeField] AudioSource RecoveringBreathingAudioSource;
     [SerializeField] AudioSource GaspAudioSource;
+    [SerializeField] AudioSource PickupAudioSource;
     [SerializeField, Min(0.01f)] float BreathingFadeDuration = 0.35f;
+    [SerializeField, Min(0.01f)] float RecoveringBreathingLowStaminaPitch = 1.0f;
+    [SerializeField, Min(0.01f)] float RecoveringBreathingHighStaminaPitch = 0.75f;
     [SerializeField] GameObject FootStepSourceObject;
+    [SerializeField] GameObject SprintFootStepSourceObject;
     List<AudioSource> _footstepAudioSources;
+    List<AudioSource> _sprintingAudioSources;
 
     bool _isSprinting;
+    bool _isRecovering;
     bool _isMonsterEncounterActive;
     bool _hasBreathingState;
     float _normalBreathingVolume = 1f;
     float _sprintingBreathingVolume = 1f;
+    float _recoveringBreathingVolume = 1f;
     float _normalBreathingTargetVolume;
     float _sprintingBreathingTargetVolume;
+    float _recoveringBreathingTargetVolume;
 
     void Awake()
     {
         _normalBreathingVolume = GetConfiguredVolume(NormalBreathingAudioSource);
         _sprintingBreathingVolume = GetConfiguredVolume(SprintingBreathingAudioSource);
-
+        _recoveringBreathingVolume = GetConfiguredVolume(RecoveringBreathingAudioSource);
         SetVolumeIfPresent(NormalBreathingAudioSource, 0f);
         SetVolumeIfPresent(SprintingBreathingAudioSource, 0f);
+        SetVolumeIfPresent(RecoveringBreathingAudioSource, 0f);
 
         _footstepAudioSources = new List<AudioSource>();
+        _sprintingAudioSources = new List<AudioSource>();
         if (FootStepSourceObject != null)
         {
             _footstepAudioSources.AddRange(FootStepSourceObject.GetComponentsInChildren<AudioSource>());
+        }
+        if (SprintFootStepSourceObject != null)
+        {
+            _sprintingAudioSources.AddRange(SprintFootStepSourceObject.GetComponentsInChildren<AudioSource>());
         }
     }
 
@@ -37,6 +52,7 @@ public class PlayerAudioManager : MonoBehaviour
     {
         FadeBreathingAudio(NormalBreathingAudioSource, _normalBreathingTargetVolume);
         FadeBreathingAudio(SprintingBreathingAudioSource, _sprintingBreathingTargetVolume);
+        FadeBreathingAudio(RecoveringBreathingAudioSource, _recoveringBreathingTargetVolume);
     }
 
     public void SetSprinting(bool isSprinting)
@@ -55,6 +71,43 @@ public class PlayerAudioManager : MonoBehaviour
         }
 
         PlayBreathingForCurrentState();
+    }
+
+    public void SetRecovering(bool isRecovering, float staminaPercent)
+    {
+        if (isRecovering)
+        {
+            SetRecoveringBreathingPitch(staminaPercent);
+        }
+
+        if (_isRecovering == isRecovering)
+        {
+            return;
+        }
+
+        _isRecovering = isRecovering;
+
+        if (_isMonsterEncounterActive)
+        {
+            return;
+        }
+
+        PlayBreathingForCurrentState();
+    }
+
+    void SetRecoveringBreathingPitch(float staminaPercent)
+    {
+        if (RecoveringBreathingAudioSource == null)
+        {
+            return;
+        }
+
+        float normalizedStamina = Mathf.Clamp01(staminaPercent);
+        Debug.Log($"Setting recovering breathing pitch with stamina percent: {staminaPercent}, normalized: {normalizedStamina}");
+        RecoveringBreathingAudioSource.pitch = Mathf.Lerp(
+            RecoveringBreathingLowStaminaPitch,
+            RecoveringBreathingHighStaminaPitch,
+            normalizedStamina);
     }
 
     public void SetMonsterEncounterActive(bool isActive)
@@ -82,13 +135,22 @@ public class PlayerAudioManager : MonoBehaviour
         {
             PlayIfNeeded(SprintingBreathingAudioSource);
             _normalBreathingTargetVolume = 0f;
+            _recoveringBreathingTargetVolume = 0f;
             _sprintingBreathingTargetVolume = _sprintingBreathingVolume;
+        }
+        else if (_isRecovering)
+        {
+            PlayIfNeeded(RecoveringBreathingAudioSource);
+            _normalBreathingTargetVolume = 0f;
+            _sprintingBreathingTargetVolume = 0f;
+            _recoveringBreathingTargetVolume = _recoveringBreathingVolume;
         }
         else
         {
             PlayIfNeeded(NormalBreathingAudioSource);
             _normalBreathingTargetVolume = _normalBreathingVolume;
             _sprintingBreathingTargetVolume = 0f;
+            _recoveringBreathingTargetVolume = 0f;
         }
     }
 
@@ -96,6 +158,7 @@ public class PlayerAudioManager : MonoBehaviour
     {
         _normalBreathingTargetVolume = 0f;
         _sprintingBreathingTargetVolume = 0f;
+        _recoveringBreathingTargetVolume = 0f;
     }
 
     void FadeBreathingAudio(AudioSource audioSource, float targetVolume)
@@ -158,18 +221,27 @@ public class PlayerAudioManager : MonoBehaviour
         }
     }
 
-    public void PlayRandomFootstep()
+    public void PlayRandomFootstep(bool isSprinting)
     {
-        if (_footstepAudioSources == null || _footstepAudioSources.Count == 0)
+        List<AudioSource> audioSources = isSprinting ? _sprintingAudioSources : _footstepAudioSources;
+        if (audioSources == null || audioSources.Count == 0)
         {
             return;
         }
 
-        int index = Random.Range(0, _footstepAudioSources.Count);
-        AudioSource footstepSource = _footstepAudioSources[index];
+        int index = Random.Range(0, audioSources.Count);
+        AudioSource footstepSource = audioSources[index];
         if (footstepSource.clip != null)
         {
             footstepSource.PlayOneShot(footstepSource.clip);
+        }
+    }
+
+    public void PlayPickupSound(AudioClip clip)
+    {
+        if (clip != null && PickupAudioSource != null)
+        {
+            PickupAudioSource.PlayOneShot(clip);
         }
     }
 }
