@@ -3753,6 +3753,10 @@ PrefabInstance:
       propertyPath: StartingRoom
       value: 
       objectReference: {fileID: 5606637903266836617}
+    - target: {fileID: 3311235527531655982, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3316018331260727839, guid: aed74157deb286a439609395499a4060, type: 3}
       propertyPath: m_Controller
       value: 
@@ -3788,6 +3792,18 @@ PrefabInstance:
     - target: {fileID: 3726935410915483710, guid: aed74157deb286a439609395499a4060, type: 3}
       propertyPath: m_Volume
       value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3797874343545700107, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4428292701070779281, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_Name
+      value: FootstepsWalk
+      objectReference: {fileID: 0}
+    - target: {fileID: 5146567892840884685, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5248298109816725722, guid: aed74157deb286a439609395499a4060, type: 3}
       propertyPath: interactionRange
@@ -3844,6 +3860,18 @@ PrefabInstance:
     - target: {fileID: 6587007256068389955, guid: aed74157deb286a439609395499a4060, type: 3}
       propertyPath: m_LocalPosition.y
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6769055723330920451, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7795880987061537558, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8694237849757643737, guid: aed74157deb286a439609395499a4060, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8797064124241943742, guid: aed74157deb286a439609395499a4060, type: 3}
       propertyPath: m_Volume

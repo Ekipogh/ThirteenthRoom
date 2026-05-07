@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerAudioManager AudioManager;
     float _distanceTraveled = 0f;
     const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
+    const float SprintDistanceThreshold = 2.5f; // distance threshold for faster footstep sounds when sprinting
 
     void InitializeStartingRoom()
     {
@@ -208,7 +209,8 @@ public class PlayerController : MonoBehaviour
         if (AudioManager != null && IsMoving())
         {
             _distanceTraveled += speed * Time.deltaTime;
-            if (_distanceTraveled >= FootstepDistanceThreshold)
+            float currentFootstepThreshold = isSprinting ? SprintDistanceThreshold : FootstepDistanceThreshold;
+            if (_distanceTraveled >= currentFootstepThreshold)
             {
                 AudioManager.PlayRandomFootstep();
                 _distanceTraveled = 0f;
