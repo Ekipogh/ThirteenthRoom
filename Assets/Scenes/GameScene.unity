@@ -5347,9 +5347,17 @@ PrefabInstance:
       propertyPath: StartingRoom
       value: 
       objectReference: {fileID: 5606637903266836617}
+    - target: {fileID: 5944484054723053787, guid: 8519ea8510910054e89b8c58ff4b4b03, type: 3}
+      propertyPath: IsHeadBobEnabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6453614356037081260, guid: 8519ea8510910054e89b8c58ff4b4b03, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834106283464222847, guid: 8519ea8510910054e89b8c58ff4b4b03, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7474306537357772090, guid: 8519ea8510910054e89b8c58ff4b4b03, type: 3}
       propertyPath: m_LocalPosition.x

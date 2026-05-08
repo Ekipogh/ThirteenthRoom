@@ -9,8 +9,8 @@ public class PlayerAudioManager : MonoBehaviour
     [SerializeField] AudioSource GaspAudioSource;
     [SerializeField] AudioSource PickupAudioSource;
     [SerializeField, Min(0.01f)] float BreathingFadeDuration = 0.35f;
-    [SerializeField, Min(0.01f)] float RecoveringBreathingLowStaminaPitch = 1.0f;
-    [SerializeField, Min(0.01f)] float RecoveringBreathingHighStaminaPitch = 0.75f;
+    [SerializeField, Min(0.01f)] float RecoveringBreathingLowStaminaVolume = 1.0f;
+    [SerializeField, Min(0.01f)] float RecoveringBreathingHighStaminaVolume = 0.0f;
     [SerializeField] GameObject FootStepSourceObject;
     [SerializeField] GameObject SprintFootStepSourceObject;
     List<AudioSource> _footstepAudioSources;
@@ -103,11 +103,11 @@ public class PlayerAudioManager : MonoBehaviour
         }
 
         float normalizedStamina = Mathf.Clamp01(staminaPercent);
-        Debug.Log($"Setting recovering breathing pitch with stamina percent: {staminaPercent}, normalized: {normalizedStamina}");
-        RecoveringBreathingAudioSource.pitch = Mathf.Lerp(
-            RecoveringBreathingLowStaminaPitch,
-            RecoveringBreathingHighStaminaPitch,
-            normalizedStamina);
+        RecoveringBreathingAudioSource.volume = Mathf.Lerp(
+            RecoveringBreathingLowStaminaVolume,
+            RecoveringBreathingHighStaminaVolume,
+            normalizedStamina
+        );
     }
 
     public void SetMonsterEncounterActive(bool isActive)
