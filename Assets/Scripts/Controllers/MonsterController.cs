@@ -17,6 +17,7 @@ public class MonsterController : MonoBehaviour
 
     [SerializeField] GameManager GameManager;
     [SerializeField] PlayerAudioManager PlayerAudioManager;
+    [SerializeField] MonsterAudioManager MonsterAudioManager;
 
     GameState _currentGameState;
 
@@ -239,6 +240,12 @@ public class MonsterController : MonoBehaviour
         MoveVisualToRoom();
         SetMonsterVisible(true);
         _isTraveling = false;
+
+        if (MonsterAudioManager != null)
+        {
+            MonsterAudioManager.PlayFootstepsSound();
+        }
+
         Debug.Log($"Monster moved to room: {_currentRoom.name}");
     }
 
