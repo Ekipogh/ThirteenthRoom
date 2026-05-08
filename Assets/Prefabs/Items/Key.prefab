@@ -124,3 +124,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
   itemName: 
+  scoreReward: 5
+  scoreManager: {fileID: 0}
+  PickupSound: {fileID: 8300000, guid: f9766e387f337e14c9e2451e2773df1f, type: 3}

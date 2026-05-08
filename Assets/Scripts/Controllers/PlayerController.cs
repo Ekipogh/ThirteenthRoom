@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     float _lookSpeed = 0.150f;
 
     bool _isSprinting = false;
-    float _sprintMultiplier = 2f;
+    readonly float _sprintMultiplier = 2f;
 
     float _maxPitch = 70f;
     float _pitch;
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     float _headHeight;
     readonly float _sprintHeadForwardOffset = 0.7f;
     float _headBobFrequency = 10f;
-    float _headBobAmplitude = 0.005f;
+    float _headBobAmplitude = 0.1f;
 
     // Stats
     float _stamina = _maxStamina;
@@ -50,6 +50,10 @@ public class PlayerController : MonoBehaviour
 
     public Microlight.MicroBar.MicroBar StaminaBar;
 
+    // Audio
+    [SerializeField] PlayerAudioManager AudioManager;
+    float _distanceTraveled = 0f;
+    const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
 
     void InitializeStartingRoom()
     {
@@ -167,7 +171,7 @@ public class PlayerController : MonoBehaviour
     {
         bool isSprinting = _isSprinting && IsMoving() && _stamina > 0f;
 
-        // Drain stamin if sprinting
+        // Drain stamina if sprinting
         // Regen stamina if not sprinting, but only after a delay
         if (isSprinting)
         {
@@ -189,10 +193,30 @@ public class PlayerController : MonoBehaviour
 
         if (_stamina <= 0) _isSprinting = false;
 
+        // Breathing audio follows stamina state:
+        // full stamina = normal, draining stamina = sprinting, below full = recovering.
+        if (AudioManager != null)
+        {
+            AudioManager.SetSprinting(isSprinting);
+            AudioManager.SetRecovering(!isSprinting && _stamina < _maxStamina, _stamina / _maxStamina);
+        }
+
         float speed = isSprinting ? _moveSpeed * _sprintMultiplier : _moveSpeed;
 
         // Build movement in world space (transform.right/forward respects yaw rotation)
         Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
+
+        // Footstep audio
+        if (AudioManager != null && IsMoving())
+        {
+            _distanceTraveled += speed * Time.deltaTime * (_isSprinting ? 1 / _sprintMultiplier : 1f);
+            float currentFootstepThreshold = FootstepDistanceThreshold;
+            if (_distanceTraveled >= currentFootstepThreshold)
+            {
+                AudioManager.PlayRandomFootstep(isSprinting);
+                _distanceTraveled = 0f;
+            }
+        }
 
         // Apply gravity
         if (_characterController.isGrounded)
@@ -223,16 +247,19 @@ public class PlayerController : MonoBehaviour
         if (!IsHeadBobEnabled) return;
 
         Vector3 headJointPosition = GetPitchTransform().localPosition;
-        float bobAmount = 0f;
-        if (_moveInput.magnitude > 0.1f)
+        bool isMoving = _moveInput.magnitude > 0.1f;
+
+        if (isMoving)
         {
-            bobAmount = Mathf.Sin(Time.time * _headBobFrequency) * _headBobAmplitude;
+            float bobAmount = Mathf.Sin(Time.time * _headBobFrequency) * _headBobAmplitude;
+            // Apply bob around baseline height to avoid frame-to-frame accumulation.
+            headJointPosition.y = _headHeight + bobAmount;
         }
         else
         {
             headJointPosition.y = Mathf.Lerp(headJointPosition.y, _headHeight, Time.deltaTime * _headBobFrequency);
         }
-        headJointPosition.y += bobAmount;
+
         GetPitchTransform().localPosition = headJointPosition;
     }
 
@@ -277,7 +304,6 @@ public class PlayerController : MonoBehaviour
 
     public float Speed()
     {
-        Debug.Log($"Current velocity: {_velocity}");
         return new Vector3(_moveInput.x * _moveSpeed, 0, _moveInput.y * _moveSpeed).magnitude;
     }
 }

@@ -76,11 +76,7 @@ crashlytics-build.properties
 .env
 
 Assets.zip
+Assets.zip.meta
 # Third-party plugins and packages
-Synty/
-TextMesh Pro/
-PolygonHorrorMansion/
-FPSFont/
-Microlight/
-Plugins/
-Kevin Iglesias/
+Assets/Thirdparty/
+Assets/Plugins/Demigiant/

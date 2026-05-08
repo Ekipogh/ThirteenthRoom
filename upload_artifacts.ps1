@@ -14,13 +14,8 @@ if (Test-Path $envFilePath) {
 
 # Archive thirdparties from Assets folder into a zip file
 $3rdPartyList = @(
-    "Assets/Plugins",
-    "Assets/Synty",
-    "Assets/FPSFont",
-    "Assets/PolygonHorrorMansion",
-    "Assets/Microlight",
-    "Assets/TextMesh Pro",
-    "Assets/Kevin Iglesias"
+    "Assets/Plugins/Demigiant",
+    "Assets/Thirdparty/"
 )
 $zipFilePath = "Assets.zip"
 if (Test-Path $zipFilePath) {

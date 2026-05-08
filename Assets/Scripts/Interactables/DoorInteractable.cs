@@ -3,6 +3,7 @@ using UnityEngine;
 public class DoorInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField] float openingTime = 1f;
+    [SerializeField] DoorAudioManager AudioManager;
     const float OpenAngle = 90f;
     const float AngleEpsilon = 0.1f;
 
@@ -29,10 +30,12 @@ public class DoorInteractable : MonoBehaviour, IInteractable
         if (IsOpen())
         {
             _targetRelativeAngle = 0f;
+            AudioManager.PlayDoorCloseSound();
         }
         else
         {
             _targetRelativeAngle = ComputeOpenTarget(playerInteractor.transform.position);
+            AudioManager.PlayDoorOpenSound();
         }
 
         _isMoving = true;
