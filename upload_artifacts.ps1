@@ -33,6 +33,11 @@ if (Test-Path $versionFilePath) {
     exit 1
 }
 
+if (-not $version) {
+    Write-Host "Error: Version number is empty. Please check artifacts_version.txt."
+    exit 1
+}
+
 # Upload the Assets.zip file to Nexus Repository Manager using PowerShell
 Write-Output "Uploading Assets.zip version $version to Nexus Repository Manager..."
 
