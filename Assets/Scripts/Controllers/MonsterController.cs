@@ -245,8 +245,6 @@ public class MonsterController : MonoBehaviour
         {
             MonsterAudioManager.PlayFootstepsSound();
         }
-
-        Debug.Log($"Monster moved to room: {_currentRoom.name}");
     }
 
     System.Collections.IEnumerator HandleEscapeWindow()

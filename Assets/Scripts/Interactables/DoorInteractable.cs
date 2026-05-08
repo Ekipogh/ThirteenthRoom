@@ -12,9 +12,9 @@ public class DoorInteractable : MonoBehaviour, IInteractable
     float _targetRelativeAngle;
     Vector3 _doorLocalCenter;
 
-    public string GetInteractionPrompt()
+    public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
-        return IsOpen() ? "close the door" : "open the door";
+        return IsOpen() ? "Press E to close the door" : "Press E to open the door";
     }
 
     public void Interact(PlayerInteractor playerInteractor)

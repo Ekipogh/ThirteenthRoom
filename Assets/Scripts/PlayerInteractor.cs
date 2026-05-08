@@ -10,12 +10,16 @@ public class PlayerInteractor : MonoBehaviour
 
     [SerializeField] TMPro.TextMeshProUGUI interactionPrompt;
 
+    private PlayerInventory _playerInventory;
+    public PlayerInventory Inventory => _playerInventory;
+
     void Awake()
     {
         if (headTransform == null)
         {
             headTransform = transform.Find("HeadJoint");
         }
+        _playerInventory = new PlayerInventory();
     }
 
     void Update()
@@ -40,7 +44,7 @@ public class PlayerInteractor : MonoBehaviour
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
                 _currentTarget = interactable;
-                interactionPrompt.text = FormatInteractionPrompt(interactable.GetInteractionPrompt());
+                interactionPrompt.text = FormatInteractionPrompt(interactable.GetInteractionPrompt(this));
                 interactionPrompt.gameObject.SetActive(true);
                 return;
             }
@@ -57,6 +61,6 @@ public class PlayerInteractor : MonoBehaviour
         }
 
         string normalizedAction = interactionAction.Trim().TrimEnd('.');
-        return $"Press E to {normalizedAction}.";
+        return $"{normalizedAction}.";
     }
 }
