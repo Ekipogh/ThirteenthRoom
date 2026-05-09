@@ -55,6 +55,12 @@ public class PlayerController : MonoBehaviour
     float _distanceTraveled = 0f;
     const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
 
+    // Torch
+    [SerializeField] GameObject TorchLight;
+    [SerializeField] AudioSource TorchOnAudio;
+    [SerializeField] AudioSource TorchOffAudio;
+    bool _isTorchEnabled = false;
+
     void InitializeStartingRoom()
     {
         if (StartingRoom == null)
@@ -305,5 +311,28 @@ public class PlayerController : MonoBehaviour
     public float Speed()
     {
         return new Vector3(_moveInput.x * _moveSpeed, 0, _moveInput.y * _moveSpeed).magnitude;
+    }
+
+    public void EnableTorch()
+    {
+        _isTorchEnabled = true;
+    }
+
+    void OnTorch(InputValue value)
+    {
+        if (!_isTorchEnabled) return; // Player need to find a torch ingame
+        if (TorchLight != null)
+        {
+            bool isActive = TorchLight.activeSelf;
+            TorchLight.SetActive(!isActive);
+            if (!isActive)
+            {
+                TorchOnAudio?.Play();
+            }
+            else
+            {
+                TorchOffAudio?.Play();
+            }
+        }
     }
 }
