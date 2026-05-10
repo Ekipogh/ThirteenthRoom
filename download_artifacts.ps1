@@ -24,7 +24,7 @@ if ([string]::IsNullOrEmpty($CurrentVersion)) {
 $CacheDir = ".\.tc-cache\artifacts"
 $CachedVersionFile = "$CacheDir\artifacts_version.txt"
 $ZipPath = "$CacheDir\Assets.zip"
-$ExtractDir = ".\Artifacts"
+$ExtractDir = ".\Assets"
 
 New-Item -ItemType Directory -Force -Path $CacheDir | Out-Null
 
