@@ -321,7 +321,7 @@ public class PlayerController : MonoBehaviour
     void OnTorch(InputValue value)
     {
         if (!_isTorchEnabled) return; // Player need to find a torch ingame
-        if (TorchLight != null)
+        if (TorchLight != null && value.isPressed)
         {
             bool isActive = TorchLight.activeSelf;
             TorchLight.SetActive(!isActive);

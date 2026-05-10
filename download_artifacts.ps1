@@ -16,6 +16,11 @@ else {
 $CurrentVersion = Get-Content ".\artifacts_version.txt" -Raw
 $CurrentVersion = $CurrentVersion.Trim()
 
+if ([string]::IsNullOrEmpty($CurrentVersion)) {
+    Write-Host "Error: Current version is empty. Please ensure artifacts_version.txt contains the correct version."
+    exit 1
+}
+
 $CacheDir = ".\.tc-cache\artifacts"
 $CachedVersionFile = "$CacheDir\artifacts_version.txt"
 $ZipPath = "$CacheDir\Assets.zip"
