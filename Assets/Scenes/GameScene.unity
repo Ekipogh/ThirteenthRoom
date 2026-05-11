@@ -6285,6 +6285,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1415333761}
     m_Modifications:
+    - target: {fileID: 132821289574363909, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.14000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 132821289574363909, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.16333333
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711426440514135262, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6493727096330843711, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
       propertyPath: m_Name
       value: PowerBox
@@ -6349,6 +6361,22 @@ PrefabInstance:
       propertyPath: 'fuseItems.Array.data[1]'
       value: 
       objectReference: {fileID: 517752844}
+    - target: {fileID: 7573426775772716783, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7573426775772716783, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
+      propertyPath: CollisionModule.collisionMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7573426775772716783, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
+      propertyPath: CollisionModule.m_Bounce.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7573426775772716783, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
+      propertyPath: CollisionModule.m_Dampen.scalar
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 7675827162149200057, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 31.745667

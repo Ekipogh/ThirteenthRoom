@@ -10,6 +10,9 @@ public class FuseBox : MonoBehaviour, IInteractable
     [SerializeField] List<Transform> fuseItems;
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] Transform boxSwitch;
+    [SerializeField] AudioSource fuseInsertSound;
+    [SerializeField] AudioSource powerOnSound;
+    [SerializeField] AudioSource FizzleSound;
 
     float _switchOffAngle = 60f;
 
@@ -45,6 +48,11 @@ public class FuseBox : MonoBehaviour, IInteractable
             {
                 lightSwitch.SetPower(activate);
             }
+        }
+
+        if (!activate && FizzleSound != null)
+        {
+            FizzleSound.PlayOneShot(FizzleSound.clip);
         }
     }
 
@@ -97,6 +105,10 @@ public class FuseBox : MonoBehaviour, IInteractable
             {
                 ActivateFuseBox(true);
                 scoreManager.AddScore(ScoreReward);
+                if (powerOnSound != null)
+                {
+                    powerOnSound.PlayOneShot(powerOnSound.clip);
+                }
                 return;
             }
 
@@ -104,6 +116,10 @@ public class FuseBox : MonoBehaviour, IInteractable
             {
                 _fuseActiveCount++;
                 fuses[_fuseActiveCount - 1].gameObject.SetActive(true);
+                if (fuseInsertSound != null)
+                {
+                    fuseInsertSound.PlayOneShot(fuseInsertSound.clip);
+                }
             }
         }
     }
