@@ -32,6 +32,8 @@ public class MonsterController : MonoBehaviour
     public Room CurrentRoom => _currentRoom;
     public MonsterState CurrentState => _currentState;
 
+    float _lightSwitchFlipChance = 0.3f;
+
     void Awake()
     {
         _renderers = GetComponentsInChildren<Renderer>(true);
@@ -69,6 +71,7 @@ public class MonsterController : MonoBehaviour
             transform.position = _currentRoom.MonsterPoint.position;
             float randomYRotation = Random.Range(0f, 360f);
             transform.rotation = Quaternion.Euler(0f, randomYRotation, 0f);
+            FlipTheSwitch();
         }
     }
 
@@ -319,6 +322,17 @@ public class MonsterController : MonoBehaviour
         if (_currentState == MonsterState.EscapeWindow || _currentState == MonsterState.Attacking)
         {
             LookAtPlayer();
+        }
+    }
+
+    void FlipTheSwitch()
+    {
+        if (Random.value < _lightSwitchFlipChance)
+        {
+            LightSwitchInteractable lightSwitch = _currentRoom.GetLightSwitch();
+            if (lightSwitch != null)            {
+                lightSwitch.SwitchLight(false);
+            }
         }
     }
 }

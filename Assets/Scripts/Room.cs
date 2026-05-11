@@ -17,8 +17,8 @@ public class Room : MonoBehaviour
     public Transform MonsterPoint;
     public List<Room> ConnectedRooms = new();
 
-    public Transform GetLightSwitch()
+    public LightSwitchInteractable GetLightSwitch()
     {
-        return transform.Find("LightSwitch");
+        return transform.Find("LightSwitch")?.GetComponent<LightSwitchInteractable>();
     }
 }

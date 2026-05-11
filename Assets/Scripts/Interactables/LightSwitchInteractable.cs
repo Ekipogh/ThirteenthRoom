@@ -15,11 +15,11 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
 
     void Awake()
     {
-        SwitchLight(isActive);
+        ApplyLightState();
     }
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
-        return "Press E to toggle the light switch";
+        return IsPowered ? "Press E to toggle the light switch" : "The light switch has no power";
     }
 
     public void Interact(PlayerInteractor playerInteractor)
@@ -28,13 +28,8 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
         {
             return; // Do nothing if the switch is not powered
         }
-        if (CeilingPointLight != null)
-        {
-            isActive = CeilingPointLight.activeSelf;
-            CeilingPointLight.SetActive(!isActive);
-            PlaySound(isActive);
-        }
-        // Turn off emmision of ceiling light when the switch is off
+
+        PlaySound(isActive);
         SwitchLight(!isActive);
     }
 
@@ -49,14 +44,26 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
 
     public void SwitchLight(bool turnOn)
     {
+        isActive = turnOn;
+        ApplyLightState();
+    }
+
+    public void SetPower(bool powered)
+    {
+        IsPowered = powered;
+        ApplyLightState();
+    }
+
+    void ApplyLightState()
+    {
         if (CeilingPointLight != null)
         {
-            CeilingPointLight.SetActive(turnOn);
+            CeilingPointLight.SetActive(IsPowered && isActive);
         }
         if (CeilingLightModel != null)
         {
             var emission = CeilingLightModel.GetComponent<Renderer>().material.GetColor("_EmissionColor");
-            if (turnOn)
+            if (IsPowered && isActive)
             {
                 emission = Color.white; // Restore emission (you can adjust the color as needed)
             }
@@ -69,7 +76,7 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
         // Rotate the light switch model to indicate on/off state
         if (LightSwitchTransform != null)
         {
-            float targetAngle = turnOn ? 0f : _switchOffAngle;
+            float targetAngle = isActive ? 0f : _switchOffAngle;
             Vector3 angles = LightSwitchTransform.localEulerAngles;
             angles.x = targetAngle;
             LightSwitchTransform.localEulerAngles = angles;

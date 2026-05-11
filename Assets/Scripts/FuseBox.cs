@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class FuseBox : MonoBehaviour, IInteractable
 {
@@ -7,6 +8,9 @@ public class FuseBox : MonoBehaviour, IInteractable
     [SerializeField] Transform particleEffectPoint;
     [SerializeField] List<Transform> fuses;
     [SerializeField] List<Transform> fuseItems;
+    [SerializeField] ScoreManager scoreManager;
+
+    public float ScoreReward = 20f;
     readonly float _timerDuration = 20f;
     float _currentTimer = 0f;
     readonly float _fuseBlowChance = 0.5f;
@@ -22,19 +26,16 @@ public class FuseBox : MonoBehaviour, IInteractable
 
     public void ActivateFuseBox(bool activate)
     {
+        _isActive = activate;
+        particleEffectPoint.gameObject.SetActive(!_isActive);
+        MakeFusesVisible(_isActive);
+
         foreach (var room in rooms)
         {
-            var lightSwitch = room.GetLightSwitch();
+            LightSwitchInteractable lightSwitch = room.GetLightSwitch();
             if (lightSwitch != null)
             {
-                if (lightSwitch.TryGetComponent<LightSwitchInteractable>(out var interactable))
-                {
-                    interactable.SwitchLight(activate);
-                    interactable.IsPowered = activate; // Set the powered state of the switch
-                    _isActive = activate;
-                    particleEffectPoint.gameObject.SetActive(!_isActive);
-                    MakeFusesVisible(_isActive);
-                }
+                lightSwitch.SetPower(activate);
             }
         }
     }
@@ -83,14 +84,18 @@ public class FuseBox : MonoBehaviour, IInteractable
     {
         if (!_isActive)
         {
+            int fusesNeeded = fuses.Count - _fuseActiveCount;
+            if (fusesNeeded <= 0)
+            {
+                ActivateFuseBox(true);
+                scoreManager.AddScore(ScoreReward);
+                return;
+            }
+
             if (playerInteractor.Inventory.RemoveItem("Fuse"))
             {
                 _fuseActiveCount++;
                 fuses[_fuseActiveCount - 1].gameObject.SetActive(true);
-                if (_fuseActiveCount >= fuses.Count)
-                {
-                    ActivateFuseBox(true);
-                }
             }
         }
     }

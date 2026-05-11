@@ -6294,6 +6294,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7372397770434816666, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
+      propertyPath: scoreManager
+      value: 
+      objectReference: {fileID: 763898658}
+    - target: {fileID: 7372397770434816666, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
       propertyPath: 'rooms.Array.data[0]'
       value: 
       objectReference: {fileID: 8466618}
