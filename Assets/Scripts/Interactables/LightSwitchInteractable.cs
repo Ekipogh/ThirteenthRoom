@@ -19,16 +19,11 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
     }
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
-        return IsPowered ? "Press E to toggle the light switch" : "The light switch has no power";
+        return "Press E to toggle the light switch";
     }
 
     public void Interact(PlayerInteractor playerInteractor)
     {
-        if (!IsPowered)
-        {
-            return; // Do nothing if the switch is not powered
-        }
-
         PlaySound(isActive);
         SwitchLight(!isActive);
     }

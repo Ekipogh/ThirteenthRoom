@@ -5072,6 +5072,10 @@ MonoBehaviour:
   fuses:
   - {fileID: 5890436074170572414}
   - {fileID: 7678582341474729876}
+  fuseItems: []
+  scoreManager: {fileID: 0}
+  boxSwitch: {fileID: 8680328444025477890}
+  ScoreReward: 20
 --- !u!1 &9198108298779822159
 GameObject:
   m_ObjectHideFlags: 0

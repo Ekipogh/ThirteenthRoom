@@ -9,6 +9,9 @@ public class FuseBox : MonoBehaviour, IInteractable
     [SerializeField] List<Transform> fuses;
     [SerializeField] List<Transform> fuseItems;
     [SerializeField] ScoreManager scoreManager;
+    [SerializeField] Transform boxSwitch;
+
+    float _switchOffAngle = 60f;
 
     public float ScoreReward = 20f;
     readonly float _timerDuration = 20f;
@@ -29,6 +32,11 @@ public class FuseBox : MonoBehaviour, IInteractable
         _isActive = activate;
         particleEffectPoint.gameObject.SetActive(!_isActive);
         MakeFusesVisible(_isActive);
+        if (boxSwitch != null)
+        {
+            float targetAngle = activate ? 0f : _switchOffAngle;
+            boxSwitch.localRotation = Quaternion.Euler(targetAngle, 0f, 0f);
+        }
 
         foreach (var room in rooms)
         {
