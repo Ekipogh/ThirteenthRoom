@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LightSwtichInteractable : MonoBehaviour, IInteractable
+public class LightSwitchInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField] GameObject CeilingPointLight;
     [SerializeField] GameObject CeilingLightModel;
@@ -10,6 +10,8 @@ public class LightSwtichInteractable : MonoBehaviour, IInteractable
 
     bool isActive = false;
     const float _switchOffAngle = -60f;
+
+    public bool IsPowered = true; // Indicates whether the switch is powered and can be interacted with
 
     void Awake()
     {
@@ -22,6 +24,10 @@ public class LightSwtichInteractable : MonoBehaviour, IInteractable
 
     public void Interact(PlayerInteractor playerInteractor)
     {
+        if (!IsPowered)
+        {
+            return; // Do nothing if the switch is not powered
+        }
         if (CeilingPointLight != null)
         {
             isActive = CeilingPointLight.activeSelf;
@@ -41,7 +47,7 @@ public class LightSwtichInteractable : MonoBehaviour, IInteractable
         }
     }
 
-    void SwitchLight(bool turnOn)
+    public void SwitchLight(bool turnOn)
     {
         if (CeilingPointLight != null)
         {

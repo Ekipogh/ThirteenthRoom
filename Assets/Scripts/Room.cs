@@ -16,4 +16,9 @@ public class Room : MonoBehaviour
     public Transform PlayerSpawnPoint;
     public Transform MonsterPoint;
     public List<Room> ConnectedRooms = new();
+
+    public Transform GetLightSwitch()
+    {
+        return transform.Find("LightSwitch");
+    }
 }
