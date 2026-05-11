@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FuseBox : MonoBehaviour
+public class FuseBox : MonoBehaviour, IInteractable
 {
     [SerializeField] List<Room> rooms;
     [SerializeField] Transform particleEffectPoint;
@@ -12,9 +12,12 @@ public class FuseBox : MonoBehaviour
     readonly float _fuseBlowChance = 0.5f;
     bool _isActive = true;
 
+    int _fuseActiveCount = 0;
+
     void Start()
     {
         _currentTimer = _timerDuration;
+        _fuseActiveCount = fuses.Count;
     }
 
     public void ActivateFuseBox(bool activate)
@@ -42,6 +45,7 @@ public class FuseBox : MonoBehaviour
         {
             fuse.gameObject.SetActive(visible);
         }
+        _fuseActiveCount = visible ? fuses.Count : 0;
         foreach (var item in fuseItems)
         {
             item.gameObject.SetActive(!visible);
@@ -59,6 +63,33 @@ public class FuseBox : MonoBehaviour
                 if (Random.value < _fuseBlowChance)
                 {
                     ActivateFuseBox(false);
+                }
+            }
+        }
+    }
+
+    public string GetInteractionPrompt(PlayerInteractor playerInteractor)
+    {
+        string prompt = "";
+        if (!_isActive)
+        {
+            int fusesNeeded = fuses.Count - _fuseActiveCount;
+            prompt = fusesNeeded > 0 ? $"Press E to insert a fuse ({fusesNeeded} needed)" : "Press E to restore power";
+        }
+        return prompt;
+    }
+
+    public void Interact(PlayerInteractor playerInteractor)
+    {
+        if (!_isActive)
+        {
+            if (playerInteractor.Inventory.RemoveItem("Fuse"))
+            {
+                _fuseActiveCount++;
+                fuses[_fuseActiveCount - 1].gameObject.SetActive(true);
+                if (_fuseActiveCount >= fuses.Count)
+                {
+                    ActivateFuseBox(true);
                 }
             }
         }

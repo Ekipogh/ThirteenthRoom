@@ -7,6 +7,7 @@ class ItemPickup : MonoBehaviour, IInteractable
     [SerializeField] float scoreReward = 5f;
     [SerializeField] ScoreManager scoreManager;
     public AudioClip PickupSound;
+    public bool DestroyOrDisable = true;
 
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
@@ -15,13 +16,23 @@ class ItemPickup : MonoBehaviour, IInteractable
 
     public void Interact(PlayerInteractor playerInteractor)
     {
-        scoreManager.AddScore(scoreReward);
+        if (scoreManager != null)
+        {
+            scoreManager.AddScore(scoreReward);
+        }
         if (PickupSound != null)
         {
             playerInteractor.GetComponent<PlayerAudioManager>().PlayPickupSound(PickupSound);
         }
         playerInteractor.Inventory.AddItem(itemName);
-        Destroy(gameObject);
+        if (DestroyOrDisable)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
 }

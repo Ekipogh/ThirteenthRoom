@@ -18,8 +18,8 @@ public class PlayerInventory
         return _items.Contains(item);
     }
 
-    public void RemoveItem(string item)
+    public bool RemoveItem(string item)
     {
-        _items.Remove(item);
+        return _items.Remove(item);
     }
 }

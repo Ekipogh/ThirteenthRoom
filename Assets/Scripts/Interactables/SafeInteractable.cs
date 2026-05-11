@@ -6,6 +6,7 @@ public class SafeInteractable : MonoBehaviour, IInteractable
     [SerializeField] Transform safeDoor;
     [SerializeField] float openAngle = -90f;
     [SerializeField] float openSpeed = 120f;
+    [SerializeField] AudioClip openSound;
     bool _isOpening;
     Collider _collider;
 
@@ -29,6 +30,10 @@ public class SafeInteractable : MonoBehaviour, IInteractable
             if (safeDoor != null)
             {
                 _isOpening = true;
+                if (openSound != null)
+                {
+                    AudioSource.PlayClipAtPoint(openSound, transform.position);
+                }
             }
         }
     }
