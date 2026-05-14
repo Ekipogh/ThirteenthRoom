@@ -58,6 +58,8 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
             }
         }
         ShuffleCandles(); // Candles will re-light in a different order when the ritual is performed again
+        currentInteractionTime = 0f;
+        _deactivateTimer = 0f;
     }
 
     private void CompleteRitual()
@@ -97,6 +99,13 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
     public void EndHoldInteract(PlayerInteractor interactor)
     {
         StopRitualMusic();
+
+        // Releasing before completion resets progress.
+        if (!_isActive)
+        {
+            currentInteractionTime = 0f;
+            UpdateLights();
+        }
     }
 
     private void StartRitualMusic()

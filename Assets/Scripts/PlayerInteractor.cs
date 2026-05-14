@@ -6,10 +6,13 @@ public class PlayerInteractor : MonoBehaviour
     [SerializeField] float interactionRange = 3f;
     [SerializeField] LayerMask interactableLayerMask = ~0; // Default to everything
     [SerializeField] Transform headTransform;
+    [SerializeField] PlayerInput playerInput;
+    [SerializeField] string interactActionName = "Interact";
     IInteractable _currentInteractableTarget;
     IHoldInteractable _currentHoldTarget;
     IHoldInteractable _activeHoldTarget;
     bool _isInteractPressed;
+    InputAction _interactAction;
 
     [SerializeField] TMPro.TextMeshProUGUI interactionPrompt;
 
@@ -22,12 +25,24 @@ public class PlayerInteractor : MonoBehaviour
         {
             headTransform = transform.Find("HeadJoint");
         }
+
+        if (playerInput == null)
+        {
+            playerInput = GetComponent<PlayerInput>();
+        }
+
+        if (playerInput != null && playerInput.actions != null)
+        {
+            _interactAction = playerInput.actions.FindAction(interactActionName, throwIfNotFound: false);
+        }
+
         _playerInventory = new PlayerInventory();
     }
 
     void Update()
     {
         CheckForInteractables();
+        RefreshInteractButtonState();
         UpdateHeldInteraction();
     }
 
@@ -51,6 +66,20 @@ public class PlayerInteractor : MonoBehaviour
 
         // One-shot interactions should not depend on a release callback from the input action.
         _isInteractPressed = false;
+    }
+
+    void RefreshInteractButtonState()
+    {
+        if (_interactAction == null)
+        {
+            return;
+        }
+
+        if (_isInteractPressed && !_interactAction.IsPressed())
+        {
+            _isInteractPressed = false;
+            EndHeldInteraction();
+        }
     }
 
     void UpdateHeldInteraction()
