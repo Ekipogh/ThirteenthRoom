@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class LightSwitchInteractable : MonoBehaviour, IInteractable
 {
+    static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
+
     [SerializeField] GameObject CeilingPointLight;
     [SerializeField] GameObject CeilingLightModel;
     [SerializeField] Transform LightSwitchTransform;
     [SerializeField] AudioSource OnSound;
     [SerializeField] AudioSource OffSound;
+    Renderer _ceilingLightRenderer;
 
     bool isActive = false;
     const float _switchOffAngle = -60f;
@@ -15,6 +18,11 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
 
     void Awake()
     {
+        if (CeilingLightModel != null)
+        {
+            _ceilingLightRenderer = CeilingLightModel.GetComponent<Renderer>();
+        }
+
         ApplyLightState();
     }
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
@@ -31,7 +39,7 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
     void PlaySound(bool isTurningOff)
     {
         AudioSource sourceToPlay = isTurningOff ? OffSound : OnSound;
-        if (sourceToPlay != null)
+        if (sourceToPlay != null && sourceToPlay.clip != null)
         {
             sourceToPlay.PlayOneShot(sourceToPlay.clip);
         }
@@ -55,18 +63,10 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
         {
             CeilingPointLight.SetActive(IsPowered && isActive);
         }
-        if (CeilingLightModel != null)
+        if (_ceilingLightRenderer != null)
         {
-            var emission = CeilingLightModel.GetComponent<Renderer>().material.GetColor("_EmissionColor");
-            if (IsPowered && isActive)
-            {
-                emission = Color.white; // Restore emission (you can adjust the color as needed)
-            }
-            else
-            {
-                emission = Color.black; // Turn off emission
-            }
-            CeilingLightModel.GetComponent<Renderer>().material.SetColor("_EmissionColor", emission);
+            Color emission = IsPowered && isActive ? Color.white : Color.black;
+            _ceilingLightRenderer.material.SetColor(EmissionColorId, emission);
         }
         // Rotate the light switch model to indicate on/off state
         if (LightSwitchTransform != null)

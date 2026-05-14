@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioSource TorchOnAudio;
     [SerializeField] AudioSource TorchOffAudio;
     bool _isTorchEnabled = false;
+    bool _isInitialized;
 
     void InitializeStartingRoom()
     {
@@ -89,6 +90,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         InitializeStartingRoom();
+        _characterController = GetComponent<CharacterController>();
+        _colliderRadius = _characterController.radius;
+        _velocity = Vector3.zero;
+
         _pitch = NormalizePitch(GetPitchTransform().localEulerAngles.x);
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -106,10 +111,7 @@ public class PlayerController : MonoBehaviour
         }
         InputActions.FindActionMap("Player").Enable();
 
-        _characterController = GetComponent<CharacterController>();
-        _colliderRadius = _characterController.radius;
-
-        _velocity = Vector3.zero;
+        _isInitialized = true;
 
         if (StaminaBar != null)
         {
@@ -155,6 +157,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (!_isInitialized || _characterController == null)
+        {
+            return;
+        }
+
         ProcessMovement();
         SprintingHeadForwardOffset();
         HeadBob();
@@ -287,7 +294,17 @@ public class PlayerController : MonoBehaviour
 
     Transform GetPitchTransform()
     {
-        return HeadJoint != null ? HeadJoint : PlayerCamera.transform;
+        if (HeadJoint != null)
+        {
+            return HeadJoint;
+        }
+
+        if (PlayerCamera != null)
+        {
+            return PlayerCamera.transform;
+        }
+
+        return transform;
     }
 
     float NormalizePitch(float pitch)

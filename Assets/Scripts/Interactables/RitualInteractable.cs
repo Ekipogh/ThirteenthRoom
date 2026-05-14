@@ -45,9 +45,17 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
     private void DeactivateRitual()
     {
         _isActive = false;
+        if (candles == null)
+        {
+            return;
+        }
+
         foreach (RitualCandle candle in candles)
         {
-            candle.ExtinguishCandle();
+            if (candle != null)
+            {
+                candle.ExtinguishCandle();
+            }
         }
         ShuffleCandles(); // Candles will re-light in a different order when the ritual is performed again
     }
@@ -79,7 +87,10 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
         if (currentInteractionTime >= interactionTime)
         {
             CompleteRitual();
-            scoreManager.AddScore(_scorePerRitual);
+            if (scoreManager != null)
+            {
+                scoreManager.AddScore(_scorePerRitual);
+            }
         }
     }
 
@@ -95,13 +106,18 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
             return;
         }
 
+        if (ritualAudioSource == null)
+        {
+            return;
+        }
+
         ritualAudioSource.Play();
         _isPerformingRitual = true;
     }
 
     private void StopRitualMusic()
     {
-        if (!_isPerformingRitual)
+        if (!_isPerformingRitual || ritualAudioSource == null)
         {
             return;
         }
@@ -117,10 +133,20 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     private void UpdateLights()
     {
+        if (candles == null || candles.Count == 0)
+        {
+            return;
+        }
+
         float progress = currentInteractionTime / interactionTime;
         int candlesToLight = Mathf.FloorToInt(progress * candles.Count);
         for (int i = 0; i < candles.Count; i++)
         {
+            if (candles[i] == null)
+            {
+                continue;
+            }
+
             if (i < candlesToLight)
             {
                 candles[i].LightCandle();
@@ -134,6 +160,11 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     void ShuffleCandles()
     {
+        if (candles == null || candles.Count <= 1)
+        {
+            return;
+        }
+
         for (int i = 0; i < candles.Count; i++)
         {
             int randomIndex = Random.Range(0, candles.Count);

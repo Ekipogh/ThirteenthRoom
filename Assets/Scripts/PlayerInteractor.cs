@@ -28,23 +28,16 @@ public class PlayerInteractor : MonoBehaviour
     void Update()
     {
         CheckForInteractables();
-        RefreshInteractButtonState();
         UpdateHeldInteraction();
     }
 
     void OnInteract(InputValue value)
     {
-        bool wasInteractPressed = _isInteractPressed;
         _isInteractPressed = value.isPressed;
 
         if (!_isInteractPressed)
         {
             EndHeldInteraction();
-            return;
-        }
-
-        if (wasInteractPressed)
-        {
             return;
         }
 
@@ -55,22 +48,9 @@ public class PlayerInteractor : MonoBehaviour
         }
 
         _currentInteractableTarget?.Interact(this);
-    }
 
-    void RefreshInteractButtonState()
-    {
-        if (!_isInteractPressed)
-        {
-            return;
-        }
-
-        if (Keyboard.current == null || Keyboard.current.eKey.isPressed)
-        {
-            return;
-        }
-
+        // One-shot interactions should not depend on a release callback from the input action.
         _isInteractPressed = false;
-        EndHeldInteraction();
     }
 
     void UpdateHeldInteraction()

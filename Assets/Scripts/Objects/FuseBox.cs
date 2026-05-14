@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class FuseBox : MonoBehaviour, IInteractable
 {
@@ -27,13 +26,17 @@ public class FuseBox : MonoBehaviour, IInteractable
     void Start()
     {
         _currentTimer = _timerDuration;
-        _fuseActiveCount = fuses.Count;
+        _fuseActiveCount = fuses != null ? fuses.Count : 0;
     }
 
     public void ActivateFuseBox(bool activate)
     {
         _isActive = activate;
-        particleEffectPoint.gameObject.SetActive(!_isActive);
+        if (particleEffectPoint != null)
+        {
+            particleEffectPoint.gameObject.SetActive(!_isActive);
+        }
+
         MakeFusesVisible(_isActive);
         if (boxSwitch != null)
         {
@@ -41,12 +44,20 @@ public class FuseBox : MonoBehaviour, IInteractable
             boxSwitch.localRotation = Quaternion.Euler(targetAngle, 0f, 0f);
         }
 
-        foreach (var room in rooms)
+        if (rooms != null)
         {
-            LightSwitchInteractable lightSwitch = room.GetLightSwitch();
-            if (lightSwitch != null)
+            foreach (var room in rooms)
             {
-                lightSwitch.SetPower(activate);
+                if (room == null)
+                {
+                    continue;
+                }
+
+                LightSwitchInteractable lightSwitch = room.GetLightSwitch();
+                if (lightSwitch != null)
+                {
+                    lightSwitch.SetPower(activate);
+                }
             }
         }
 
@@ -58,14 +69,27 @@ public class FuseBox : MonoBehaviour, IInteractable
 
     void MakeFusesVisible(bool visible)
     {
-        foreach (var fuse in fuses)
+        if (fuses != null)
         {
-            fuse.gameObject.SetActive(visible);
+            foreach (var fuse in fuses)
+            {
+                if (fuse != null)
+                {
+                    fuse.gameObject.SetActive(visible);
+                }
+            }
         }
-        _fuseActiveCount = visible ? fuses.Count : 0;
-        foreach (var item in fuseItems)
+
+        _fuseActiveCount = visible && fuses != null ? fuses.Count : 0;
+        if (fuseItems != null)
         {
-            item.gameObject.SetActive(!visible);
+            foreach (var item in fuseItems)
+            {
+                if (item != null)
+                {
+                    item.gameObject.SetActive(!visible);
+                }
+            }
         }
     }
 
@@ -90,7 +114,8 @@ public class FuseBox : MonoBehaviour, IInteractable
         string prompt = "";
         if (!_isActive)
         {
-            int fusesNeeded = fuses.Count - _fuseActiveCount;
+            int fuseCount = fuses != null ? fuses.Count : 0;
+            int fusesNeeded = fuseCount - _fuseActiveCount;
             prompt = fusesNeeded > 0 ? $"Press E to insert a fuse ({fusesNeeded} needed)" : "Press E to restore power";
         }
         return prompt;
@@ -100,11 +125,16 @@ public class FuseBox : MonoBehaviour, IInteractable
     {
         if (!_isActive)
         {
-            int fusesNeeded = fuses.Count - _fuseActiveCount;
+            int fuseCount = fuses != null ? fuses.Count : 0;
+            int fusesNeeded = fuseCount - _fuseActiveCount;
             if (fusesNeeded <= 0)
             {
                 ActivateFuseBox(true);
-                scoreManager.AddScore(ScoreReward);
+                if (scoreManager != null)
+                {
+                    scoreManager.AddScore(ScoreReward);
+                }
+
                 if (powerOnSound != null)
                 {
                     powerOnSound.PlayOneShot(powerOnSound.clip);
@@ -115,7 +145,11 @@ public class FuseBox : MonoBehaviour, IInteractable
             if (playerInteractor.Inventory.RemoveItem("Fuse"))
             {
                 _fuseActiveCount++;
-                fuses[_fuseActiveCount - 1].gameObject.SetActive(true);
+                if (fuses != null && _fuseActiveCount - 1 >= 0 && _fuseActiveCount - 1 < fuses.Count && fuses[_fuseActiveCount - 1] != null)
+                {
+                    fuses[_fuseActiveCount - 1].gameObject.SetActive(true);
+                }
+
                 if (fuseInsertSound != null)
                 {
                     fuseInsertSound.PlayOneShot(fuseInsertSound.clip);
