@@ -6,7 +6,10 @@ public class PlayerInteractor : MonoBehaviour
     [SerializeField] float interactionRange = 3f;
     [SerializeField] LayerMask interactableLayerMask = ~0; // Default to everything
     [SerializeField] Transform headTransform;
-    IInteractable _currentTarget;
+    IInteractable _currentInteractableTarget;
+    IHoldInteractable _currentHoldTarget;
+    IHoldInteractable _activeHoldTarget;
+    bool _isInteractPressed;
 
     [SerializeField] TMPro.TextMeshProUGUI interactionPrompt;
 
@@ -25,14 +28,89 @@ public class PlayerInteractor : MonoBehaviour
     void Update()
     {
         CheckForInteractables();
+        RefreshInteractButtonState();
+        UpdateHeldInteraction();
     }
 
     void OnInteract(InputValue value)
     {
-        if (value.isPressed && _currentTarget != null)
+        bool wasInteractPressed = _isInteractPressed;
+        _isInteractPressed = value.isPressed;
+
+        if (!_isInteractPressed)
         {
-            _currentTarget.Interact(this);
+            EndHeldInteraction();
+            return;
         }
+
+        if (wasInteractPressed)
+        {
+            return;
+        }
+
+        if (_currentHoldTarget != null)
+        {
+            BeginHeldInteraction(_currentHoldTarget);
+            return;
+        }
+
+        _currentInteractableTarget?.Interact(this);
+    }
+
+    void RefreshInteractButtonState()
+    {
+        if (!_isInteractPressed)
+        {
+            return;
+        }
+
+        if (Keyboard.current == null || Keyboard.current.eKey.isPressed)
+        {
+            return;
+        }
+
+        _isInteractPressed = false;
+        EndHeldInteraction();
+    }
+
+    void UpdateHeldInteraction()
+    {
+        if (!_isInteractPressed || _activeHoldTarget == null)
+        {
+            return;
+        }
+
+        if (_currentHoldTarget != _activeHoldTarget)
+        {
+            EndHeldInteraction();
+            _isInteractPressed = false;
+            return;
+        }
+
+        _activeHoldTarget.HoldInteract(this, Time.deltaTime);
+    }
+
+    void BeginHeldInteraction(IHoldInteractable holdTarget)
+    {
+        if (_activeHoldTarget == holdTarget)
+        {
+            return;
+        }
+
+        EndHeldInteraction();
+        _activeHoldTarget = holdTarget;
+        _activeHoldTarget.BeginHoldInteract(this);
+    }
+
+    void EndHeldInteraction()
+    {
+        if (_activeHoldTarget == null)
+        {
+            return;
+        }
+
+        _activeHoldTarget.EndHoldInteract(this);
+        _activeHoldTarget = null;
     }
 
     void CheckForInteractables()
@@ -41,15 +119,27 @@ public class PlayerInteractor : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * interactionRange, Color.green);
         if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactableLayerMask))
         {
+            if (hit.collider.TryGetComponent<IHoldInteractable>(out var holdInteractable))
+            {
+                _currentHoldTarget = holdInteractable;
+                _currentInteractableTarget = null;
+                interactionPrompt.text = FormatInteractionPrompt(holdInteractable.GetInteractionPrompt(this));
+                interactionPrompt.gameObject.SetActive(true);
+                return;
+            }
+
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
-                _currentTarget = interactable;
+                _currentHoldTarget = null;
+                _currentInteractableTarget = interactable;
                 interactionPrompt.text = FormatInteractionPrompt(interactable.GetInteractionPrompt(this));
                 interactionPrompt.gameObject.SetActive(true);
                 return;
             }
         }
-        _currentTarget = null;
+
+        _currentHoldTarget = null;
+        _currentInteractableTarget = null;
         interactionPrompt.gameObject.SetActive(false);
     }
 
