@@ -20,7 +20,6 @@ public class RoomTracker : MonoBehaviour
         if (other.TryGetComponent<Room>(out var room))
         {
             CurrentRoom = room;
-            Debug.Log($"Entered room: {room.name}");
         }
     }
 }

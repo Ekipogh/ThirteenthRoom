@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class ScoreManger : MonoBehaviour
+public class ScoreManager : MonoBehaviour
 {
     public float CurrentScore { get; private set; } = 0;
 

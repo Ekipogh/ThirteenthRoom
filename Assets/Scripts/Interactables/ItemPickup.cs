@@ -5,22 +5,34 @@ class ItemPickup : MonoBehaviour, IInteractable
 {
     [SerializeField] string itemName;
     [SerializeField] float scoreReward = 5f;
-    [SerializeField] ScoreManger scoreManager;
+    [SerializeField] ScoreManager scoreManager;
     public AudioClip PickupSound;
+    public bool DestroyOrDisable = true;
 
-    public string GetInteractionPrompt()
+    public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
-        return $"pick up {itemName}";
+        return $"Press E to pick up {itemName}";
     }
 
     public void Interact(PlayerInteractor playerInteractor)
     {
-        scoreManager.AddScore(scoreReward);
+        if (scoreManager != null)
+        {
+            scoreManager.AddScore(scoreReward);
+        }
         if (PickupSound != null)
         {
             playerInteractor.GetComponent<PlayerAudioManager>().PlayPickupSound(PickupSound);
         }
-        Destroy(gameObject);
+        playerInteractor.Inventory.AddItem(itemName);
+        if (DestroyOrDisable)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
 }

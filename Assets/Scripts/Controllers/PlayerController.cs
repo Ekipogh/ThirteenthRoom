@@ -55,6 +55,13 @@ public class PlayerController : MonoBehaviour
     float _distanceTraveled = 0f;
     const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
 
+    // Torch
+    [SerializeField] GameObject TorchLight;
+    [SerializeField] AudioSource TorchOnAudio;
+    [SerializeField] AudioSource TorchOffAudio;
+    bool _isTorchEnabled = false;
+    bool _isInitialized;
+
     void InitializeStartingRoom()
     {
         if (StartingRoom == null)
@@ -83,6 +90,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         InitializeStartingRoom();
+        _characterController = GetComponent<CharacterController>();
+        _colliderRadius = _characterController.radius;
+        _velocity = Vector3.zero;
+
         _pitch = NormalizePitch(GetPitchTransform().localEulerAngles.x);
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -100,10 +111,7 @@ public class PlayerController : MonoBehaviour
         }
         InputActions.FindActionMap("Player").Enable();
 
-        _characterController = GetComponent<CharacterController>();
-        _colliderRadius = _characterController.radius;
-
-        _velocity = Vector3.zero;
+        _isInitialized = true;
 
         if (StaminaBar != null)
         {
@@ -149,6 +157,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (!_isInitialized || _characterController == null)
+        {
+            return;
+        }
+
         ProcessMovement();
         SprintingHeadForwardOffset();
         HeadBob();
@@ -281,7 +294,17 @@ public class PlayerController : MonoBehaviour
 
     Transform GetPitchTransform()
     {
-        return HeadJoint != null ? HeadJoint : PlayerCamera.transform;
+        if (HeadJoint != null)
+        {
+            return HeadJoint;
+        }
+
+        if (PlayerCamera != null)
+        {
+            return PlayerCamera.transform;
+        }
+
+        return transform;
     }
 
     float NormalizePitch(float pitch)
@@ -305,5 +328,28 @@ public class PlayerController : MonoBehaviour
     public float Speed()
     {
         return new Vector3(_moveInput.x * _moveSpeed, 0, _moveInput.y * _moveSpeed).magnitude;
+    }
+
+    public void EnableTorch()
+    {
+        _isTorchEnabled = true;
+    }
+
+    void OnTorch(InputValue value)
+    {
+        if (!_isTorchEnabled) return; // Player need to find a torch ingame
+        if (TorchLight != null && value.isPressed)
+        {
+            bool isActive = TorchLight.activeSelf;
+            TorchLight.SetActive(!isActive);
+            if (!isActive)
+            {
+                TorchOnAudio?.Play();
+            }
+            else
+            {
+                TorchOffAudio?.Play();
+            }
+        }
     }
 }

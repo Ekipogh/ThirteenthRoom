@@ -1,4 +1,3 @@
-
 # Load environment variables from .env file
 $envFilePath = ".env"
 if (Test-Path $envFilePath) {
@@ -9,15 +8,55 @@ if (Test-Path $envFilePath) {
             [System.Environment]::SetEnvironmentVariable($name, $value)
         }
     }
-} else {
+}
+else {
     Write-Host "Warning: .env file not found. Make sure to create one with the necessary environment variables."
 }
 
-# Download the Assets.zip file from Nexus Repository Manager using PowerShell
-$loginPassword = "{0}:{1}" -f $env:NEXUS_USERNAME, $env:NEXUS_PASSWORD
-$encodedCredentials = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($loginPassword))
-Invoke-WebRequest -Uri "$env:NEXUS_URL/repository/teamcity-raw/thirteenthroom/latest/Assets.zip" -Headers @{ Authorization = "Basic " + $encodedCredentials } -OutFile "Assets.zip"
+$CurrentVersion = Get-Content ".\artifacts_version.txt" -Raw
+$CurrentVersion = $CurrentVersion.Trim()
 
-# Extract the downloaded zip file
-$extractPath = "Assets"
-Expand-Archive -Path "Assets.zip" -DestinationPath $extractPath -Force
+if ([string]::IsNullOrEmpty($CurrentVersion)) {
+    Write-Host "Error: Current version is empty. Please ensure artifacts_version.txt contains the correct version."
+    exit 1
+}
+
+$CacheDir = ".\.tc-cache\artifacts"
+$CachedVersionFile = "$CacheDir\artifacts_version.txt"
+$ZipPath = "$CacheDir\Assets.zip"
+$ExtractDir = ".\Assets"
+
+New-Item -ItemType Directory -Force -Path $CacheDir | Out-Null
+
+$CachedVersion = ""
+if (Test-Path $CachedVersionFile) {
+    $CachedVersion = (Get-Content $CachedVersionFile -Raw).Trim()
+}
+
+if ($CurrentVersion -eq $CachedVersion -and (Test-Path $ExtractDir)) {
+    Write-Host "Artifacts version $CurrentVersion already cached. Skipping download."
+}
+else {
+    Write-Host "Artifacts changed: cached='$CachedVersion', current='$CurrentVersion'. Downloading..."
+
+    $url = "$env:NEXUS_URL/repository/teamcity-raw/thirteenthroom/$CurrentVersion/Assets.zip"
+    Write-Host "Downloading artifacts from $url"
+
+    $loginPassword = "{0}:{1}" -f $env:NEXUS_USERNAME, $env:NEXUS_PASSWORD
+    $encodedCredentials = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($loginPassword))
+    $headers = @{ Authorization = "Basic " + $encodedCredentials }
+
+    Invoke-WebRequest -Uri $url `
+        -OutFile $ZipPath `
+        -Headers $headers
+
+    if (Test-Path $ExtractDir) {
+        Remove-Item $ExtractDir -Recurse -Force
+    }
+
+    Test-Path $ZipPath -ErrorAction Stop
+
+    Expand-Archive -Path $ZipPath -DestinationPath $ExtractDir -Force
+
+    Set-Content -Path $CachedVersionFile -Value $CurrentVersion
+}

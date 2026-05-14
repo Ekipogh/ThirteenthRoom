@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] string _gameSceneName;
 
-    [SerializeField] ScoreManger ScoreManager;
+    [SerializeField] ScoreManager ScoreManager;
 
 
     void Awake()

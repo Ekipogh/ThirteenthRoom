@@ -6,9 +6,18 @@ public class PlayerInteractor : MonoBehaviour
     [SerializeField] float interactionRange = 3f;
     [SerializeField] LayerMask interactableLayerMask = ~0; // Default to everything
     [SerializeField] Transform headTransform;
-    IInteractable _currentTarget;
+    [SerializeField] PlayerInput playerInput;
+    [SerializeField] string interactActionName = "Interact";
+    IInteractable _currentInteractableTarget;
+    IHoldInteractable _currentHoldTarget;
+    IHoldInteractable _activeHoldTarget;
+    bool _isInteractPressed;
+    InputAction _interactAction;
 
     [SerializeField] TMPro.TextMeshProUGUI interactionPrompt;
+
+    private PlayerInventory _playerInventory;
+    public PlayerInventory Inventory => _playerInventory;
 
     void Awake()
     {
@@ -16,19 +25,101 @@ public class PlayerInteractor : MonoBehaviour
         {
             headTransform = transform.Find("HeadJoint");
         }
+
+        if (playerInput == null)
+        {
+            playerInput = GetComponent<PlayerInput>();
+        }
+
+        if (playerInput != null && playerInput.actions != null)
+        {
+            _interactAction = playerInput.actions.FindAction(interactActionName, throwIfNotFound: false);
+        }
+
+        _playerInventory = new PlayerInventory();
     }
 
     void Update()
     {
         CheckForInteractables();
+        RefreshInteractButtonState();
+        UpdateHeldInteraction();
     }
 
     void OnInteract(InputValue value)
     {
-        if (value.isPressed && _currentTarget != null)
+        _isInteractPressed = value.isPressed;
+
+        if (!_isInteractPressed)
         {
-            _currentTarget.Interact(this);
+            EndHeldInteraction();
+            return;
         }
+
+        if (_currentHoldTarget != null)
+        {
+            BeginHeldInteraction(_currentHoldTarget);
+            return;
+        }
+
+        _currentInteractableTarget?.Interact(this);
+
+        // One-shot interactions should not depend on a release callback from the input action.
+        _isInteractPressed = false;
+    }
+
+    void RefreshInteractButtonState()
+    {
+        if (_interactAction == null)
+        {
+            return;
+        }
+
+        if (_isInteractPressed && !_interactAction.IsPressed())
+        {
+            _isInteractPressed = false;
+            EndHeldInteraction();
+        }
+    }
+
+    void UpdateHeldInteraction()
+    {
+        if (!_isInteractPressed || _activeHoldTarget == null)
+        {
+            return;
+        }
+
+        if (_currentHoldTarget != _activeHoldTarget)
+        {
+            EndHeldInteraction();
+            _isInteractPressed = false;
+            return;
+        }
+
+        _activeHoldTarget.HoldInteract(this, Time.deltaTime);
+    }
+
+    void BeginHeldInteraction(IHoldInteractable holdTarget)
+    {
+        if (_activeHoldTarget == holdTarget)
+        {
+            return;
+        }
+
+        EndHeldInteraction();
+        _activeHoldTarget = holdTarget;
+        _activeHoldTarget.BeginHoldInteract(this);
+    }
+
+    void EndHeldInteraction()
+    {
+        if (_activeHoldTarget == null)
+        {
+            return;
+        }
+
+        _activeHoldTarget.EndHoldInteract(this);
+        _activeHoldTarget = null;
     }
 
     void CheckForInteractables()
@@ -37,15 +128,27 @@ public class PlayerInteractor : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * interactionRange, Color.green);
         if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactableLayerMask))
         {
+            if (hit.collider.TryGetComponent<IHoldInteractable>(out var holdInteractable))
+            {
+                _currentHoldTarget = holdInteractable;
+                _currentInteractableTarget = null;
+                interactionPrompt.text = FormatInteractionPrompt(holdInteractable.GetInteractionPrompt(this));
+                interactionPrompt.gameObject.SetActive(true);
+                return;
+            }
+
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
-                _currentTarget = interactable;
-                interactionPrompt.text = FormatInteractionPrompt(interactable.GetInteractionPrompt());
+                _currentHoldTarget = null;
+                _currentInteractableTarget = interactable;
+                interactionPrompt.text = FormatInteractionPrompt(interactable.GetInteractionPrompt(this));
                 interactionPrompt.gameObject.SetActive(true);
                 return;
             }
         }
-        _currentTarget = null;
+
+        _currentHoldTarget = null;
+        _currentInteractableTarget = null;
         interactionPrompt.gameObject.SetActive(false);
     }
 
@@ -57,6 +160,6 @@ public class PlayerInteractor : MonoBehaviour
         }
 
         string normalizedAction = interactionAction.Trim().TrimEnd('.');
-        return $"Press E to {normalizedAction}.";
+        return $"{normalizedAction}.";
     }
 }
