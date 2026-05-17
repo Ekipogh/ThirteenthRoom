@@ -10,6 +10,7 @@ public class LightObject : MonoBehaviour
     [SerializeField] Color offEmissionColor = Color.black;
 
     public bool IsOn = true;
+    public bool IsPowered = true;
 
     Renderer _modelRenderer;
     MaterialPropertyBlock _propertyBlock;
@@ -20,21 +21,38 @@ public class LightObject : MonoBehaviour
         {
             _modelRenderer = model.GetComponentInChildren<Renderer>(true);
         }
-        ToggleLight(IsOn);
+
+        ApplyLightState();
     }
 
     public void ToggleLight(bool isOn)
     {
-        if (lights != null && lights.activeSelf != isOn)
+        IsOn = isOn;
+
+        ApplyLightState();
+    }
+
+    public void SetPower(bool isPowered)
+    {
+        IsPowered = isPowered;
+
+        ApplyLightState();
+    }
+
+    void ApplyLightState()
+    {
+        bool lightIsOn = IsPowered && IsOn;
+
+        if (lights != null && lights.activeSelf != lightIsOn)
         {
-            lights.SetActive(isOn);
+            lights.SetActive(lightIsOn);
         }
 
         if (_modelRenderer != null)
         {
             _propertyBlock ??= new MaterialPropertyBlock();
             _modelRenderer.GetPropertyBlock(_propertyBlock);
-            _propertyBlock.SetColor(EmissionColorId, isOn ? onEmissionColor : offEmissionColor);
+            _propertyBlock.SetColor(EmissionColorId, lightIsOn ? onEmissionColor : offEmissionColor);
             _modelRenderer.SetPropertyBlock(_propertyBlock);
         }
     }

@@ -46,17 +46,25 @@ public class FuseBox : MonoBehaviour, IInteractable
 
         if (rooms != null)
         {
-            foreach (var room in rooms)
+            foreach (Room room in rooms)
             {
                 if (room == null)
                 {
                     continue;
                 }
 
-                LightSwitchInteractable lightSwitch = room.GetLightSwitch();
-                if (lightSwitch != null)
+                List<LightObject> lightObjects = room.GetLightObjects();
+                if (lightObjects == null)
                 {
-                    lightSwitch.SetPower(activate);
+                    continue;
+                }
+
+                foreach (LightObject lightObject in lightObjects)
+                {
+                    if (lightObject != null)
+                    {
+                        lightObject.SetPower(activate);
+                    }
                 }
             }
         }

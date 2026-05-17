@@ -10,8 +10,6 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
     bool isActive = false;
     const float _switchOffAngle = -60f;
 
-    public bool IsPowered = true; // Indicates whether the switch is powered and can be interacted with
-
     void Awake()
     {
         ApplyLightState();
@@ -43,23 +41,15 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
         ApplyLightState();
     }
 
-    public void SetPower(bool powered)
-    {
-        IsPowered = powered;
-        ApplyLightState();
-    }
-
-
     void ApplyLightState()
     {
-        bool lightIsOn = IsPowered && isActive;
         if (LightObjects != null)
         {
             foreach (LightObject lightObject in LightObjects)
             {
                 if (lightObject != null)
                 {
-                    lightObject.ToggleLight(lightIsOn);
+                    lightObject.ToggleLight(isActive);
                 }
             }
         }
