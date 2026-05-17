@@ -2,14 +2,10 @@ using UnityEngine;
 
 public class LightSwitchInteractable : MonoBehaviour, IInteractable
 {
-    static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
-
-    [SerializeField] GameObject CeilingPointLight;
-    [SerializeField] GameObject CeilingLightModel;
+    [SerializeField] LightObject[] LightObjects;
     [SerializeField] Transform LightSwitchTransform;
     [SerializeField] AudioSource OnSound;
     [SerializeField] AudioSource OffSound;
-    Renderer _ceilingLightRenderer;
 
     bool isActive = false;
     const float _switchOffAngle = -60f;
@@ -18,13 +14,9 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
 
     void Awake()
     {
-        if (CeilingLightModel != null)
-        {
-            _ceilingLightRenderer = CeilingLightModel.GetComponent<Renderer>();
-        }
-
         ApplyLightState();
     }
+
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
         return "Press E to toggle the light switch";
@@ -57,17 +49,21 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
         ApplyLightState();
     }
 
+
     void ApplyLightState()
     {
-        if (CeilingPointLight != null)
+        bool lightIsOn = IsPowered && isActive;
+        if (LightObjects != null)
         {
-            CeilingPointLight.SetActive(IsPowered && isActive);
+            foreach (LightObject lightObject in LightObjects)
+            {
+                if (lightObject != null)
+                {
+                    lightObject.ToggleLight(lightIsOn);
+                }
+            }
         }
-        if (_ceilingLightRenderer != null)
-        {
-            Color emission = IsPowered && isActive ? Color.white : Color.black;
-            _ceilingLightRenderer.material.SetColor(EmissionColorId, emission);
-        }
+
         // Rotate the light switch model to indicate on/off state
         if (LightSwitchTransform != null)
         {
