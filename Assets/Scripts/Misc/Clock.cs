@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Clock : MonoBehaviour
@@ -6,8 +7,8 @@ public class Clock : MonoBehaviour
     [SerializeField] Transform minutesHand;
     [SerializeField] Transform pendulum;
 
-    const float pendulumAmplitude = 10f; // Maximum angle for the pendulum swing
-    const float pendulumFrequency = 2f; // Speed of the pendulum swing
+    const float pendulumAmplitude = 9f; // Maximum angle for the pendulum swing
+    const float pendulumFrequency = Mathf.PI;
 
     const float minutesAngleOffset = 90f; // Offset to align the minute hand correctly
 
