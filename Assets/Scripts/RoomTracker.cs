@@ -12,7 +12,6 @@ public class RoomTracker : MonoBehaviour
             return;
         }
         CurrentRoom = startingRoom;
-        Debug.Log($"RoomTracker initialized to room: {startingRoom.name}");
     }
 
     void OnTriggerEnter(Collider other)
