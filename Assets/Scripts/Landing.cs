@@ -11,6 +11,12 @@ public class Landing : Room
     public GameObject WestWall;
     public GameObject WestDoor;
 
+    [SerializeField] GameObject leftStaircase;
+    [SerializeField] GameObject rightStaircase;
+    [SerializeField] GameObject floorsParent;
+
+    [SerializeField] private int floor = 0;
+
     protected override void Awake()
     {
         base.Awake();
@@ -19,7 +25,27 @@ public class Landing : Room
         SetOpening(RoomDirection.South, SouthWall, SouthDoor);
         SetOpening(RoomDirection.East, EastWall, EastDoor);
         SetOpening(RoomDirection.West, WestWall, WestDoor);
+        ManageStaircaseVisibility();
     }
+
+    private void ManageStaircaseVisibility()
+    {
+        if (floor > 0)
+        {
+            floorsParent.SetActive(false);
+        }
+        if (floor % 2 == 0)
+        {
+            if (leftStaircase != null) leftStaircase.SetActive(true);
+            if (rightStaircase != null) rightStaircase.SetActive(false);
+        }
+        else
+        {
+            if (leftStaircase != null) leftStaircase.SetActive(false);
+            if (rightStaircase != null) rightStaircase.SetActive(true);
+        }
+    }
+
 
     void SetOpening(RoomDirection direction, GameObject wall, GameObject door)
     {
