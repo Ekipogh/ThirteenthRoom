@@ -14,7 +14,23 @@ public class Room : MonoBehaviour
     public string RoomId;
     public Transform PlayerSpawnPoint;
     public Transform MonsterPoint;
-    public List<Room> ConnectedRooms = new();
+    // Connected Rooms
+    [SerializeField] Room North;
+    [SerializeField] Room South;
+    [SerializeField] Room East;
+    [SerializeField] Room West;
+    public List<Room> ConnectedRooms
+    {
+        get
+        {
+            List<Room> connectedRooms = new();
+            if (North != null) connectedRooms.Add(North);
+            if (South != null) connectedRooms.Add(South);
+            if (East != null) connectedRooms.Add(East);
+            if (West != null) connectedRooms.Add(West);
+            return connectedRooms;
+        }
+    }
     [SerializeField] GameObject lightObjectsParent;
 
     protected virtual void Awake()
@@ -49,43 +65,15 @@ public class Room : MonoBehaviour
         return lightObjects;
     }
 
-    public bool TryGetDirectionTo(Room other, out RoomDirection direction)
-    {
-        direction = RoomDirection.North;
-        if (other == null || other == this)
-        {
-            return false;
-        }
-
-        Vector3 offset = other.transform.position - transform.position;
-        offset.y = 0f;
-        if (offset == Vector3.zero)
-        {
-            return false;
-        }
-
-        if (Mathf.Abs(offset.z) >= Mathf.Abs(offset.x))
-        {
-            direction = offset.z >= 0f ? RoomDirection.North : RoomDirection.South;
-        }
-        else
-        {
-            direction = offset.x >= 0f ? RoomDirection.East : RoomDirection.West;
-        }
-
-        return true;
-    }
-
     public bool HasConnectedRoomInDirection(RoomDirection direction)
     {
-        foreach (Room connectedRoom in ConnectedRooms)
+        return direction switch
         {
-            if (TryGetDirectionTo(connectedRoom, out RoomDirection connectedDirection) && connectedDirection == direction)
-            {
-                return true;
-            }
-        }
-
-        return false;
+            RoomDirection.North => North != null,
+            RoomDirection.South => South != null,
+            RoomDirection.East => East != null,
+            RoomDirection.West => West != null,
+            _ => false
+        };
     }
 }
