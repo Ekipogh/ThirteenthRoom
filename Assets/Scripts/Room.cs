@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum RoomDirection
+{
+    North,
+    South,
+    East,
+    West
+}
+
 public class Room : MonoBehaviour
 {
-    public GameObject NorthWall;
-    public GameObject NorthDoor;
-    public GameObject SouthWall;
-    public GameObject SouthDoor;
-    public GameObject EastWall;
-    public GameObject EastDoor;
-    public GameObject WestWall;
-    public GameObject WestDoor;
-
     public string RoomId;
     public Transform PlayerSpawnPoint;
     public Transform MonsterPoint;
     public List<Room> ConnectedRooms = new();
     [SerializeField] GameObject lightObjectsParent;
 
-    void Awake()
+    protected virtual void Awake()
     {
         if (!lightObjectsParent)
         {
@@ -48,5 +47,45 @@ public class Room : MonoBehaviour
             lightObjects.AddRange(lightObjectsParent.GetComponentsInChildren<LightObject>(true));
         }
         return lightObjects;
+    }
+
+    public bool TryGetDirectionTo(Room other, out RoomDirection direction)
+    {
+        direction = RoomDirection.North;
+        if (other == null || other == this)
+        {
+            return false;
+        }
+
+        Vector3 offset = other.transform.position - transform.position;
+        offset.y = 0f;
+        if (offset == Vector3.zero)
+        {
+            return false;
+        }
+
+        if (Mathf.Abs(offset.z) >= Mathf.Abs(offset.x))
+        {
+            direction = offset.z >= 0f ? RoomDirection.North : RoomDirection.South;
+        }
+        else
+        {
+            direction = offset.x >= 0f ? RoomDirection.East : RoomDirection.West;
+        }
+
+        return true;
+    }
+
+    public bool HasConnectedRoomInDirection(RoomDirection direction)
+    {
+        foreach (Room connectedRoom in ConnectedRooms)
+        {
+            if (TryGetDirectionTo(connectedRoom, out RoomDirection connectedDirection) && connectedDirection == direction)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
