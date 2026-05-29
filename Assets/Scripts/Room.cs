@@ -15,10 +15,12 @@ public class Room : MonoBehaviour
     public Transform PlayerSpawnPoint;
     public Transform MonsterPoint;
     // Connected Rooms
-    [SerializeField] Room North;
-    [SerializeField] Room South;
-    [SerializeField] Room East;
-    [SerializeField] Room West;
+    [SerializeField] protected Room North;
+    [SerializeField] protected Room South;
+    [SerializeField] protected Room East;
+    [SerializeField] protected Room West;
+    [SerializeField] protected Room Up;
+    [SerializeField] protected Room Down;
     public List<Room> ConnectedRooms
     {
         get
@@ -28,6 +30,8 @@ public class Room : MonoBehaviour
             if (South != null) connectedRooms.Add(South);
             if (East != null) connectedRooms.Add(East);
             if (West != null) connectedRooms.Add(West);
+            if (Up != null) connectedRooms.Add(Up);
+            if (Down != null) connectedRooms.Add(Down);
             return connectedRooms;
         }
     }
