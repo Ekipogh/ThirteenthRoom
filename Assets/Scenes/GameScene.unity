@@ -1110,9 +1110,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
+  m_Script: {fileID: 11500000, guid: 9cd8896a6d863f14aa4bf4bccbe63f35, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Room
+  m_EditorClassIdentifier: Assembly-CSharp::Landing
 --- !u!1001 &480381486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1962,6 +1962,10 @@ PrefabInstance:
     - target: {fileID: 3790262192504654542, guid: 52c3ab0e7b027df4880bba04db352bea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6067087058613219512, guid: 52c3ab0e7b027df4880bba04db352bea, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6841,14 +6845,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4a44852c5aec746a125ea4f07f5d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  NorthWall: {fileID: 0}
-  NorthDoor: {fileID: 0}
-  SouthWall: {fileID: 0}
-  SouthDoor: {fileID: 0}
-  EastWall: {fileID: 0}
-  EastDoor: {fileID: 0}
-  WestWall: {fileID: 0}
-  WestDoor: {fileID: 0}
   RoomId: 
   PlayerSpawnPoint: {fileID: 0}
   MonsterPoint: {fileID: 0}
