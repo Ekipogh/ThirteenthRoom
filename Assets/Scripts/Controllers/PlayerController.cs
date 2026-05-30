@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
         if (StartingRoom.PlayerSpawnPoint != null)
         {
-            transform.SetPositionAndRotation(StartingRoom.PlayerSpawnPoint.position, StartingRoom.PlayerSpawnPoint.rotation);
+            transform.SetPositionAndRotation(StartingRoom.PlayerSpawnPoint.transform.position, StartingRoom.PlayerSpawnPoint.transform.rotation);
         }
         else
         {

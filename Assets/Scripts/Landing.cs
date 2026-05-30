@@ -63,11 +63,11 @@ public class Landing : Room
 
     void SetOpening(RoomDirection direction, GameObject wall, GameObject door)
     {
-        bool hasConnection = HasConnectedRoomInDirection(direction);
+        bool hasOpening = HasConnectedRoomInDirection(direction);
 
         if (wall != null)
         {
-            wall.SetActive(!hasConnection);
+            wall.SetActive(!hasOpening);
         }
         else
         {
@@ -76,11 +76,11 @@ public class Landing : Room
 
         if (door != null)
         {
-            door.SetActive(hasConnection);
+            door.SetActive(hasOpening);
         }
-        else
+        else if (hasOpening)
         {
-            Debug.LogWarning($"Landing '{name}' is missing a door reference for {direction}.");
+            Debug.LogWarning($"Landing '{name}' has an opening for {direction}, but is missing a door reference.");
         }
     }
 }
