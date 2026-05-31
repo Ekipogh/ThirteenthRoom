@@ -21,7 +21,7 @@ if ([string]::IsNullOrEmpty($CurrentVersion)) {
     exit 1
 }
 
-$CacheDir = ".\.tc-cache\artifacts"
+$CacheDir = if ($env:CACHE_DIR) { $env:CACHE_DIR } else { ".\.tc-cache\artifacts" }
 $CachedVersionFile = "$CacheDir\artifacts_version.txt"
 $ZipPath = "$CacheDir\Assets.zip"
 $ExtractDir = ".\Assets"
