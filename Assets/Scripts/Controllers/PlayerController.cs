@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
         if (StartingRoom.PlayerSpawnPoint != null)
         {
-            transform.SetPositionAndRotation(StartingRoom.PlayerSpawnPoint.position, StartingRoom.PlayerSpawnPoint.rotation);
+            transform.SetPositionAndRotation(StartingRoom.PlayerSpawnPoint.transform.position, StartingRoom.PlayerSpawnPoint.transform.rotation);
         }
         else
         {
@@ -176,8 +176,6 @@ public class PlayerController : MonoBehaviour
         float targetZ = _moveInput.magnitude > 0.1f ? _sprintHeadForwardOffset : 0f;
         localPosition.z = Mathf.Lerp(localPosition.z, targetZ, Time.deltaTime * 5f);
         GetPitchTransform().localPosition = localPosition;
-        // if moving widen the collider to match the head forward offset, otherwise reset it
-        _characterController.radius = Mathf.Lerp(_characterController.radius, _moveInput.magnitude > 0.1f ? _colliderRadius + _sprintHeadForwardOffset : _colliderRadius, Time.deltaTime * 5f);
     }
 
     private void ProcessMovement()
@@ -351,5 +349,11 @@ public class PlayerController : MonoBehaviour
                 TorchOffAudio?.Play();
             }
         }
+    }
+
+    public void SetStartingRoom(Room room)
+    {
+        StartingRoom = room;
+        InitializeStartingRoom();
     }
 }

@@ -29,6 +29,23 @@ public class FuseBox : MonoBehaviour, IInteractable
         _fuseActiveCount = fuses != null ? fuses.Count : 0;
     }
 
+    public void SetControlledRooms(IEnumerable<Room> controlledRooms)
+    {
+        rooms = new List<Room>();
+        if (controlledRooms != null)
+        {
+            foreach (Room room in controlledRooms)
+            {
+                if (room != null && !rooms.Contains(room))
+                {
+                    rooms.Add(room);
+                }
+            }
+        }
+
+        ApplyPowerToRooms(_isActive);
+    }
+
     public void ActivateFuseBox(bool activate)
     {
         _isActive = activate;
@@ -46,24 +63,53 @@ public class FuseBox : MonoBehaviour, IInteractable
 
         if (rooms != null)
         {
-            foreach (var room in rooms)
+            foreach (Room room in rooms)
             {
                 if (room == null)
                 {
                     continue;
                 }
 
-                LightSwitchInteractable lightSwitch = room.GetLightSwitch();
-                if (lightSwitch != null)
-                {
-                    lightSwitch.SetPower(activate);
-                }
+                ApplyPowerToRoom(room, activate);
             }
         }
 
         if (!activate && FizzleSound != null)
         {
             FizzleSound.PlayOneShot(FizzleSound.clip);
+        }
+    }
+
+    void ApplyPowerToRooms(bool activate)
+    {
+        if (rooms == null)
+        {
+            return;
+        }
+
+        foreach (Room room in rooms)
+        {
+            if (room != null)
+            {
+                ApplyPowerToRoom(room, activate);
+            }
+        }
+    }
+
+    void ApplyPowerToRoom(Room room, bool activate)
+    {
+        List<LightObject> lightObjects = room.GetLightObjects();
+        if (lightObjects == null)
+        {
+            return;
+        }
+
+        foreach (LightObject lightObject in lightObjects)
+        {
+            if (lightObject != null)
+            {
+                lightObject.SetPower(activate);
+            }
         }
     }
 
