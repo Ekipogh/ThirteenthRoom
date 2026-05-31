@@ -157,6 +157,7 @@ Transform:
   - {fileID: 6697808134245721129}
   - {fileID: 2111696743353784220}
   - {fileID: 2615351345463304631}
+  - {fileID: 2701293071187039771}
   - {fileID: 7542868033209843218}
   - {fileID: 4246837700040554371}
   - {fileID: 2707057943754479097}
@@ -2989,6 +2990,68 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4746249394046780, guid: 8cafb8859908fca4ea9e365b05144e2f, type: 3}
   m_PrefabInstance: {fileID: 2770990377531064407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2779432779914113968
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2949971814751305557}
+    m_Modifications:
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.3007379
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -7.7238407
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.43949533
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7663212
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.58801776
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.20533466
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.15755868
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284431410824001584, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+      propertyPath: m_Name
+      value: Desklamp (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+--- !u!4 &2701293071187039771 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 283283533039445419, guid: bc6259ab0f6b4964d943b3b212bf5501, type: 3}
+  m_PrefabInstance: {fileID: 2779432779914113968}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2856958843565802524
 PrefabInstance:
