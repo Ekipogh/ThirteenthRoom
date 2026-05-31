@@ -44,6 +44,8 @@ public class Room : MonoBehaviour
     [SerializeField] protected RoomType roomType;
     public RoomType RoomType => roomType;
 
+    public string[] SpawnTags;
+
     public void SetRoomType(RoomType type)
     {
         roomType = type;

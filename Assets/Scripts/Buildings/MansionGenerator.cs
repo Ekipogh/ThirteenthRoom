@@ -19,6 +19,7 @@ public class MansionGenerator : MonoBehaviour
 
     [SerializeField] GameObject doorPrefab;
     [SerializeField] GameObject doorParent;
+    [SerializeField] GameObject floorParent;
 
     GameObject[] floorParents;
 
@@ -34,7 +35,7 @@ public class MansionGenerator : MonoBehaviour
 
     private Room[,,] placedRooms;
 
-    void Start()
+    public void GenerateMansion()
     {
         CreateFloorParentObjects();
         var entranceRoom = InitializeEntrance();
@@ -662,7 +663,7 @@ public class MansionGenerator : MonoBehaviour
         for (int i = 0; i < floorCount; i++)
         {
             floorParents[i] = new GameObject($"Floor_{i}");
-            floorParents[i].transform.SetParent(transform);
+            floorParents[i].transform.SetParent(floorParent.transform);
         }
     }
 }

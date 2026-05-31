@@ -9,14 +9,14 @@ public enum MonsterState
 
 public class MonsterController : MonoBehaviour
 {
-    [SerializeField] Room StartingRoom;
-    [SerializeField] RoomTracker RoomTracker;
+    public Room StartingRoom { get; set; }
+    public RoomTracker RoomTracker { get; set; }
     [SerializeField] float moveInterval = 5f;
     [SerializeField] float escapeWindowDuration = 5f;
     [SerializeField] float travelTime = 2f;
 
-    [SerializeField] GameManager GameManager;
-    [SerializeField] PlayerAudioManager PlayerAudioManager;
+    public GameManager GameManager { get; set; }
+    public PlayerAudioManager PlayerAudioManager { get; set; }
     [SerializeField] MonsterAudioManager MonsterAudioManager;
 
     GameState _currentGameState;
