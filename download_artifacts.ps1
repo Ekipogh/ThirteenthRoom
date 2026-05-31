@@ -49,14 +49,10 @@ else {
     Invoke-WebRequest -Uri $url `
         -OutFile $ZipPath `
         -Headers $headers
-
-    if (Test-Path $ExtractDir) {
-        Remove-Item $ExtractDir -Recurse -Force
-    }
-
-    Test-Path $ZipPath -ErrorAction Stop
-
-    Expand-Archive -Path $ZipPath -DestinationPath $ExtractDir -Force
-
-    Set-Content -Path $CachedVersionFile -Value $CurrentVersion
 }
+
+Test-Path $ZipPath -ErrorAction Stop
+
+Expand-Archive -Path $ZipPath -DestinationPath $ExtractDir -Force
+
+Set-Content -Path $CachedVersionFile -Value $CurrentVersion
