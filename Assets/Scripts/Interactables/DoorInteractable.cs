@@ -3,7 +3,10 @@ using UnityEngine;
 public class DoorInteractable : MonoBehaviour, IInteractable
 {
     [SerializeField] float openingTime = 1f;
-    [SerializeField] DoorAudioManager AudioManager;
+    [SerializeField] GameObject doorAudioParent;
+
+    AudioSource openAudioSource;
+    AudioSource closeAudioSource;
     const float OpenAngle = 90f;
     const float AngleEpsilon = 0.1f;
 
@@ -30,12 +33,18 @@ public class DoorInteractable : MonoBehaviour, IInteractable
         if (IsOpen())
         {
             _targetRelativeAngle = 0f;
-            AudioManager.PlayDoorCloseSound();
+            if (closeAudioSource != null)
+            {
+                closeAudioSource.Play();
+            }
         }
         else
         {
             _targetRelativeAngle = ComputeOpenTarget(playerInteractor.transform.position);
-            AudioManager.PlayDoorOpenSound();
+            if (openAudioSource != null)
+            {
+                openAudioSource.Play();
+            }
         }
 
         _isMoving = true;
@@ -45,6 +54,23 @@ public class DoorInteractable : MonoBehaviour, IInteractable
     {
         _closedLocalY = transform.localEulerAngles.y;
         _doorLocalCenter = CalculateDoorLocalCenter();
+        if (doorAudioParent != null)
+        {
+            AudioSource[] audioSources = doorAudioParent.GetComponentsInChildren<AudioSource>();
+            if (audioSources.Length >= 2)
+            {
+                openAudioSource = audioSources[0];
+                closeAudioSource = audioSources[1];
+            }
+            else
+            {
+                Debug.LogWarning("DoorInteractable: Not enough AudioSources found in doorAudioParent.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("DoorInteractable: doorAudioParent is not assigned.");
+        }
     }
 
     void Update()

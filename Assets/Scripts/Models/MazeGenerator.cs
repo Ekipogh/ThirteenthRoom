@@ -8,6 +8,7 @@ public class Cell
     public int Y { get; set; }
     public bool IsVisited { get; set; }
     public bool[] Doors { get; set; } = new bool[4]; // North, East, South, West
+    public bool[] DoorsPlaced { get; set; } = new bool[4]; // Whether a door has been placed in the corresponding direction
 
     public bool IsPlaced { get; set; } = false;
 
