@@ -50,7 +50,6 @@ else {
         -OutFile $ZipPath `
         -Headers $headers
 }
-// Extract the zip file
 
 Test-Path $ZipPath -ErrorAction Stop
 
