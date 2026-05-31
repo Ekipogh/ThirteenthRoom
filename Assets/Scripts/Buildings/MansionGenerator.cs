@@ -17,6 +17,9 @@ public class MansionGenerator : MonoBehaviour
     [SerializeField] GameObject[] genericJuntionPrefabs;
     [SerializeField] GameObject[] genericIntersectionPrefabs;
 
+    [SerializeField] GameObject doorPrefab;
+    [SerializeField] GameObject doorParent;
+
     GameObject[] floorParents;
 
     public int width = 5; // Number of rooms horizontally
@@ -48,7 +51,7 @@ public class MansionGenerator : MonoBehaviour
                 break;
             }
         }
-
+        PlaceDoors(mansionFloorLayouts);
         if (uniquePlacements == null || mansionFloorLayouts == null)
         {
             Debug.LogError($"Failed to place all unique mansion rooms after {MaxLayoutAttempts} layout attempts.");
@@ -71,6 +74,71 @@ public class MansionGenerator : MonoBehaviour
             layouts[i] = GenerateMansionLayout();
         }
         return layouts;
+    }
+
+    private void PlaceDoors(Cell[][,] mansionFloorLayouts)
+    {
+        const float doorOffset = 1.5f;
+        for (int floor = 0; floor < floorCount; floor++)
+        {
+            Cell[,] mansionLayout = mansionFloorLayouts[floor];
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Cell cell = mansionLayout[x, y];
+                    Vector3 roomPosition = GetRoomPosition(floor, x, y);
+
+                    // North
+                    if (cell.Doors[0] && !cell.DoorsPlaced[0])
+                    {
+                        PlaceDoor(roomPosition + new Vector3(0f + doorOffset, 0f, -Room.RoomSize.z / 2f), Quaternion.identity, "Door_North" + $"_Floor{floor}_{x}_{y}");
+                        cell.DoorsPlaced[0] = true;
+                        if (y > 0)
+                        {
+                            mansionLayout[x, y - 1].DoorsPlaced[2] = true;
+                        }
+                    }
+                    //  East
+                    if (cell.Doors[1] && !cell.DoorsPlaced[1])
+                    {
+                        PlaceDoor(roomPosition + new Vector3(-Room.RoomSize.x / 2f, 0f, 0f - doorOffset), Quaternion.Euler(0f, 90f, 0f), "Door_East" + $"_Floor{floor}_{x}_{y}");
+                        cell.DoorsPlaced[1] = true;
+                        if (x + 1 < width)
+                        {
+                            mansionLayout[x + 1, y].DoorsPlaced[3] = true;
+                        }
+                    }
+                    // South
+                    if (cell.Doors[2] && !cell.DoorsPlaced[2])
+                    {
+                        PlaceDoor(roomPosition + new Vector3(0f + doorOffset, 0f, Room.RoomSize.z / 2f), Quaternion.identity, "Door_South" + $"_Floor{floor}_{x}_{y}");
+                        cell.DoorsPlaced[2] = true;
+                        if (y + 1 < height)
+                        {
+                            mansionLayout[x, y + 1].DoorsPlaced[0] = true;
+                        }
+                    }
+                    // West
+                    if (cell.Doors[3] && !cell.DoorsPlaced[3])
+                    {
+                        PlaceDoor(roomPosition + new Vector3(Room.RoomSize.x / 2f, 0f, 0f - doorOffset), Quaternion.Euler(0f, 90f, 0f), "Door_West" + $"_Floor{floor}_{x}_{y}");
+                        cell.DoorsPlaced[3] = true;
+                        if (x > 0)
+                        {
+                            mansionLayout[x - 1, y].DoorsPlaced[1] = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void PlaceDoor(Vector3 position, Quaternion rotation, string doorName = "Door")
+    {
+        var door = Instantiate(doorPrefab, position, rotation, doorParent.transform);
+        door.name = doorName;
     }
 
     private void InitializeRooms(Cell[][,] mansionFloorLayouts, List<RoomPlacement> uniquePlacements)
@@ -167,7 +235,6 @@ public class MansionGenerator : MonoBehaviour
     {
         MazeGenerator mazeGenerator = new(width, height);
         Cell[,] mansionLayout = mazeGenerator.GenerateMaze();
-        Debug.Log(mazeGenerator.DisplayMaze());
         return mansionLayout;
     }
 
@@ -335,7 +402,7 @@ public class MansionGenerator : MonoBehaviour
                     }
                     if (cell.Doors[1] && x < width - 1)
                     {
-                        room.SetWest(placedRooms[floor, x + 1, y]);
+                        room.SetEast(placedRooms[floor, x + 1, y]);
                     }
                     if (cell.Doors[2] && y < height - 1)
                     {
@@ -343,7 +410,7 @@ public class MansionGenerator : MonoBehaviour
                     }
                     if (cell.Doors[3] && x > 0)
                     {
-                        room.SetEast(placedRooms[floor, x - 1, y]);
+                        room.SetWest(placedRooms[floor, x - 1, y]);
                     }
                 }
             }
