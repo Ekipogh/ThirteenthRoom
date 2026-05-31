@@ -1,6 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class RoomConnection
+{
+    public Room RoomA;
+    public Room RoomB;
+    public RoomDirection DirectionFromAtoB;
+
+    //public Transform DoorWay;
+
+    public RoomConnection(Room roomA, Room roomB, RoomDirection directionFromAtoB)
+    {
+        RoomA = roomA;
+        RoomB = roomB;
+        DirectionFromAtoB = directionFromAtoB;
+    }
+}
+
 public class MansionGenerator : MonoBehaviour
 {
     [SerializeField] PlayerController playerController;

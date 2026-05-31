@@ -71,7 +71,6 @@ public class MonsterController : MonoBehaviour
             transform.position = _currentRoom.MonsterPoint.transform.position;
             float randomYRotation = Random.Range(0f, 360f);
             transform.rotation = Quaternion.Euler(0f, randomYRotation, 0f);
-            FlipTheSwitch();
         }
     }
 
@@ -241,6 +240,7 @@ public class MonsterController : MonoBehaviour
 
         _currentRoom = nextRoom;
         MoveVisualToRoom();
+        FlipTheSwitch();
         SetMonsterVisible(true);
         _isTraveling = false;
 
