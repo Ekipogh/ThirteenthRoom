@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Base: door to the west
-// Corner: door to the west and south
-// Corridor: door to the west and east
-// Junction: door to the west, east, and south
+// Base: door to the south
+// Corner: door to the south and east
+// Corridor: door to the north and south
+// Junction: door to the west, south, and east
 // Intersection: door to all four sides
 
 public enum RoomDirection
@@ -29,6 +29,7 @@ public enum RoomType
 
 public class Room : MonoBehaviour
 {
+    public static readonly Vector3 RoomSize = new(37.5f, 13.5f, 37.5f);
     public string RoomId;
     public SpawnPoint PlayerSpawnPoint;
     public SpawnPoint MonsterPoint;
@@ -41,6 +42,42 @@ public class Room : MonoBehaviour
     [SerializeField] protected Room Down;
 
     [SerializeField] protected RoomType roomType;
+    public RoomType RoomType => roomType;
+
+    public void SetRoomType(RoomType type)
+    {
+        roomType = type;
+    }
+
+    public void SetNorth(Room room)
+    {
+        North = room;
+    }
+
+    public void SetSouth(Room room)
+    {
+        South = room;
+    }
+
+    public void SetEast(Room room)
+    {
+        East = room;
+    }
+
+    public void SetWest(Room room)
+    {
+        West = room;
+    }
+
+    public void SetUp(Room room)
+    {
+        Up = room;
+    }
+
+    public void SetDown(Room room)
+    {
+        Down = room;
+    }
 
     public List<Room> ConnectedRooms
     {
@@ -72,6 +109,15 @@ public class Room : MonoBehaviour
             {
                 Debug.LogWarning($"Room '{name}' is missing a reference to lightObjectsParent and could not find a child at 'Objects/Lights'.");
             }
+        }
+    }
+
+    protected virtual void Start()
+    {
+        // Ensure the room has a unique ID for saving/loading purposes
+        if (string.IsNullOrEmpty(RoomId))
+        {
+            RoomId = name + "_" + GetInstanceID();
         }
     }
 
@@ -108,7 +154,12 @@ public class Room : MonoBehaviour
         return connectedRoom.HasDoorFacingWorldDirection(GetOppositeDirection(rotatedDirection));
     }
 
-    private Room GetConnectedRoom(RoomDirection direction)
+    public bool HasDoorFacingDirection(RoomDirection worldDirection)
+    {
+        return HasDoorFacingWorldDirection(worldDirection);
+    }
+
+    protected Room GetConnectedRoom(RoomDirection direction)
     {
         return direction switch
         {
@@ -128,17 +179,17 @@ public class Room : MonoBehaviour
 
         return roomType switch
         {
-            RoomType.Base => localDirection == RoomDirection.West,
-            RoomType.Corner => localDirection == RoomDirection.West || localDirection == RoomDirection.South,
-            RoomType.Corridor => localDirection == RoomDirection.West || localDirection == RoomDirection.East,
-            RoomType.Junction => localDirection == RoomDirection.West || localDirection == RoomDirection.East || localDirection == RoomDirection.South,
+            RoomType.Base => localDirection == RoomDirection.South,
+            RoomType.Corner => localDirection == RoomDirection.South || localDirection == RoomDirection.East,
+            RoomType.Corridor => localDirection == RoomDirection.North || localDirection == RoomDirection.South,
+            RoomType.Junction => localDirection == RoomDirection.West || localDirection == RoomDirection.South || localDirection == RoomDirection.East,
             RoomType.Intersection => localDirection == RoomDirection.North || localDirection == RoomDirection.South || localDirection == RoomDirection.East || localDirection == RoomDirection.West,
             RoomType.Dynamic => localDirection == RoomDirection.North || localDirection == RoomDirection.South || localDirection == RoomDirection.East || localDirection == RoomDirection.West,
             _ => false
         };
     }
 
-    private RoomDirection GetRotatedDirection(RoomDirection direction)
+    protected RoomDirection GetRotatedDirection(RoomDirection direction)
     {
         Vector3 localDirection = DirectionToVector(direction);
         if (localDirection == Vector3.zero)
@@ -151,7 +202,7 @@ public class Room : MonoBehaviour
         return VectorToDirection(worldDirection, direction);
     }
 
-    private RoomDirection GetLocalDirection(RoomDirection worldDirection)
+    protected RoomDirection GetLocalDirection(RoomDirection worldDirection)
     {
         Vector3 direction = DirectionToVector(worldDirection);
         if (direction == Vector3.zero)
@@ -164,7 +215,7 @@ public class Room : MonoBehaviour
         return VectorToDirection(localDirection, worldDirection);
     }
 
-    private static RoomDirection VectorToDirection(Vector3 direction, RoomDirection fallbackDirection)
+    protected static RoomDirection VectorToDirection(Vector3 direction, RoomDirection fallbackDirection)
     {
         if (direction == Vector3.zero)
         {
@@ -185,7 +236,7 @@ public class Room : MonoBehaviour
         return direction.z > 0f ? RoomDirection.North : RoomDirection.South;
     }
 
-    private static RoomDirection GetOppositeDirection(RoomDirection direction)
+    protected static RoomDirection GetOppositeDirection(RoomDirection direction)
     {
         return direction switch
         {
@@ -199,7 +250,7 @@ public class Room : MonoBehaviour
         };
     }
 
-    private static Vector3 DirectionToVector(RoomDirection direction)
+    protected static Vector3 DirectionToVector(RoomDirection direction)
     {
         return direction switch
         {
@@ -210,6 +261,20 @@ public class Room : MonoBehaviour
             RoomDirection.Up => Vector3.up,
             RoomDirection.Down => Vector3.down,
             _ => Vector3.zero
+        };
+    }
+
+    public int GetDoorCount()
+    {
+        return roomType switch
+        {
+            RoomType.Base => 1,
+            RoomType.Corner => 2,
+            RoomType.Corridor => 2,
+            RoomType.Junction => 3,
+            RoomType.Intersection => 4,
+            RoomType.Dynamic => ConnectedRooms.Count,
+            _ => 0
         };
     }
 

@@ -350,4 +350,10 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public void SetStartingRoom(Room room)
+    {
+        StartingRoom = room;
+        InitializeStartingRoom();
+    }
 }
