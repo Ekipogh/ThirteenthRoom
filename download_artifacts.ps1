@@ -53,13 +53,6 @@ else {
 
 Test-Path $ZipPath -ErrorAction Stop
 
-Test-Path $ExtractDir -ErrorAction Ignore | ForEach-Object {
-    if ($_ -eq $true) {
-        Write-Host "Removing existing extracted artifacts at $ExtractDir"
-        Remove-Item -Path $ExtractDir -Recurse -Force
-    }
-}
-
 Expand-Archive -Path $ZipPath -DestinationPath $ExtractDir -Force
 
 Set-Content -Path $CachedVersionFile -Value $CurrentVersion
