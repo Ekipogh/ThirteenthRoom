@@ -10,7 +10,7 @@ public class MonsterSpawner : MonoBehaviour
     [SerializeField] GameManager GameManager;
     [SerializeField] Transform Floors;
 
-    public void SpawnMonster(Transform mansionTransform)
+    public void SpawnMonster(MansionModel mansion)
     {
         if (MonsterDefinitions.Length == 0)
         {
@@ -31,6 +31,7 @@ public class MonsterSpawner : MonoBehaviour
         if (monsterController != null)
         {
             monsterController.StartingRoom = randomRoom;
+            monsterController.Mansion = mansion;
             monsterController.RoomTracker = RoomTracker;
             monsterController.GameManager = GameManager;
             monsterController.PlayerAudioManager = PlayerAudioManager;

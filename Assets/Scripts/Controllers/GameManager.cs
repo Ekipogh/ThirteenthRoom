@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         }
         if (MonsterSpawner != null)
         {
-            MonsterSpawner.SpawnMonster(transform);
+            MonsterSpawner.SpawnMonster(MansionGenerator != null ? MansionGenerator.CurrentMansion : null);
         }
     }
 
