@@ -7,6 +7,7 @@ public class MonsterAnimationController : CharacterAnimationController
     [SerializeField] float speedSmoothingTime = 0.15f;
     [SerializeField] float startWalkingSpeed = 0.15f;
     [SerializeField] float stopWalkingSpeed = 0.05f;
+    [SerializeField] float locomotionPlaybackSpeed = 0.333f;
 
     readonly int _isAttackingHash = Animator.StringToHash("Attack");
 
@@ -32,7 +33,10 @@ public class MonsterAnimationController : CharacterAnimationController
         float speed = GetMoveSpeed();
         _currentGait = GetSmoothedGait(speed);
         UpdateLocomotion(speed, _currentGait);
-        Animator.SetBool(_isAttackingHash, _currentState == MonsterState.EscapeWindow || _currentState == MonsterState.Attacking);
+
+        bool isAttacking = _currentState == MonsterState.EscapeWindow || _currentState == MonsterState.Attacking;
+        Animator.speed = _currentGait == Gait.Idle || isAttacking ? 1f : locomotionPlaybackSpeed;
+        Animator.SetBool(_isAttackingHash, isAttacking);
     }
 
     float GetMoveSpeed()
@@ -55,8 +59,15 @@ public class MonsterAnimationController : CharacterAnimationController
 
         float speed = delta.magnitude / Time.deltaTime;
         _smoothedSpeed = Mathf.SmoothDamp(_smoothedSpeed, speed, ref _speedSmoothVelocity, speedSmoothingTime);
-        Debug.Log($"Calculated speed: {speed}, Smoothed speed: {_smoothedSpeed}");
         return _smoothedSpeed;
+    }
+
+    void OnDisable()
+    {
+        if (Animator != null)
+        {
+            Animator.speed = 1f;
+        }
     }
 
     Gait GetSmoothedGait(float speed)

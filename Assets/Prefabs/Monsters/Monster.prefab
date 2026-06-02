@@ -308,7 +308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterController
   moveInterval: 5
   escapeWindowDuration: 5
-  travelSpeed: 1.5
+  travelSpeed: 1.6
   doorframeWaitTime: 1
   doorframeEmoteTrigger: 
   MonsterAudioManager: {fileID: 2189419207568745214}
@@ -329,6 +329,7 @@ MonoBehaviour:
   speedSmoothingTime: 0.15
   startWalkingSpeed: 0.15
   stopWalkingSpeed: 0.05
+  locomotionPlaybackSpeed: 0.333
 --- !u!114 &2189419207568745214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,7 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAudioManager
   FootStepSourceObject: {fileID: 6244428514413526002}
-  footstepDistanceThreshold: 2.5
+  footstepDistanceThreshold: 2.3
 --- !u!1 &2771689186562380064
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +369,7 @@ Transform:
   m_GameObject: {fileID: 2771689186562380064}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.75, z: 0}
+  m_LocalPosition: {x: 0, y: 4.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1462,15 +1463,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4615886734921068, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4615886734921068, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
       propertyPath: m_LocalScale.y
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4615886734921068, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
       propertyPath: m_LocalScale.z
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4615886734921068, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1511,6 +1512,10 @@ PrefabInstance:
     - target: {fileID: 4615886734921068, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4615886734921068, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 95591080237398288, guid: 773d21b665a278541ae517d2cf706d63, type: 3}
       propertyPath: m_Controller

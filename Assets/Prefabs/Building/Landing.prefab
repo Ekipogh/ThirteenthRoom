@@ -207,6 +207,7 @@ MonoBehaviour:
   Up: {fileID: 0}
   Down: {fileID: 0}
   roomType: 5
+  SpawnTags: []
   lightObjectsParent: {fileID: 6800561772214909679}
   NorthWall: {fileID: 3999860527825964869}
   NorthDoor: {fileID: 4297194293149784324}
@@ -241,8 +242,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 37, y: 1, z: 37}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 37, y: 13.474332, z: 37}
+  m_Center: {x: 0, y: 6.237166, z: 0}
 --- !u!1 &4435414969740690020
 GameObject:
   m_ObjectHideFlags: 0

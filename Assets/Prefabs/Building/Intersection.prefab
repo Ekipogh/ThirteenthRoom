@@ -94,6 +94,7 @@ MonoBehaviour:
   Up: {fileID: 0}
   Down: {fileID: 0}
   roomType: 4
+  SpawnTags: []
   lightObjectsParent: {fileID: 6800561772214909679}
 --- !u!65 &4316348028511358445
 BoxCollider:
@@ -114,8 +115,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 37, y: 1, z: 37}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 37, y: 9.198385, z: 37}
+  m_Center: {x: 0, y: 4.0991936, z: 0}
 --- !u!1 &4435414969740690020
 GameObject:
   m_ObjectHideFlags: 0

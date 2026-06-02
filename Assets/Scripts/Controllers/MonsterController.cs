@@ -25,6 +25,7 @@ public class MonsterController : MonoBehaviour
     GameState _currentGameState;
 
     Room _currentRoom;
+    Room _encounterRoom;
     MonsterState _currentState;
     Coroutine _roamCoroutine;
     Coroutine _escapeCoroutine;
@@ -97,18 +98,21 @@ public class MonsterController : MonoBehaviour
 
     void CheckIfInSameRoomAsPlayer()
     {
-        if (RoomTracker == null || _currentRoom == null || _currentGameState != GameState.Playing || _isTraveling)
+        if (RoomTracker == null || _currentRoom == null || _currentGameState != GameState.Playing)
         {
             return;
         }
 
-        if (RoomTracker.CurrentRoom == _currentRoom && _currentState == MonsterState.Roaming)
+        Room playerRoom = RoomTracker.CurrentRoom;
+
+        if (playerRoom == _currentRoom && _currentState == MonsterState.Roaming)
         {
             StartAttackCountdown();
             return;
         }
 
-        if (RoomTracker.CurrentRoom != _currentRoom && _currentState == MonsterState.EscapeWindow)
+        bool isMonsterAggro = _currentState == MonsterState.EscapeWindow || _currentState == MonsterState.Attacking;
+        if (isMonsterAggro && playerRoom != _currentRoom)
         {
             ResumeRoamingAfterEscape();
         }
@@ -116,6 +120,7 @@ public class MonsterController : MonoBehaviour
 
     void StartAttackCountdown()
     {
+        _encounterRoom = RoomTracker != null ? RoomTracker.CurrentRoom : _currentRoom;
         _currentState = MonsterState.EscapeWindow;
         Debug.Log("Monster spotted player. Escape window started.");
         StopRoaming();
@@ -138,6 +143,7 @@ public class MonsterController : MonoBehaviour
     void ResumeRoamingAfterEscape()
     {
         _currentState = MonsterState.Roaming;
+        _encounterRoom = null;
         Debug.Log("Player escaped room. Monster resumed roaming.");
         SetMonsterEncounterAudioActive(false);
         StopEscapeWindow();
@@ -388,8 +394,9 @@ public class MonsterController : MonoBehaviour
             yield break;
         }
 
-        if (RoomTracker != null && RoomTracker.CurrentRoom == _currentRoom && _currentState == MonsterState.EscapeWindow)
+        if (RoomTracker != null && RoomTracker.CurrentRoom == _encounterRoom && _currentState == MonsterState.EscapeWindow)
         {
+            _encounterRoom = null;
             _currentState = MonsterState.Attacking;
             Debug.Log("Player failed to escape. Monster attacks.");
             SetMonsterEncounterAudioActive(false);
@@ -400,6 +407,7 @@ public class MonsterController : MonoBehaviour
         }
         else if (_currentState == MonsterState.EscapeWindow)
         {
+            _encounterRoom = null;
             _currentState = MonsterState.Roaming;
             SetMonsterEncounterAudioActive(false);
             StartRoaming();
@@ -426,6 +434,7 @@ public class MonsterController : MonoBehaviour
             if (_currentState == MonsterState.EscapeWindow)
             {
                 SetMonsterEncounterAudioActive(false);
+                _encounterRoom = null;
             }
             StopRoaming();
             StopEscapeWindow();
