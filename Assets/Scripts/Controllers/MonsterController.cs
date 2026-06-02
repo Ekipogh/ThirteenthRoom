@@ -14,7 +14,7 @@ public class MonsterController : MonoBehaviour
     public RoomTracker RoomTracker { get; set; }
     [SerializeField] float moveInterval = 5f;
     [SerializeField] float escapeWindowDuration = 5f;
-    [SerializeField] float travelSpeed = 3f;
+    [SerializeField] float travelSpeed = 1.5f;
     [SerializeField] float doorframeWaitTime = 1f;
     [SerializeField] string doorframeEmoteTrigger;
 
@@ -243,6 +243,7 @@ public class MonsterController : MonoBehaviour
         }
 
         _isTraveling = true;
+        MonsterAudioManager?.ResetFootstepDistance();
 
         yield return MoveToPosition(connection.GetApproachPoint(_currentRoom), travelSpeed);
 
@@ -274,11 +275,6 @@ public class MonsterController : MonoBehaviour
 
         FlipTheSwitch();
         _isTraveling = false;
-
-        if (MonsterAudioManager != null)
-        {
-            MonsterAudioManager.PlayFootstepsSound();
-        }
     }
 
     System.Collections.IEnumerator WaitAtDoorframe()
@@ -310,22 +306,25 @@ public class MonsterController : MonoBehaviour
         _animator.SetTrigger(doorframeEmoteTrigger);
     }
 
-    System.Collections.IEnumerator MoveToPosition(Vector3 targetPosition, float duration)
+    System.Collections.IEnumerator MoveToPosition(Vector3 targetPosition, float speed)
     {
         Vector3 startPosition = transform.position;
-        float effectiveDuration = Mathf.Max(0f, duration);
+        float distance = Vector3.Distance(startPosition, targetPosition);
+        float effectiveSpeed = Mathf.Max(0f, speed);
 
-        if (effectiveDuration <= 0f)
+        if (effectiveSpeed <= 0f || distance <= 0f)
         {
             transform.position = targetPosition;
             FaceTravelDirection(targetPosition - startPosition);
             yield break;
         }
 
+        float duration = distance / effectiveSpeed;
         float elapsed = 0f;
         FaceTravelDirection(targetPosition - startPosition);
+        Vector3 previousPosition = transform.position;
 
-        while (elapsed < effectiveDuration)
+        while (elapsed < duration)
         {
             UpdateGameState();
             if (_currentGameState != GameState.Playing || _currentState != MonsterState.Roaming)
@@ -334,12 +333,27 @@ public class MonsterController : MonoBehaviour
             }
 
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / effectiveDuration);
+            float t = Mathf.Clamp01(elapsed / duration);
             transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            PlayFootstepForMovement(previousPosition, transform.position);
+            previousPosition = transform.position;
             yield return null;
         }
 
         transform.position = targetPosition;
+        PlayFootstepForMovement(previousPosition, transform.position);
+    }
+
+    void PlayFootstepForMovement(Vector3 previousPosition, Vector3 currentPosition)
+    {
+        if (MonsterAudioManager == null)
+        {
+            return;
+        }
+
+        previousPosition.y = 0f;
+        currentPosition.y = 0f;
+        MonsterAudioManager.PlayFootstepForDistance(Vector3.Distance(previousPosition, currentPosition));
     }
 
     Vector3 GetMonsterPoint(Room room)

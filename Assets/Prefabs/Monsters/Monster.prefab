@@ -306,13 +306,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7cb36e3a7fecbd46957b3cc077574a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterController
-  StartingRoom: {fileID: 0}
-  RoomTracker: {fileID: 0}
   moveInterval: 5
   escapeWindowDuration: 5
-  travelTime: 2
-  GameManager: {fileID: 0}
-  PlayerAudioManager: {fileID: 0}
+  travelSpeed: 1.5
+  doorframeWaitTime: 1
+  doorframeEmoteTrigger: 
   MonsterAudioManager: {fileID: 2189419207568745214}
 --- !u!114 &2360497677737910293
 MonoBehaviour:
@@ -328,6 +326,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAnimationController
   _animator: {fileID: 5921065126808581483}
   monsterController: {fileID: 6200854791622715947}
+  speedSmoothingTime: 0.15
+  startWalkingSpeed: 0.15
+  stopWalkingSpeed: 0.05
 --- !u!114 &2189419207568745214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,6 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterAudioManager
   FootStepSourceObject: {fileID: 6244428514413526002}
+  footstepDistanceThreshold: 2.5
 --- !u!1 &2771689186562380064
 GameObject:
   m_ObjectHideFlags: 0
