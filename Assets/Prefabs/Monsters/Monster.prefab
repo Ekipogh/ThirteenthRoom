@@ -308,7 +308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterController
   moveInterval: 5
   escapeWindowDuration: 5
-  travelSpeed: 1.6
+  travelSpeed: 1.8
   doorframeWaitTime: 1
   doorframeEmoteTrigger: 
   MonsterAudioManager: {fileID: 2189419207568745214}

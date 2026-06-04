@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Landing : DynamicDoorRoom
 {
+    [Header("Landing Specific")]
     [SerializeField] GameObject leftStaircase;
     [SerializeField] GameObject leftStairsCeiling;
     [SerializeField] GameObject rightStaircase;
@@ -39,6 +40,8 @@ public class Landing : DynamicDoorRoom
             if (leftStairsCeiling != null) leftStairsCeiling.SetActive(true);
             if (rightStaircase != null) rightStaircase.SetActive(false);
             if (rightStairsCeiling != null) rightStairsCeiling.SetActive(true);
+            upDoorPoint = null;
+            downDoorPoint = floor % 2 == 0 ? downDoorPointRight : downDoorPointLeft;
             return;
         }
         if (floor % 2 == 0)
@@ -48,7 +51,7 @@ public class Landing : DynamicDoorRoom
             if (rightStaircase != null) rightStaircase.SetActive(false);
             if (rightStairsCeiling != null) rightStairsCeiling.SetActive(false);
             upDoorPoint = upDoorPointLeft;
-            downDoorPoint = downDoorPointLeft;
+            downDoorPoint = downDoorPointRight;
         }
         else
         {
@@ -57,7 +60,11 @@ public class Landing : DynamicDoorRoom
             if (rightStaircase != null) rightStaircase.SetActive(true);
             if (rightStairsCeiling != null) rightStairsCeiling.SetActive(true);
             upDoorPoint = upDoorPointRight;
-            downDoorPoint = downDoorPointRight;
+            downDoorPoint = downDoorPointLeft;
+        }
+        if (Down == null)
+        {
+            downDoorPoint = null;
         }
     }
 

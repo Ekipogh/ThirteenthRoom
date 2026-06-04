@@ -33,12 +33,16 @@ public class Room : MonoBehaviour
     public string RoomId;
     public PointNode PlayerSpawnPoint;
     public PointNode MonsterPoint;
+
+    [Header("Door Points")]
     [SerializeField] protected PointNode northDoorPoint;
     [SerializeField] protected PointNode southDoorPoint;
     [SerializeField] protected PointNode westDoorPoint;
     [SerializeField] protected PointNode eastDoorPoint;
     [SerializeField] protected PointNode upDoorPoint;
     [SerializeField] protected PointNode downDoorPoint;
+
+    [Header("Connected Rooms")]
     // Connected Rooms
     [SerializeField] protected Room North;
     [SerializeField] protected Room South;

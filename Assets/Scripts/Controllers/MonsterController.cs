@@ -269,6 +269,8 @@ public class MonsterController : MonoBehaviour
             yield break;
         }
 
+        Vector3 destinationDoorwayPoint = GetDestinationDoorwayPoint(connection);
+        transform.position = destinationDoorwayPoint;
         _currentRoom = connection.To;
         yield return MoveToPosition(GetMonsterPoint(_currentRoom), travelSpeed);
 
@@ -281,6 +283,18 @@ public class MonsterController : MonoBehaviour
 
         FlipTheSwitch();
         _isTraveling = false;
+    }
+
+    Vector3 GetDestinationDoorwayPoint(RoomConnection connection)
+    {
+        if (connection?.Reverse != null)
+        {
+            return connection.Reverse.DoorwayPoint;
+        }
+
+        return connection != null
+            ? connection.DoorwayPoint
+            : transform.position;
     }
 
     System.Collections.IEnumerator WaitAtDoorframe()

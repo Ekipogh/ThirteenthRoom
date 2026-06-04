@@ -70,9 +70,10 @@ public class MansionGenerator : MonoBehaviour
         InitializeStairs(mansionFloorLayouts, entranceRoom);
         InitializeRooms(mansionFloorLayouts, uniquePlacements);
         ConnectPlacedRooms(mansionFloorLayouts, entranceRoom);
-        CurrentMansion = new MansionModel(GetGeneratedRooms(entranceRoom), roomConnections);
         BindGeneratedFuseBoxes();
         RefreshDynamicRooms();
+        RefreshRoomConnectionDoorwayPoints();
+        CurrentMansion = new MansionModel(GetGeneratedRooms(entranceRoom), roomConnections);
     }
 
     private Cell[][,] GenerateLayouts()
@@ -201,21 +202,34 @@ public class MansionGenerator : MonoBehaviour
                 var stairs = Instantiate(stairsPrefab, GetRoomPosition(floor, x, y), Quaternion.identity);
                 SetRoomIdAndParent(stairs, $"Stairs_Floor{floor}", floor);
                 Room stairsRoom = stairs.GetComponent<Room>();
+                Landing stairsLanding = stairs.GetComponent<Landing>();
+                if (stairsLanding == null)
+                {
+                    Debug.LogError($"Stairs prefab '{stairsPrefab.name}' is missing a Landing component.");
+                    return;
+                }
+
+                stairsLanding.SetFloor(floor);
 
                 if (floor == 0)
                 {
                     entranceRoom.SetNorth(stairsRoom);
                     stairsRoom.SetSouth(entranceRoom);
+                    stairsLanding.UpdateDoorsAndStairs();
                     CreateRoomConnectionPair(entranceRoom, stairsRoom, RoomDirection.North);
                 }
                 else
                 {
                     previousStairs.SetUp(stairsRoom);
                     stairsRoom.SetDown(previousStairs);
+                    if (previousStairs is Landing previousLanding)
+                    {
+                        previousLanding.UpdateDoorsAndStairs();
+                    }
+                    stairsLanding.UpdateDoorsAndStairs();
                     CreateRoomConnectionPair(previousStairs, stairsRoom, RoomDirection.Up);
                 }
 
-                stairs.GetComponent<Landing>().SetFloor(floor);
                 placedRooms[floor, x, y] = stairsRoom;
                 previousStairs = stairsRoom;
                 mansionFloorLayouts[floor][x, y].IsPlaced = true;
@@ -467,6 +481,7 @@ public class MansionGenerator : MonoBehaviour
         {
             if (connection.From == from && connection.To == to)
             {
+                connection.SetDoorwayPoint(GetDoorwayPoint(from, to, directionFromFromToTo, door));
                 return connection;
             }
         }
@@ -504,6 +519,23 @@ public class MansionGenerator : MonoBehaviour
             {
                 dynamicDoorRoom.UpdateDynamicDoors();
             }
+        }
+    }
+
+    private void RefreshRoomConnectionDoorwayPoints()
+    {
+        foreach (RoomConnection connection in roomConnections)
+        {
+            if (connection?.From == null || connection.To == null)
+            {
+                continue;
+            }
+
+            connection.SetDoorwayPoint(GetDoorwayPoint(
+                connection.From,
+                connection.To,
+                connection.DirectionFromFromToTo,
+                connection.Door));
         }
     }
 

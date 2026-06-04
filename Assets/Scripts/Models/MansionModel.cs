@@ -6,7 +6,7 @@ public class RoomConnection
     public Room From { get; }
     public Room To { get; }
     public RoomDirection DirectionFromFromToTo { get; }
-    public Vector3 DoorwayPoint { get; }
+    public Vector3 DoorwayPoint { get; private set; }
     public DoorInteractable Door { get; }
     public RoomConnection Reverse { get; private set; }
 
@@ -22,6 +22,11 @@ public class RoomConnection
     public void SetReverse(RoomConnection reverse)
     {
         Reverse = reverse;
+    }
+
+    public void SetDoorwayPoint(Vector3 doorwayPoint)
+    {
+        DoorwayPoint = doorwayPoint;
     }
 
     public Room GetOther(Room room)
@@ -98,7 +103,6 @@ public class MansionModel
         {
             return System.Array.Empty<RoomConnection>();
         }
-
         return connections;
     }
 
@@ -109,8 +113,8 @@ public class MansionModel
         {
             return null;
         }
-
-        return connections[Random.Range(0, connections.Count)];
+        int randomIndex = Random.Range(0, connections.Count);
+        return connections[randomIndex];
     }
 
     public bool TryGetConnection(Room from, Room to, out RoomConnection connection)
