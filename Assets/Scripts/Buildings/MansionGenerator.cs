@@ -215,18 +215,25 @@ public class MansionGenerator : MonoBehaviour
                 {
                     entranceRoom.SetNorth(stairsRoom);
                     stairsRoom.SetSouth(entranceRoom);
-                    stairsLanding.UpdateDoorsAndStairs();
-                    CreateRoomConnectionPair(entranceRoom, stairsRoom, RoomDirection.North);
                 }
                 else
                 {
                     previousStairs.SetUp(stairsRoom);
                     stairsRoom.SetDown(previousStairs);
-                    if (previousStairs is Landing previousLanding)
-                    {
-                        previousLanding.UpdateDoorsAndStairs();
-                    }
-                    stairsLanding.UpdateDoorsAndStairs();
+                }
+
+                if (previousStairs is Landing previousLanding)
+                {
+                    previousLanding.UpdateDoorsAndStairs();
+                }
+                stairsLanding.UpdateDoorsAndStairs();
+
+                if (floor == 0)
+                {
+                    CreateRoomConnectionPair(entranceRoom, stairsRoom, RoomDirection.North);
+                }
+                else
+                {
                     CreateRoomConnectionPair(previousStairs, stairsRoom, RoomDirection.Up);
                 }
 

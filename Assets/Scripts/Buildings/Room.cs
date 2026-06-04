@@ -245,7 +245,7 @@ public class Room : MonoBehaviour
             return direction.x > 0f ? RoomDirection.East : RoomDirection.West;
         }
 
-        return direction.z > 0f ? RoomDirection.North : RoomDirection.South;
+        return direction.z > 0f ? RoomDirection.South : RoomDirection.North;
     }
 
     protected static RoomDirection GetOppositeDirection(RoomDirection direction)
@@ -266,8 +266,8 @@ public class Room : MonoBehaviour
     {
         return direction switch
         {
-            RoomDirection.North => Vector3.forward,
-            RoomDirection.South => Vector3.back,
+            RoomDirection.North => Vector3.back,
+            RoomDirection.South => Vector3.forward,
             RoomDirection.East => Vector3.right,
             RoomDirection.West => Vector3.left,
             RoomDirection.Up => Vector3.up,
