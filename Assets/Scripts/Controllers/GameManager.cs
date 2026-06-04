@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] ScoreManager ScoreManager;
 
+    [SerializeField] MansionGenerator MansionGenerator;
+    [SerializeField] MonsterSpawner MonsterSpawner;
+
 
     void Awake()
     {
@@ -34,6 +37,18 @@ public class GameManager : MonoBehaviour
         _playerActionMap = InputActions != null ? InputActions.FindActionMap("Player", throwIfNotFound: false) : null;
         EnableDisableInput(true);
         SetGameOverUiVisible(false);
+    }
+
+    void Start()
+    {
+        if (MansionGenerator != null)
+        {
+            MansionGenerator.GenerateMansion();
+        }
+        if (MonsterSpawner != null)
+        {
+            MonsterSpawner.SpawnMonster(MansionGenerator != null ? MansionGenerator.CurrentMansion : null);
+        }
     }
 
     public void RestartGame()

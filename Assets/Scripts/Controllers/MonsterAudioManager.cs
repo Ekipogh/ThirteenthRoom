@@ -1,15 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MonsterAudioManager : MonoBehaviour
 {
     [SerializeField] GameObject FootStepSourceObject;
-    List<AudioSource> _footstepAudioSources;
-    Coroutine _footstepCoroutine;
+    [SerializeField] float footstepDistanceThreshold = 2.5f;
 
-    const float _footstepSoundDelay = 0.5f;
-    const int _numberOfFootsteps = 3;
+    List<AudioSource> _footstepAudioSources;
+    float _distanceTraveled;
 
     void Awake()
     {
@@ -20,17 +18,29 @@ public class MonsterAudioManager : MonoBehaviour
         }
     }
 
-    public void PlayFootstepsSound()
+    public void PlayFootstepForDistance(float distance)
     {
-        if (_footstepCoroutine != null)
+        if (distance <= 0f)
         {
-            StopCoroutine(_footstepCoroutine);
+            return;
         }
 
-        _footstepCoroutine = StartCoroutine(PlayFootstepsWithDelay(_footstepSoundDelay));
+        _distanceTraveled += distance;
+        if (_distanceTraveled < footstepDistanceThreshold)
+        {
+            return;
+        }
+
+        _distanceTraveled = 0f;
+        PlayRandomFootstepSound();
     }
 
-    private void PlayRandomFootstepSound()
+    public void ResetFootstepDistance()
+    {
+        _distanceTraveled = 0f;
+    }
+
+    void PlayRandomFootstepSound()
     {
         if (_footstepAudioSources.Count == 0)
         {
@@ -43,16 +53,5 @@ public class MonsterAudioManager : MonoBehaviour
         {
             footstepSource.PlayOneShot(footstepSource.clip);
         }
-    }
-
-    IEnumerator PlayFootstepsWithDelay(float delay)
-    {
-        for (int i = 0; i < _numberOfFootsteps; i++)
-        {
-            PlayRandomFootstepSound();
-            yield return new WaitForSeconds(delay);
-        }
-
-        _footstepCoroutine = null;
     }
 }
