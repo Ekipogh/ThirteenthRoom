@@ -31,8 +31,14 @@ public class Room : MonoBehaviour
 {
     public static readonly Vector3 RoomSize = new(37.5f, 13.5f, 37.5f);
     public string RoomId;
-    public SpawnPoint PlayerSpawnPoint;
-    public SpawnPoint MonsterPoint;
+    public PointNode PlayerSpawnPoint;
+    public PointNode MonsterPoint;
+    [SerializeField] protected PointNode northDoorPoint;
+    [SerializeField] protected PointNode southDoorPoint;
+    [SerializeField] protected PointNode westDoorPoint;
+    [SerializeField] protected PointNode eastDoorPoint;
+    [SerializeField] protected PointNode upDoorPoint;
+    [SerializeField] protected PointNode downDoorPoint;
     // Connected Rooms
     [SerializeField] protected Room North;
     [SerializeField] protected Room South;
@@ -280,23 +286,37 @@ public class Room : MonoBehaviour
         };
     }
 
-    void OnDrawGizmos()
+    public Vector3 GetDoorPosition(RoomDirection direction)
     {
-        // Draw arrow to the north
-        Gizmos.color = Color.red;
-        Vector3 northDirection = transform.TransformDirection(Vector3.forward);
-        Gizmos.DrawLine(transform.position, transform.position + northDirection);
-        // Draw arrow to the south
-        Gizmos.color = Color.green;
-        Vector3 southDirection = transform.TransformDirection(Vector3.back);
-        Gizmos.DrawLine(transform.position, transform.position + southDirection);
-        // Draw arrow to the east
-        Gizmos.color = Color.blue;
-        Vector3 eastDirection = transform.TransformDirection(Vector3.right);
-        Gizmos.DrawLine(transform.position, transform.position + eastDirection);
-        // Draw arrow to the west
-        Gizmos.color = Color.yellow;
-        Vector3 westDirection = transform.TransformDirection(Vector3.left);
-        Gizmos.DrawLine(transform.position, transform.position + westDirection);
+        return TryGetDoorPosition(direction, out Vector3 position)
+            ? position
+            : Vector3.zero;
+    }
+
+    public bool TryGetDoorPosition(RoomDirection worldDirection, out Vector3 position)
+    {
+        PointNode doorPoint = GetDoorPoint(GetLocalDirection(worldDirection));
+        if (doorPoint == null)
+        {
+            position = Vector3.zero;
+            return false;
+        }
+
+        position = doorPoint.transform.position;
+        return true;
+    }
+
+    private PointNode GetDoorPoint(RoomDirection localDirection)
+    {
+        return localDirection switch
+        {
+            RoomDirection.North => northDoorPoint,
+            RoomDirection.South => southDoorPoint,
+            RoomDirection.East => eastDoorPoint,
+            RoomDirection.West => westDoorPoint,
+            RoomDirection.Up => upDoorPoint,
+            RoomDirection.Down => downDoorPoint,
+            _ => null
+        };
     }
 }

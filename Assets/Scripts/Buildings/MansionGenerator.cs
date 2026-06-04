@@ -471,12 +471,25 @@ public class MansionGenerator : MonoBehaviour
             }
         }
 
-        Vector3 doorwayPoint = door != null
-            ? door.transform.position
-            : (from.transform.position + to.transform.position) / 2f;
+        Vector3 doorwayPoint = GetDoorwayPoint(from, to, directionFromFromToTo, door);
         RoomConnection createdConnection = new(from, to, directionFromFromToTo, doorwayPoint, door);
         roomConnections.Add(createdConnection);
         return createdConnection;
+    }
+
+    private static Vector3 GetDoorwayPoint(Room from, Room to, RoomDirection directionFromFromToTo, DoorInteractable door)
+    {
+        if (from.TryGetDoorPosition(directionFromFromToTo, out Vector3 doorwayPoint))
+        {
+            return doorwayPoint;
+        }
+
+        if (door != null)
+        {
+            return door.transform.position;
+        }
+
+        return (from.transform.position + to.transform.position) / 2f;
     }
 
     private void RefreshDynamicRooms()

@@ -8,6 +8,11 @@ public class Landing : DynamicDoorRoom
     [SerializeField] GameObject rightStairsCeiling;
     [SerializeField] GameObject floorsParent;
 
+    [SerializeField] PointNode upDoorPointLeft;
+    [SerializeField] PointNode upDoorPointRight;
+    [SerializeField] PointNode downDoorPointLeft;
+    [SerializeField] PointNode downDoorPointRight;
+
     [SerializeField] private int floor = 0;
 
     protected override void Start()
@@ -42,6 +47,8 @@ public class Landing : DynamicDoorRoom
             if (leftStairsCeiling != null) leftStairsCeiling.SetActive(true);
             if (rightStaircase != null) rightStaircase.SetActive(false);
             if (rightStairsCeiling != null) rightStairsCeiling.SetActive(false);
+            upDoorPoint = upDoorPointLeft;
+            downDoorPoint = downDoorPointLeft;
         }
         else
         {
@@ -49,6 +56,8 @@ public class Landing : DynamicDoorRoom
             if (leftStairsCeiling != null) leftStairsCeiling.SetActive(false);
             if (rightStaircase != null) rightStaircase.SetActive(true);
             if (rightStairsCeiling != null) rightStairsCeiling.SetActive(true);
+            upDoorPoint = upDoorPointRight;
+            downDoorPoint = downDoorPointRight;
         }
     }
 
