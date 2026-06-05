@@ -16,9 +16,9 @@ public class FuseBox : MonoBehaviour, IInteractable
     float _switchOffAngle = 60f;
 
     public float ScoreReward = 20f;
-    readonly float _timerDuration = 20f;
+    readonly float _timerDuration = 5 * 60f;
     float _currentTimer = 0f;
-    readonly float _fuseBlowChance = 0.5f;
+    readonly float _fuseBlowChance = 0.3f;
     bool _isActive = true;
 
     int _fuseActiveCount = 0;
