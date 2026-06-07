@@ -2232,9 +2232,11 @@ MonoBehaviour:
   - {fileID: 2648397103870277830, guid: a62c2d4ab8ec135478ec2eab1a95f3f8, type: 3}
   - {fileID: 2648397103870277830, guid: 198bc1623376bb647b2853de9c1e21df, type: 3}
   genericCorridorPrefabs:
+  - {fileID: 2648397103870277830, guid: 95141e30925fc3d4fbee79d3fffc68d8, type: 3}
   - {fileID: 2648397103870277830, guid: cdd5c0b56b226dc4d96cf9831cdcb68d, type: 3}
   genericCornerPrefabs:
   - {fileID: 2648397103870277830, guid: e2ee1a43e5b43fc4e89df0c48a3e1746, type: 3}
+  - {fileID: 2648397103870277830, guid: 87e6b404b4630464f9e65ee977c8a7ee, type: 3}
   genericJuntionPrefabs:
   - {fileID: 2648397103870277830, guid: f957a50929e743d4c9204b99939bf206, type: 3}
   genericIntersectionPrefabs:
