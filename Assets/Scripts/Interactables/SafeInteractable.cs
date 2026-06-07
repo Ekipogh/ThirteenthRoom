@@ -12,6 +12,7 @@ public class SafeInteractable : MonoBehaviour, IInteractable
     float _closedDoorLocalY;
     float _targetDoorLocalY;
     Collider _collider;
+    [SerializeField] ItemDefinition safeKeyItem;
 
     void Awake()
     {
@@ -25,13 +26,13 @@ public class SafeInteractable : MonoBehaviour, IInteractable
 
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
-        bool hasKey = playerInteractor.Inventory.HasItem("Safe Key");
+        bool hasKey = playerInteractor.Inventory.HasItem(safeKeyItem);
         return hasKey ? "Open the safe" : "The safe is locked";
     }
 
     public void Interact(PlayerInteractor playerInteractor)
     {
-        bool hasKey = playerInteractor.Inventory.HasItem("Safe Key");
+        bool hasKey = playerInteractor.Inventory.HasItem(safeKeyItem);
         if (!hasKey || safeDoor == null || _isOpening || _isOpened)
         {
             return;

@@ -2,24 +2,40 @@ using System.Collections.Generic;
 
 public class PlayerInventory
 {
-    List<string> _items;
+    Dictionary<ItemDefinition, int> _items;
     public PlayerInventory()
     {
-        _items = new List<string>();
+        _items = new Dictionary<ItemDefinition, int>();
     }
 
-    public void AddItem(string item)
+    public void AddItem(ItemDefinition item)
     {
-        _items.Add(item);
+        if (_items.ContainsKey(item))
+        {
+            _items[item]++;
+        }
+        else
+        {
+            _items[item] = 1;
+        }
     }
 
-    public bool HasItem(string item)
+    public bool HasItem(ItemDefinition item)
     {
-        return _items.Contains(item);
+        return _items.ContainsKey(item);
     }
 
-    public bool RemoveItem(string item)
+    public bool RemoveItem(ItemDefinition item)
     {
-        return _items.Remove(item);
+        if (_items.ContainsKey(item))
+        {
+            _items[item]--;
+            if (_items[item] <= 0)
+            {
+                _items.Remove(item);
+            }
+            return true;
+        }
+        return false;
     }
 }

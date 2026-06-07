@@ -12,6 +12,7 @@ public class FuseBox : MonoBehaviour, IInteractable
     [SerializeField] AudioSource fuseInsertSound;
     [SerializeField] AudioSource powerOnSound;
     [SerializeField] AudioSource FizzleSound;
+    [SerializeField] ItemDefinition fuseItem;
 
     float _switchOffAngle = 60f;
 
@@ -188,7 +189,7 @@ public class FuseBox : MonoBehaviour, IInteractable
                 return;
             }
 
-            if (playerInteractor.Inventory.RemoveItem("Fuse"))
+            if (playerInteractor.Inventory.RemoveItem(fuseItem))
             {
                 _fuseActiveCount++;
                 if (fuses != null && _fuseActiveCount - 1 >= 0 && _fuseActiveCount - 1 < fuses.Count && fuses[_fuseActiveCount - 1] != null)
