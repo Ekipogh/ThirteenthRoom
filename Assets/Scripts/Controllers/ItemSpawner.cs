@@ -38,6 +38,10 @@ public class ItemSpawner : MonoBehaviour
     private static List<SpawnItemDefinition> CollectRequestedItems(MansionModel mansion)
     {
         List<SpawnItemDefinition> itemsToSpawn = new();
+        if (mansion.InitialSpawnItemDefinitions != null)
+        {
+            itemsToSpawn.AddRange(mansion.InitialSpawnItemDefinitions);
+        }
         foreach (Room room in mansion.Rooms)
         {
             if (room == null)

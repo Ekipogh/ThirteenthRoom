@@ -2359,6 +2359,9 @@ MonoBehaviour:
   width: 5
   height: 5
   floorCount: 2
+  itemNeeds:
+  - Item: {fileID: 11400000, guid: a8f991864db77634fb7e661d5167e0a7, type: 2}
+    Quantity: 1
 --- !u!1 &1874722950
 GameObject:
   m_ObjectHideFlags: 0

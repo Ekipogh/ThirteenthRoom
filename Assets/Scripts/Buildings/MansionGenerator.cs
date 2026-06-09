@@ -30,6 +30,9 @@ public class MansionGenerator : MonoBehaviour
     public int height = 5; // Number of rooms vertically
     public int floorCount = 2;
 
+    [Header("Items")]
+    [SerializeField] ItemNeed[] itemNeeds;
+
     private const int MaxLayoutAttempts = 50;
     private const int DoorNorth = 1 << 0;
     private const int DoorEast = 1 << 1;
@@ -77,8 +80,24 @@ public class MansionGenerator : MonoBehaviour
         BindGeneratedFuseBoxes();
         RefreshDynamicRooms();
         RefreshRoomConnectionDoorwayPoints();
-        CurrentMansion = new MansionModel(GetGeneratedRooms(entranceRoom), roomConnections);
+        List<SpawnItemDefinition> initialSpawnItemDefinitions = GenerateMansionSpawnItemList();
+        CurrentMansion = new MansionModel(GetGeneratedRooms(entranceRoom), roomConnections, initialSpawnItemDefinitions);
         return CurrentMansion;
+    }
+
+    private List<SpawnItemDefinition> GenerateMansionSpawnItemList()
+    {
+        if (itemNeeds == null || itemNeeds.Length == 0)
+        {
+            return new List<SpawnItemDefinition>();
+        }
+        var initialSpawnItemDefinitions = new List<SpawnItemDefinition>();
+        foreach (ItemNeed itemNeed in itemNeeds)
+        {
+            initialSpawnItemDefinitions.Add(itemNeed.Item);
+        }
+
+        return initialSpawnItemDefinitions;
     }
 
     private Cell[][,] GenerateLayouts()
