@@ -2349,6 +2349,7 @@ MonoBehaviour:
   genericCornerPrefabs:
   - {fileID: 2648397103870277830, guid: e2ee1a43e5b43fc4e89df0c48a3e1746, type: 3}
   - {fileID: 2648397103870277830, guid: 87e6b404b4630464f9e65ee977c8a7ee, type: 3}
+  - {fileID: 2648397103870277830, guid: c07b65ebe6c45114f9fbc65a0aeea597, type: 3}
   genericJuntionPrefabs:
   - {fileID: 2648397103870277830, guid: f957a50929e743d4c9204b99939bf206, type: 3}
   genericIntersectionPrefabs:
@@ -2361,6 +2362,8 @@ MonoBehaviour:
   floorCount: 2
   itemNeeds:
   - Item: {fileID: 11400000, guid: a8f991864db77634fb7e661d5167e0a7, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: d1612f71b6ff2764095cc7be07830465, type: 2}
     Quantity: 1
 --- !u!1 &1874722950
 GameObject:
