@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
+    [Header("Audio Source")]
     [SerializeField] AudioSource musicSource;
+
+    [Header("Clips")]
     [SerializeField] AudioClip normalMusic;
     [SerializeField] AudioClip intenseMusic;
 

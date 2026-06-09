@@ -3,7 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(MonsterController))]
 public class MonsterAnimationController : CharacterAnimationController
 {
+    [Header("Monster")]
     [SerializeField] MonsterController monsterController;
+
+    [Header("Movement")]
     [SerializeField] float speedSmoothingTime = 0.15f;
     [SerializeField] float startWalkingSpeed = 0.15f;
     [SerializeField] float stopWalkingSpeed = 0.05f;

@@ -3,11 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemDefinition", menuName = "Scriptable Objects/ItemDefinition")]
 public class ItemDefinition : ScriptableObject
 {
-    public string _itemId;
-    public string _displayName;
-    public Sprite _itemIcon;
-    public ItemCategory _category;
-    public bool _isUnique;
-    public bool _isConsumable;
-    public int _scoreOnPickup;
+    public string ItemId;
+    public string DisplayName;
+    public Sprite ItemIcon;
+    public ItemCategory Category;
+    public bool IsUnique;
+    public bool IsConsumable;
+    public int ScoreOnPickup;
 }

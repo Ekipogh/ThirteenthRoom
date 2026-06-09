@@ -2,21 +2,24 @@ using UnityEngine;
 
 class ItemPickup : MonoBehaviour, IInteractable
 {
+    [Header("Item")]
     [SerializeField] ItemDefinition itemDefinition;
-    [SerializeField] ScoreManager scoreManager;
     public AudioClip PickupSound;
     public bool DestroyOrDisable = true;
 
+    [Header("Scoring")]
+    [SerializeField] ScoreManager scoreManager;
+
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
-        return $"Press E to pick up {itemDefinition._displayName}";
+        return $"Press E to pick up {itemDefinition.DisplayName}";
     }
 
     public void Interact(PlayerInteractor playerInteractor)
     {
         if (scoreManager != null)
         {
-            scoreManager.AddScore(itemDefinition._scoreOnPickup);
+            scoreManager.AddScore(itemDefinition.ScoreOnPickup);
         }
         if (PickupSound != null)
         {

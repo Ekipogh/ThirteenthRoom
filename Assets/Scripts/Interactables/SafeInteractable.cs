@@ -3,16 +3,22 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class SafeInteractable : MonoBehaviour, IInteractable
 {
+    [Header("Door")]
     [SerializeField] Transform safeDoor;
     [SerializeField] float openAngle = -90f;
     [SerializeField] float openSpeed = 120f;
+
+    [Header("Required Item")]
+    [SerializeField] ItemDefinition safeKeyItem;
+
+    [Header("Audio")]
     [SerializeField] AudioClip openSound;
+
     bool _isOpening;
     bool _isOpened;
     float _closedDoorLocalY;
     float _targetDoorLocalY;
     Collider _collider;
-    [SerializeField] ItemDefinition safeKeyItem;
 
     void Awake()
     {

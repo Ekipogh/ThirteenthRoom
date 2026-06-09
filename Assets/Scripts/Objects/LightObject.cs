@@ -4,11 +4,15 @@ public class LightObject : MonoBehaviour
 {
     static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
 
+    [Header("Objects")]
     [SerializeField] GameObject lights;
     [SerializeField] GameObject model;
+
+    [Header("Emission")]
     [SerializeField] Color onEmissionColor = Color.white;
     [SerializeField] Color offEmissionColor = Color.black;
 
+    [Header("State")]
     public bool IsOn = true;
     public bool IsPowered = true;
 

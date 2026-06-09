@@ -77,9 +77,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
   itemDefinition: {fileID: 11400000, guid: 4ed630ce514cf17428b0a00886f0159f, type: 2}
-  scoreManager: {fileID: 0}
   PickupSound: {fileID: 0}
-  DestroyOrDisable: 0
+  DestroyOrDisable: 1
+  scoreManager: {fileID: 0}
 --- !u!136 &5524774956501429768
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -3,23 +3,32 @@ using UnityEngine;
 
 public class FuseBox : MonoBehaviour, IInteractable
 {
+    [Header("Controlled Rooms")]
     [SerializeField] List<Room> rooms;
+
+    [Header("Visuals")]
     [SerializeField] Transform particleEffectPoint;
     [SerializeField] List<Transform> fuses;
     [SerializeField] List<Transform> fuseItems;
-    [SerializeField] ScoreManager scoreManager;
     [SerializeField] Transform boxSwitch;
+
+    [Header("Audio")]
     [SerializeField] AudioSource fuseInsertSound;
     [SerializeField] AudioSource powerOnSound;
     [SerializeField] AudioSource FizzleSound;
+
+    [Header("Required Item")]
     [SerializeField] ItemDefinition fuseItem;
 
-    float _switchOffAngle = 60f;
-
+    [Header("Scoring")]
     public float ScoreReward = 20f;
+
+    [SerializeField] ScoreManager scoreManager;
+
     readonly float _timerDuration = 5 * 60f;
-    float _currentTimer = 0f;
     readonly float _fuseBlowChance = 0.3f;
+    float _switchOffAngle = 60f;
+    float _currentTimer = 0f;
     bool _isActive = true;
 
     int _fuseActiveCount = 0;

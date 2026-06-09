@@ -123,6 +123,7 @@ MonoBehaviour:
   RoomId: 
   PlayerSpawnPoint: {fileID: 2962038149520283407}
   MonsterPoint: {fileID: 5592503339150244176}
+  SpawnTags: []
   northDoorPoint: {fileID: 0}
   southDoorPoint: {fileID: 5076482537376404339}
   westDoorPoint: {fileID: 0}
@@ -136,8 +137,11 @@ MonoBehaviour:
   Up: {fileID: 0}
   Down: {fileID: 0}
   roomType: 1
-  SpawnTags: []
+  itemSpawnPointsParent: {fileID: 0}
   lightObjectsParent: {fileID: 6800561772214909679}
+  itemNeeds:
+  - Item: {fileID: 11400000, guid: 68d8e2755303fa74184308eb580f5191, type: 2}
+    Quantity: 2
 --- !u!65 &-2146496007076455212
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369494443cb633341883e1192e1c6c43, type: 3}
   m_Name: SafeKeys
   m_EditorClassIdentifier: Assembly-CSharp::ItemDefinition
-  _itemId: safekey
-  _displayName: Safe keys
-  _itemPrefab: {fileID: 9086674187349361492, guid: f1736b47f7c804a478e5de66022e24d8, type: 3}
-  _itemIcon: {fileID: 21300000, guid: 3d2bc93769e2bc24bbe4e0d82f97750d, type: 3}
-  _category: 
-  _isUnique: 0
-  _isConsumable: 0
-  _scoreOnPickup: 0
+  ItemId: safekeys
+  DisplayName: Safe KEys
+  ItemIcon: {fileID: 21300000, guid: 3d2bc93769e2bc24bbe4e0d82f97750d, type: 3}
+  Category: 1
+  IsUnique: 0
+  IsConsumable: 0
+  ScoreOnPickup: 0

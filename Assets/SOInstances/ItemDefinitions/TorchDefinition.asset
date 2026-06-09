@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369494443cb633341883e1192e1c6c43, type: 3}
   m_Name: TorchDefinition
   m_EditorClassIdentifier: Assembly-CSharp::ItemDefinition
-  _itemId: torch
-  _displayName: Torch
-  _itemIcon: {fileID: 0}
-  _category: 
-  _isUnique: 1
-  _isConsumable: 0
-  _scoreOnPickup: 0
+  ItemId: torch
+  DisplayName: Torch
+  ItemIcon: {fileID: 0}
+  Category: 1
+  IsUnique: 1
+  IsConsumable: 0
+  ScoreOnPickup: 0

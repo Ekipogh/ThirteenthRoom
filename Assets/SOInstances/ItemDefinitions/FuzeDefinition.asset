@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369494443cb633341883e1192e1c6c43, type: 3}
   m_Name: FuzeDefinition
   m_EditorClassIdentifier: Assembly-CSharp::ItemDefinition
-  _itemId: fuse
-  _displayName: Fuse
-  _itemPrefab: {fileID: 221722224330119678, guid: ce5c81543e1be824c84d87584895db99, type: 3}
-  _itemIcon: {fileID: 21300000, guid: 28cf5639bf3268a4cb121ce89a866ebf, type: 3}
-  _category: 
-  _isUnique: 0
-  _isConsumable: 0
-  _scoreOnPickup: 0
+  ItemId: fuse
+  DisplayName: Fuse
+  ItemIcon: {fileID: 21300000, guid: 28cf5639bf3268a4cb121ce89a866ebf, type: 3}
+  Category: 0
+  IsUnique: 0
+  IsConsumable: 1
+  ScoreOnPickup: 0

@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerController))]
 public class PlayerAnimationController : CharacterAnimationController
 {
+    [Header("Player")]
     [SerializeField] PlayerController playerController;
 
     protected override void Awake()
