@@ -4563,7 +4563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3580986910451035821, guid: 0cc033322c216f6468ac918c54622d0d, type: 3}
       propertyPath: _itemCategory
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8250,7 +8250,7 @@ PrefabInstance:
     - target: {fileID: 8033997876262589454, guid: d868302ef4efcb74bbf08c3b84d56a5d, type: 3}
       propertyPath: safeKeyItem
       value: 
-      objectReference: {fileID: 11400000, guid: 07bff7f8fa003b24ea9fbc57570494c2, type: 2}
+      objectReference: {fileID: 11400000, guid: 2330e3b3ae2150a44aad9ca521d32a2d, type: 2}
     - target: {fileID: 9102066050603995575, guid: d868302ef4efcb74bbf08c3b84d56a5d, type: 3}
       propertyPath: m_Name
       value: Safe

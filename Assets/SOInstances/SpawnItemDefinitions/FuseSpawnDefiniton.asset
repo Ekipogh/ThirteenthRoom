@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1e5c36a68a7f048990923cc31d0c80, type: 3}
   m_Name: FuseSpawnDefiniton
   m_EditorClassIdentifier: Assembly-CSharp::SpawnItemDefinition
-  itemDefinition: {fileID: 11400000, guid: 4ed630ce514cf17428b0a00886f0159f, type: 2}
-  itemPrefab: {fileID: 221722224330119678, guid: ce5c81543e1be824c84d87584895db99, type: 3}
+  ItemDefinition: {fileID: 11400000, guid: 4ed630ce514cf17428b0a00886f0159f, type: 2}
+  ItemPrefab: {fileID: 221722224330119678, guid: ce5c81543e1be824c84d87584895db99, type: 3}

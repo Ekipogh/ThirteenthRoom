@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1e5c36a68a7f048990923cc31d0c80, type: 3}
   m_Name: TorchSpawnDefiniton
   m_EditorClassIdentifier: Assembly-CSharp::SpawnItemDefinition
-  itemDefinition: {fileID: 11400000, guid: 3cec2fed25d5fe644b29e9aefc2a97ee, type: 2}
-  itemPrefab: {fileID: 6205267514194482492, guid: be3258e76abf9654f926f11e8e9b4926, type: 3}
+  ItemDefinition: {fileID: 11400000, guid: 3cec2fed25d5fe644b29e9aefc2a97ee, type: 2}
+  ItemPrefab: {fileID: 6205267514194482492, guid: be3258e76abf9654f926f11e8e9b4926, type: 3}

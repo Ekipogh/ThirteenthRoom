@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1e5c36a68a7f048990923cc31d0c80, type: 3}
   m_Name: KeysSpawnDefinition
   m_EditorClassIdentifier: Assembly-CSharp::SpawnItemDefinition
-  itemDefinition: {fileID: 11400000, guid: 07bff7f8fa003b24ea9fbc57570494c2, type: 2}
-  itemPrefab: {fileID: 9086674187349361492, guid: f1736b47f7c804a478e5de66022e24d8, type: 3}
+  ItemDefinition: {fileID: 11400000, guid: 07bff7f8fa003b24ea9fbc57570494c2, type: 2}
+  ItemPrefab: {fileID: 9086674187349361492, guid: f1736b47f7c804a478e5de66022e24d8, type: 3}

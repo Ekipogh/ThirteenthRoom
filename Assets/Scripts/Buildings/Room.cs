@@ -378,4 +378,12 @@ public class Room : MonoBehaviour
 
         return itemSpawnPointsParent.GetComponentsInChildren<ItemSpawnPoint>();
     }
+
+    public void RequestItem(SpawnItemDefinition item)
+    {
+        if (item != null && !_requestedItems.Contains(item))
+        {
+            _requestedItems.Add(item);
+        }
+    }
 }

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1e5c36a68a7f048990923cc31d0c80, type: 3}
   m_Name: GunSpawnDefiniton
   m_EditorClassIdentifier: Assembly-CSharp::SpawnItemDefinition
-  itemDefinition: {fileID: 11400000, guid: 13688d3768249b348ba63d2465ad4b56, type: 2}
-  itemPrefab: {fileID: 6766266616257962877, guid: ce313ebe463bdc94fb3fd85a1426051c, type: 3}
+  ItemDefinition: {fileID: 11400000, guid: 13688d3768249b348ba63d2465ad4b56, type: 2}
+  ItemPrefab: {fileID: 6766266616257962877, guid: ce313ebe463bdc94fb3fd85a1426051c, type: 3}

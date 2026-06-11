@@ -15,7 +15,7 @@ MonoBehaviour:
   ItemId: torch
   DisplayName: Torch
   ItemIcon: {fileID: 0}
-  Category: 1
+  Category: 3
   IsUnique: 1
   IsConsumable: 0
   ScoreOnPickup: 0

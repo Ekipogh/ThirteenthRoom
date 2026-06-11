@@ -90,7 +90,7 @@ public class ItemSpawner : MonoBehaviour
 
     private static bool IsSpawnableDefinition(SpawnItemDefinition itemDefinition)
     {
-        return itemDefinition != null && itemDefinition.itemDefinition != null && itemDefinition.itemPrefab != null;
+        return itemDefinition != null && itemDefinition.ItemDefinition != null && itemDefinition.ItemPrefab != null;
     }
 
     private static string GetItemLabel(SpawnItemDefinition itemDefinition)
@@ -100,14 +100,14 @@ public class ItemSpawner : MonoBehaviour
             return "<null definition>";
         }
 
-        if (itemDefinition.itemPrefab != null)
+        if (itemDefinition.ItemPrefab != null)
         {
-            return itemDefinition.itemPrefab.name;
+            return itemDefinition.ItemPrefab.name;
         }
 
-        if (itemDefinition.itemDefinition != null)
+        if (itemDefinition.ItemDefinition != null)
         {
-            return itemDefinition.itemDefinition.name;
+            return itemDefinition.ItemDefinition.name;
         }
 
         return itemDefinition.name;
@@ -121,7 +121,10 @@ public class ItemSpawner : MonoBehaviour
             return;
         }
 
-        Instantiate(spawnDefinition.itemPrefab, spawnPoint.transform.position, Quaternion.identity, itemParent);
+        var instance = Instantiate(spawnDefinition.ItemPrefab, spawnPoint.transform.position, Quaternion.identity, itemParent);
+        if (instance.TryGetComponent<ITargetable>(out var targetable))        {
+            targetable.TargetID = spawnDefinition.targetID;
+        }
         spawnPoint.MarkAsOccupied();
     }
 }
