@@ -1,38 +1,37 @@
 using UnityEngine;
-using System.Collections;
 
-class ItemPickup : MonoBehaviour, IInteractable
+public class ItemPickup : MonoBehaviour, IInteractable
 {
-    [SerializeField] string itemName;
-    [SerializeField] float scoreReward = 5f;
-    [SerializeField] ScoreManager scoreManager;
+    [Header("Item")]
+    [SerializeField] ItemDefinition itemDefinition;
     public AudioClip PickupSound;
-    public bool DestroyOrDisable = true;
+
+    [Header("Scoring")]
+    [SerializeField] ScoreManager scoreManager;
 
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
-        return $"Press E to pick up {itemName}";
+        return $"Press E to pick up {itemDefinition.DisplayName}";
     }
 
-    public void Interact(PlayerInteractor playerInteractor)
+    public virtual void Interact(PlayerInteractor playerInteractor)
     {
         if (scoreManager != null)
         {
-            scoreManager.AddScore(scoreReward);
+            scoreManager.AddScore(itemDefinition.ScoreOnPickup);
         }
         if (PickupSound != null)
         {
             playerInteractor.GetComponent<PlayerAudioManager>().PlayPickupSound(PickupSound);
         }
-        playerInteractor.Inventory.AddItem(itemName);
-        if (DestroyOrDisable)
+        if (this is ITargetable targetable)
         {
-            Destroy(gameObject);
+            playerInteractor.Inventory.AddInstanceItem(itemDefinition, targetable.TargetID);
         }
         else
         {
-            gameObject.SetActive(false);
+            playerInteractor.Inventory.AddItem(itemDefinition);
         }
+        Destroy(gameObject);
     }
-
 }

@@ -70,6 +70,8 @@ MonoBehaviour:
   safeDoor: {fileID: 3652349258088575020}
   openAngle: -90
   openSpeed: 120
+  safeKeyItem: {fileID: 11400000, guid: 2330e3b3ae2150a44aad9ca521d32a2d, type: 2}
+  openSound: {fileID: 0}
 --- !u!1001 &4464975406826577884
 PrefabInstance:
   m_ObjectHideFlags: 0

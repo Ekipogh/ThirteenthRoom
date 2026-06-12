@@ -3,22 +3,31 @@ using UnityEngine;
 
 public class FuseBox : MonoBehaviour, IInteractable
 {
+    [Header("Controlled Rooms")]
     [SerializeField] List<Room> rooms;
+
+    [Header("Visuals")]
     [SerializeField] Transform particleEffectPoint;
     [SerializeField] List<Transform> fuses;
-    [SerializeField] List<Transform> fuseItems;
-    [SerializeField] ScoreManager scoreManager;
     [SerializeField] Transform boxSwitch;
+
+    [Header("Audio")]
     [SerializeField] AudioSource fuseInsertSound;
     [SerializeField] AudioSource powerOnSound;
     [SerializeField] AudioSource FizzleSound;
 
-    float _switchOffAngle = 60f;
+    [Header("Required Item")]
+    [SerializeField] ItemDefinition fuseItem;
 
+    [Header("Scoring")]
     public float ScoreReward = 20f;
+
+    [SerializeField] ScoreManager scoreManager;
+
     readonly float _timerDuration = 5 * 60f;
-    float _currentTimer = 0f;
     readonly float _fuseBlowChance = 0.3f;
+    float _switchOffAngle = 60f;
+    float _currentTimer = 0f;
     bool _isActive = true;
 
     int _fuseActiveCount = 0;
@@ -74,6 +83,11 @@ public class FuseBox : MonoBehaviour, IInteractable
             }
         }
 
+        if (!activate)
+        {
+            _fuseActiveCount = 0;
+        }
+
         if (!activate && FizzleSound != null)
         {
             FizzleSound.PlayOneShot(FizzleSound.clip);
@@ -122,18 +136,6 @@ public class FuseBox : MonoBehaviour, IInteractable
                 if (fuse != null)
                 {
                     fuse.gameObject.SetActive(visible);
-                }
-            }
-        }
-
-        _fuseActiveCount = visible && fuses != null ? fuses.Count : 0;
-        if (fuseItems != null)
-        {
-            foreach (var item in fuseItems)
-            {
-                if (item != null)
-                {
-                    item.gameObject.SetActive(!visible);
                 }
             }
         }
@@ -188,7 +190,7 @@ public class FuseBox : MonoBehaviour, IInteractable
                 return;
             }
 
-            if (playerInteractor.Inventory.RemoveItem("Fuse"))
+            if (playerInteractor.Inventory.RemoveItem(fuseItem))
             {
                 _fuseActiveCount++;
                 if (fuses != null && _fuseActiveCount - 1 >= 0 && _fuseActiveCount - 1 < fuses.Count && fuses[_fuseActiveCount - 1] != null)

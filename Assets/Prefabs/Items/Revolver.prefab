@@ -831,7 +831,7 @@ GameObject:
   - component: {fileID: 5692183186277249326}
   - component: {fileID: 879340197348469107}
   - component: {fileID: 1764050269163811007}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Revolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -974,10 +974,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0336cc63747cb1c4baf8859c68e12194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
-  itemName: Revolver
-  scoreReward: 0
-  scoreManager: {fileID: 0}
+  itemDefinition: {fileID: 11400000, guid: 13688d3768249b348ba63d2465ad4b56, type: 2}
   PickupSound: {fileID: 0}
+  scoreManager: {fileID: 0}
 --- !u!1 &8554428521306780056
 GameObject:
   m_ObjectHideFlags: 0

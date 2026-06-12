@@ -4973,7 +4973,7 @@ GameObject:
   - component: {fileID: 4985772285851750925}
   - component: {fileID: 4689374616237372756}
   - component: {fileID: 7372397770434816666}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PowerBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5107,13 +5107,13 @@ MonoBehaviour:
   fuses:
   - {fileID: 5890436074170572414}
   - {fileID: 7678582341474729876}
-  fuseItems: []
-  scoreManager: {fileID: 0}
   boxSwitch: {fileID: 8680328444025477890}
   fuseInsertSound: {fileID: 8906087011611658634}
   powerOnSound: {fileID: 4067772408352156103}
   FizzleSound: {fileID: 3187804213928847156}
+  fuseItem: {fileID: 11400000, guid: 4ed630ce514cf17428b0a00886f0159f, type: 2}
   ScoreReward: 20
+  scoreManager: {fileID: 0}
 --- !u!1 &7405662918229323969
 GameObject:
   m_ObjectHideFlags: 0

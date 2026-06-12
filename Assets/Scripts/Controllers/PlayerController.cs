@@ -4,63 +4,66 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Room Tracking")]
     [SerializeField] Room StartingRoom;
     [SerializeField] RoomTracker RoomTracker;
 
+    [Header("Input")]
     public InputActionAsset InputActions;
 
+    [Header("View")]
     public Transform HeadJoint;
     public Camera PlayerCamera;
-    Vector2 _moveInput = new();
 
-    float _moveSpeed = 5f;
-    float _lookSpeed = 0.150f;
-
-    bool _isSprinting = false;
-    readonly float _sprintMultiplier = 2f;
-
-    float _maxPitch = 70f;
-    float _pitch;
-
+    [Header("Movement")]
     public bool IsHeadBobEnabled = true;
 
-    float _headHeight;
-    readonly float _sprintHeadForwardOffset = 0.7f;
-    float _headBobFrequency = 10f;
-    float _headBobAmplitude = 0.1f;
+    [Header("UI")]
+    public Microlight.MicroBar.MicroBar StaminaBar;
 
-    // Stats
-    float _stamina = _maxStamina;
-    float _lastDisplayedStamina = -1f;
+    [Header("Audio")]
+    [SerializeField] PlayerAudioManager AudioManager;
 
-    public float Stamina => _stamina;
+    [Header("Torch")]
+    [SerializeField] GameObject TorchLight;
+    [SerializeField] AudioSource TorchOnAudio;
+    [SerializeField] AudioSource TorchOffAudio;
+
     const float _maxStamina = 100f;
     const float _staminaRegenRate = 5f;
     const float _staminaDrainRate = 10f;
     const float _staminaChangeEpsilon = 0.01f;
-
     const float _staminaRegenDelay = 2f; // in seconds
     const float _exhaustedStaminaRegenDelay = 5f; // longer delay when stamina is fully drained
+    const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
+
+    readonly float _sprintMultiplier = 2f;
+    readonly float _sprintHeadForwardOffset = 0.7f;
+
+    Vector2 _moveInput = new();
+    float _moveSpeed = 5f;
+    float _lookSpeed = 0.150f;
+    bool _isSprinting = false;
+    float _maxPitch = 70f;
+    float _pitch;
+
+    float _headHeight;
+    float _headBobFrequency = 10f;
+    float _headBobAmplitude = 0.1f;
+
+    float _stamina = _maxStamina;
+    float _lastDisplayedStamina = -1f;
     float _staminaRegenTimer = 0f;
 
     CharacterController _characterController;
     private float _colliderRadius;
-
     Vector3 _velocity;
-
-    public Microlight.MicroBar.MicroBar StaminaBar;
-
-    // Audio
-    [SerializeField] PlayerAudioManager AudioManager;
     float _distanceTraveled = 0f;
-    const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
 
-    // Torch
-    [SerializeField] GameObject TorchLight;
-    [SerializeField] AudioSource TorchOnAudio;
-    [SerializeField] AudioSource TorchOffAudio;
     bool _isTorchEnabled = false;
     bool _isInitialized;
+
+    public float Stamina => _stamina;
 
     void InitializeStartingRoom()
     {

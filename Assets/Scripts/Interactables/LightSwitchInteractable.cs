@@ -2,8 +2,13 @@ using UnityEngine;
 
 public class LightSwitchInteractable : MonoBehaviour, IInteractable
 {
+    [Header("Lights")]
     [SerializeField] LightObject[] LightObjects;
+
+    [Header("Switch")]
     [SerializeField] Transform LightSwitchTransform;
+
+    [Header("Audio")]
     [SerializeField] AudioSource OnSound;
     [SerializeField] AudioSource OffSound;
 

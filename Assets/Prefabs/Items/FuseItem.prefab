@@ -76,11 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0336cc63747cb1c4baf8859c68e12194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
-  itemName: Fuse
-  scoreReward: 0
-  scoreManager: {fileID: 0}
+  itemDefinition: {fileID: 11400000, guid: 4ed630ce514cf17428b0a00886f0159f, type: 2}
   PickupSound: {fileID: 0}
-  DestroyOrDisable: 0
+  DestroyOrDisable: 1
+  scoreManager: {fileID: 0}
 --- !u!136 &5524774956501429768
 CapsuleCollider:
   m_ObjectHideFlags: 0

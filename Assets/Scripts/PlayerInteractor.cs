@@ -3,18 +3,21 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteractor : MonoBehaviour
 {
+    [Header("Interaction")]
     [SerializeField] float interactionRange = 3f;
     [SerializeField] LayerMask interactableLayerMask = ~0; // Default to everything
     [SerializeField] Transform headTransform;
     [SerializeField] PlayerInput playerInput;
     [SerializeField] string interactActionName = "Interact";
+
+    [Header("UI")]
+    [SerializeField] TMPro.TextMeshProUGUI interactionPrompt;
+
     IInteractable _currentInteractableTarget;
     IHoldInteractable _currentHoldTarget;
     IHoldInteractable _activeHoldTarget;
     bool _isInteractPressed;
     InputAction _interactAction;
-
-    [SerializeField] TMPro.TextMeshProUGUI interactionPrompt;
 
     private PlayerInventory _playerInventory;
     public PlayerInventory Inventory => _playerInventory;

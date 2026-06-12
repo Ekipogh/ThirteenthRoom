@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class Clock : MonoBehaviour
 {
+    [Header("Hands")]
     [SerializeField] Transform hoursHand;
     [SerializeField] Transform minutesHand;
+
+    [Header("Pendulum")]
     [SerializeField] Transform pendulum;
 
     const float pendulumAmplitude = 9f; // Maximum angle for the pendulum swing

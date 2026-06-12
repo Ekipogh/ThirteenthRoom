@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2748486757906470621}
   - component: {fileID: 4568527897220736634}
   - component: {fileID: 6835019893728685273}
-  - component: {fileID: 3809738542604859346}
+  - component: {fileID: 3100565521226717032}
   m_Layer: 3
   m_Name: Key
   m_TagString: Untagged
@@ -142,7 +142,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3809738542604859346
+--- !u!114 &3100565521226717032
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,10 +151,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9086674187349361492}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0336cc63747cb1c4baf8859c68e12194, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e9dc4e73525938449cb44f569bc544f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
-  itemName: Safe Key
-  scoreReward: 5
-  scoreManager: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::SafeKey
+  itemDefinition: {fileID: 11400000, guid: 07bff7f8fa003b24ea9fbc57570494c2, type: 2}
   PickupSound: {fileID: 8300000, guid: f9766e387f337e14c9e2451e2773df1f, type: 3}
+  DestroyOrDisable: 1
+  scoreManager: {fileID: 0}

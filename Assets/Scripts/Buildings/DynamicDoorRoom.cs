@@ -2,12 +2,19 @@ using UnityEngine;
 
 public class DynamicDoorRoom : Room
 {
+    [Header("North Opening")]
     public GameObject NorthWall;
     public GameObject NorthDoor;
+
+    [Header("South Opening")]
     public GameObject SouthWall;
     public GameObject SouthDoor;
+
+    [Header("East Opening")]
     public GameObject EastWall;
     public GameObject EastDoor;
+
+    [Header("West Opening")]
     public GameObject WestWall;
     public GameObject WestDoor;
 
