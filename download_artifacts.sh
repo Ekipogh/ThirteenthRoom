@@ -14,6 +14,10 @@ fi
 cached_version_file="$CACHE_DIR/artifacts_version.txt"
 zip_path="$CACHE_DIR/Assets.zip"
 extract_dir="./Assets"
+required_extracted_paths=(
+    "./Assets/Thirdparty"
+    "./Assets/Plugins/Demigiant"
+)
 
 mkdir -p "$CACHE_DIR"
 
@@ -25,7 +29,15 @@ else
     cached_version=""
 fi
 
-if [ "$current_version" = "$cached_version" ] && [ -d "$extract_dir" ]; then
+artifacts_extracted=true
+for path in "${required_extracted_paths[@]}"; do
+    if [ ! -e "$path" ]; then
+        artifacts_extracted=false
+        break
+    fi
+done
+
+if [ "$current_version" = "$cached_version" ] && [ "$artifacts_extracted" = true ]; then
     echo "Artifacts version $current_version already cached and extracted. No need to download."
     exit 0
 fi
