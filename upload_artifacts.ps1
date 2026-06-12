@@ -23,6 +23,7 @@ if (Test-Path $zipFilePath) {
 try {
     New-Item -Path (Join-Path $zipStagingPath "Plugins") -ItemType Directory -Force | Out-Null
     Copy-Item -Path "Assets/Plugins/Demigiant" -Destination (Join-Path $zipStagingPath "Plugins/Demigiant") -Recurse
+    Copy-Item -Path "Assets/Plugins/Demigiant.meta" -Destination (Join-Path $zipStagingPath "Plugins/Demigiant.meta") -Force
     Copy-Item -Path "Assets/Thirdparty" -Destination (Join-Path $zipStagingPath "Thirdparty") -Recurse
 
     Compress-Archive -Path (Join-Path $zipStagingPath "*") -DestinationPath $zipFilePath
