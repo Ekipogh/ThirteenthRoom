@@ -13,15 +13,25 @@ if (Test-Path $envFilePath) {
 }
 
 # Archive thirdparties from Assets folder into a zip file
-$3rdPartyList = @(
-    "Assets/Plugins/Demigiant",
-    "Assets/Thirdparty/"
-)
 $zipFilePath = "Assets.zip"
+$zipStagingPath = Join-Path ([System.IO.Path]::GetTempPath()) ("ThirteenthRoomAssetsZip_" + [System.Guid]::NewGuid().ToString("N"))
+
 if (Test-Path $zipFilePath) {
     Remove-Item $zipFilePath
 }
-Compress-Archive -Path $3rdPartyList -DestinationPath $zipFilePath
+
+try {
+    New-Item -Path (Join-Path $zipStagingPath "Plugins") -ItemType Directory -Force | Out-Null
+    Copy-Item -Path "Assets/Plugins/Demigiant" -Destination (Join-Path $zipStagingPath "Plugins/Demigiant") -Recurse
+    Copy-Item -Path "Assets/Thirdparty" -Destination (Join-Path $zipStagingPath "Thirdparty") -Recurse
+
+    Compress-Archive -Path (Join-Path $zipStagingPath "*") -DestinationPath $zipFilePath
+}
+finally {
+    if (Test-Path $zipStagingPath) {
+        Remove-Item $zipStagingPath -Recurse -Force
+    }
+}
 
 # Extract the version number from artifacts_version.txt
 $versionFilePath = "artifacts_version.txt"
