@@ -9,7 +9,6 @@ public class FuseBox : MonoBehaviour, IInteractable
     [Header("Visuals")]
     [SerializeField] Transform particleEffectPoint;
     [SerializeField] List<Transform> fuses;
-    [SerializeField] List<Transform> fuseItems;
     [SerializeField] Transform boxSwitch;
 
     [Header("Audio")]
@@ -84,6 +83,11 @@ public class FuseBox : MonoBehaviour, IInteractable
             }
         }
 
+        if (!activate)
+        {
+            _fuseActiveCount = 0;
+        }
+
         if (!activate && FizzleSound != null)
         {
             FizzleSound.PlayOneShot(FizzleSound.clip);
@@ -132,18 +136,6 @@ public class FuseBox : MonoBehaviour, IInteractable
                 if (fuse != null)
                 {
                     fuse.gameObject.SetActive(visible);
-                }
-            }
-        }
-
-        _fuseActiveCount = visible && fuses != null ? fuses.Count : 0;
-        if (fuseItems != null)
-        {
-            foreach (var item in fuseItems)
-            {
-                if (item != null)
-                {
-                    item.gameObject.SetActive(!visible);
                 }
             }
         }

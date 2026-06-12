@@ -141,7 +141,7 @@ MonoBehaviour:
   lightObjectsParent: {fileID: 6800561772214909679}
   itemNeeds:
   - Item: {fileID: 11400000, guid: 68d8e2755303fa74184308eb580f5191, type: 2}
-    Quantity: 2
+    Quantity: 5
 --- !u!65 &-2146496007076455212
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6733,7 +6733,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7675827162149200057, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.190306
+      value: 3.4827924
       objectReference: {fileID: 0}
     - target: {fileID: 7675827162149200057, guid: 6ece5102abcd21f47ae31b6c9ee2be1f, type: 3}
       propertyPath: m_LocalPosition.z

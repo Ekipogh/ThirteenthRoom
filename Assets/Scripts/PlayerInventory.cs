@@ -13,6 +13,11 @@ public class PlayerInventory
 
     public void AddItem(ItemDefinition item)
     {
+        if (item == null)
+        {
+            return;
+        }
+
         if (_items.ContainsKey(item))
         {
             _items[item]++;
@@ -34,6 +39,11 @@ public class PlayerInventory
 
     public bool HasItem(ItemDefinition item)
     {
+        if (item == null)
+        {
+            return false;
+        }
+
         return _items.ContainsKey(item);
     }
 
@@ -56,6 +66,11 @@ public class PlayerInventory
 
     public bool RemoveItem(ItemDefinition item)
     {
+        if (item == null)
+        {
+            return false;
+        }
+
         if (_items.ContainsKey(item))
         {
             _items[item]--;
