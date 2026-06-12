@@ -25,6 +25,10 @@ $CacheDir = if ($env:CACHE_DIR) { $env:CACHE_DIR } else { ".\.tc-cache\artifacts
 $CachedVersionFile = "$CacheDir\artifacts_version.txt"
 $ZipPath = "$CacheDir\Assets.zip"
 $ExtractDir = ".\Assets"
+$RequiredExtractedPaths = @(
+    ".\Assets\Thirdparty",
+    ".\Assets\Plugins\Demigiant"
+)
 
 New-Item -ItemType Directory -Force -Path $CacheDir | Out-Null
 
@@ -33,26 +37,48 @@ if (Test-Path $CachedVersionFile) {
     $CachedVersion = (Get-Content $CachedVersionFile -Raw).Trim()
 }
 
-if ($CurrentVersion -eq $CachedVersion -and (Test-Path $ExtractDir)) {
-    Write-Host "Artifacts version $CurrentVersion already cached. Skipping download."
+function Test-ArtifactsExtracted {
+    foreach ($path in $RequiredExtractedPaths) {
+        if (-not (Test-Path $path)) {
+            return $false
+        }
+    }
+
+    return $true
+}
+
+$ArtifactsExtracted = Test-ArtifactsExtracted
+
+if ($CurrentVersion -eq $CachedVersion -and $ArtifactsExtracted) {
+    Write-Host "Artifacts version $CurrentVersion already cached and extracted. Skipping download and extraction."
 }
 else {
-    Write-Host "Artifacts changed: cached='$CachedVersion', current='$CurrentVersion'. Downloading..."
+    if ($CurrentVersion -ne $CachedVersion -or -not (Test-Path $ZipPath)) {
+        if ($CurrentVersion -ne $CachedVersion) {
+            Write-Host "Artifacts changed: cached='$CachedVersion', current='$CurrentVersion'. Downloading..."
+        }
+        else {
+            Write-Host "Cached archive missing. Downloading artifacts version $CurrentVersion..."
+        }
 
-    $url = "$env:NEXUS_URL/repository/teamcity-raw/thirteenthroom/$CurrentVersion/Assets.zip"
-    Write-Host "Downloading artifacts from $url"
+        $url = "$env:NEXUS_URL/repository/teamcity-raw/thirteenthroom/$CurrentVersion/Assets.zip"
+        Write-Host "Downloading artifacts from $url"
 
-    $loginPassword = "{0}:{1}" -f $env:NEXUS_USERNAME, $env:NEXUS_PASSWORD
-    $encodedCredentials = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($loginPassword))
-    $headers = @{ Authorization = "Basic " + $encodedCredentials }
+        $loginPassword = "{0}:{1}" -f $env:NEXUS_USERNAME, $env:NEXUS_PASSWORD
+        $encodedCredentials = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($loginPassword))
+        $headers = @{ Authorization = "Basic " + $encodedCredentials }
 
-    Invoke-WebRequest -Uri $url `
-        -OutFile $ZipPath `
-        -Headers $headers
+        Invoke-WebRequest -Uri $url `
+            -OutFile $ZipPath `
+            -Headers $headers
+    }
+    else {
+        Write-Host "Versions match, but extracted artifacts are missing. Reusing cached archive."
+    }
+
+    Test-Path $ZipPath -ErrorAction Stop | Out-Null
+
+    Expand-Archive -Path $ZipPath -DestinationPath $ExtractDir -Force
+
+    Set-Content -Path $CachedVersionFile -Value $CurrentVersion
 }
-
-Test-Path $ZipPath -ErrorAction Stop
-
-Expand-Archive -Path $ZipPath -DestinationPath $ExtractDir -Force
-
-Set-Content -Path $CachedVersionFile -Value $CurrentVersion
