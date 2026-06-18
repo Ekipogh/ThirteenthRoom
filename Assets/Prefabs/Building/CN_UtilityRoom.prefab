@@ -2564,6 +2564,10 @@ PrefabInstance:
       value: LightSwitch
       objectReference: {fileID: 0}
     - target: {fileID: 8590273631023127984, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
+      propertyPath: LightsParent
+      value: 
+      objectReference: {fileID: 2026338781969628856}
+    - target: {fileID: 8590273631023127984, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
       propertyPath: LightObjects.Array.size
       value: 3
       objectReference: {fileID: 0}

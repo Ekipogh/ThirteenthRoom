@@ -90,6 +90,7 @@ MonoBehaviour:
   RoomId: 
   PlayerSpawnPoint: {fileID: 2962038149520283407}
   MonsterPoint: {fileID: 2948862812473762354}
+  SpawnTags: []
   northDoorPoint: {fileID: 0}
   southDoorPoint: {fileID: 6211139934868384592}
   westDoorPoint: {fileID: 0}
@@ -103,8 +104,9 @@ MonoBehaviour:
   Up: {fileID: 0}
   Down: {fileID: 0}
   roomType: 0
-  SpawnTags: []
+  itemSpawnPointsParent: {fileID: 0}
   lightObjectsParent: {fileID: 6800561772214909679}
+  itemNeeds: []
 --- !u!65 &9122584682723478023
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2486,6 +2488,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LightSwitch
       objectReference: {fileID: 0}
+    - target: {fileID: 8590273631023127984, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
+      propertyPath: LightsParent
+      value: 
+      objectReference: {fileID: 2026338781969628856}
     - target: {fileID: 8590273631023127984, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
       propertyPath: LightObjects.Array.size
       value: 3

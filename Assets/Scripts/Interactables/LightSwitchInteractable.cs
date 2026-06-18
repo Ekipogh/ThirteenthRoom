@@ -3,7 +3,8 @@ using UnityEngine;
 public class LightSwitchInteractable : MonoBehaviour, IInteractable
 {
     [Header("Lights")]
-    [SerializeField] LightObject[] LightObjects;
+    LightObject[] LightObjects;
+    [SerializeField] Transform LightsParent;
 
     [Header("Switch")]
     [SerializeField] Transform LightSwitchTransform;
@@ -17,6 +18,10 @@ public class LightSwitchInteractable : MonoBehaviour, IInteractable
 
     void Awake()
     {
+        if (LightsParent != null)
+        {
+            LightObjects = LightsParent.GetComponentsInChildren<LightObject>();
+        }
         ApplyLightState();
     }
 
