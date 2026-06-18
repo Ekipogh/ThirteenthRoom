@@ -29,7 +29,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8865681789075264501}
   - {fileID: 2026338781969628856}
   - {fileID: 7189242909852914958}
   - {fileID: 6291815504183305302}
@@ -91,6 +90,7 @@ MonoBehaviour:
   RoomId: 
   PlayerSpawnPoint: {fileID: 2962038149520283407}
   MonsterPoint: {fileID: 2176342846702810705}
+  SpawnTags: []
   northDoorPoint: {fileID: 6163555599381842402}
   southDoorPoint: {fileID: 0}
   westDoorPoint: {fileID: 0}
@@ -104,8 +104,9 @@ MonoBehaviour:
   Up: {fileID: 0}
   Down: {fileID: 0}
   roomType: 2
-  SpawnTags: []
+  itemSpawnPointsParent: {fileID: 0}
   lightObjectsParent: {fileID: 6800561772214909679}
+  itemNeeds: []
 --- !u!65 &4268555508046536618
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -310,6 +311,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3811834465408899983}
+  - {fileID: 8865681789075264501}
   m_Father: {fileID: 7397950500092138010}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6800561772214909679
@@ -2350,7 +2352,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 7397950500092138010}
+    m_TransformParent: {fileID: 6291815504183305302}
     m_Modifications:
     - target: {fileID: 6965865434426909611, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2362,11 +2364,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6965865434426909611, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.1300015
+      value: 5.130001
       objectReference: {fileID: 0}
     - target: {fileID: 6965865434426909611, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.70710737
+      value: -0.7071073
       objectReference: {fileID: 0}
     - target: {fileID: 6965865434426909611, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
       propertyPath: m_LocalRotation.x
@@ -2396,6 +2398,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LightSwitch
       objectReference: {fileID: 0}
+    - target: {fileID: 8590273631023127984, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
+      propertyPath: LightsParent
+      value: 
+      objectReference: {fileID: 2026338781969628856}
     - target: {fileID: 8590273631023127984, guid: 8e9f5db42440b984297faf08d2a86437, type: 3}
       propertyPath: LightObjects.Array.size
       value: 4

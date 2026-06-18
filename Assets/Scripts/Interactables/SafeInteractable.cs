@@ -52,7 +52,6 @@ public class SafeInteractable : MonoBehaviour, IInteractable
             requiredItemId = room.name + "_SafeKey_" + randomSuffix;
             safeKeyItem = Instantiate(safeKeyItem);
             safeKeyItem.targetID = requiredItemId;
-            Debug.Log($"SafeInteractable in room '{room.name}' is requesting key item with ID: {requiredItemId}");
             room.RequestItem(safeKeyItem);
         }
     }
