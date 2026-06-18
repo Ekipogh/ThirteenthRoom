@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class RitualCandle : MonoBehaviour
 {
+    [Header("Visuals")]
     [SerializeField] List<GameObject> pointLights;
     [SerializeField] List<GameObject> flameParticles;
 

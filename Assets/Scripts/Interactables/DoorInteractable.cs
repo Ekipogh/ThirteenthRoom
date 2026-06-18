@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class DoorInteractable : MonoBehaviour, IInteractable
 {
+    [Header("Movement")]
     [SerializeField] float openingTime = 1f;
+
+    [Header("Audio")]
     [SerializeField] GameObject doorAudioParent;
 
     AudioSource openAudioSource;

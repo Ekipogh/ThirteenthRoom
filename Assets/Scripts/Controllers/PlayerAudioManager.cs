@@ -3,16 +3,24 @@ using UnityEngine;
 
 public class PlayerAudioManager : MonoBehaviour
 {
+    [Header("Breathing Sources")]
     [SerializeField] AudioSource NormalBreathingAudioSource;
     [SerializeField] AudioSource SprintingBreathingAudioSource;
     [SerializeField] AudioSource RecoveringBreathingAudioSource;
+
+    [Header("One-Shot Sources")]
     [SerializeField] AudioSource GaspAudioSource;
     [SerializeField] AudioSource PickupAudioSource;
+
+    [Header("Breathing Settings")]
     [SerializeField, Min(0.01f)] float BreathingFadeDuration = 0.35f;
     [SerializeField, Min(0.01f)] float RecoveringBreathingLowStaminaVolume = 1.0f;
     [SerializeField, Min(0.01f)] float RecoveringBreathingHighStaminaVolume = 0.0f;
+
+    [Header("Footsteps")]
     [SerializeField] GameObject FootStepSourceObject;
     [SerializeField] GameObject SprintFootStepSourceObject;
+
     List<AudioSource> _footstepAudioSources;
     List<AudioSource> _sprintingAudioSources;
 

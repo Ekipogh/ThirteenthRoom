@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class MonsterSpawner : MonoBehaviour
 {
+    [Header("Definitions")]
     [SerializeField] MonsterDefinition[] MonsterDefinitions;
+
+    [Header("Scene References")]
     [SerializeField] RoomTracker RoomTracker;
     [SerializeField] PlayerAudioManager PlayerAudioManager;
     [SerializeField] GameManager GameManager;

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MonsterAudioManager : MonoBehaviour
 {
+    [Header("Footsteps")]
     [SerializeField] GameObject FootStepSourceObject;
     [SerializeField] float footstepDistanceThreshold = 2.5f;
 

@@ -67,10 +67,13 @@ public class MansionModel
     public IReadOnlyList<Room> Rooms => _rooms;
     public IReadOnlyList<RoomConnection> Connections => _connections;
 
-    public MansionModel(IEnumerable<Room> rooms, IEnumerable<RoomConnection> connections)
+    public IReadOnlyList<SpawnItemDefinition> InitialSpawnItemDefinitions { get; } = new List<SpawnItemDefinition>();
+
+    public MansionModel(IEnumerable<Room> rooms, IEnumerable<RoomConnection> connections, IEnumerable<SpawnItemDefinition> initialSpawnItemDefinitions)
     {
         _rooms = new List<Room>(rooms);
         _connections = new List<RoomConnection>(connections);
+        InitialSpawnItemDefinitions = new List<SpawnItemDefinition>(initialSpawnItemDefinitions);
 
         foreach (Room room in _rooms)
         {

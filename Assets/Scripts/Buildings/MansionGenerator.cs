@@ -3,29 +3,35 @@ using UnityEngine;
 
 public class MansionGenerator : MonoBehaviour
 {
+    [Header("Player")]
     [SerializeField] PlayerController playerController;
 
+    [Header("Special Rooms")]
     [SerializeField] GameObject entrancePrefab;
     [SerializeField] GameObject stairsPrefab;
-
-    // Unique rooms
     [SerializeField] GameObject[] uniqueRooms;
-    // Generic rooms
+
+    [Header("Generic Rooms")]
     [SerializeField] GameObject[] genericBaseRoomPrefabs;
     [SerializeField] GameObject[] genericCorridorPrefabs;
     [SerializeField] GameObject[] genericCornerPrefabs;
     [SerializeField] GameObject[] genericJuntionPrefabs;
     [SerializeField] GameObject[] genericIntersectionPrefabs;
 
+    [Header("Doors")]
     [SerializeField] GameObject doorPrefab;
     [SerializeField] GameObject doorParent;
+
+    [Header("Generated Parents")]
     [SerializeField] GameObject floorParent;
 
-    GameObject[] floorParents;
-
+    [Header("Layout")]
     public int width = 5; // Number of rooms horizontally
     public int height = 5; // Number of rooms vertically
     public int floorCount = 2;
+
+    [Header("Items")]
+    [SerializeField] ItemNeed[] itemNeeds;
 
     private const int MaxLayoutAttempts = 50;
     private const int DoorNorth = 1 << 0;
@@ -33,13 +39,14 @@ public class MansionGenerator : MonoBehaviour
     private const int DoorSouth = 1 << 2;
     private const int DoorWest = 1 << 3;
 
+    GameObject[] floorParents;
     private Room[,,] placedRooms;
     private readonly List<RoomConnection> roomConnections = new();
     private readonly Dictionary<DoorKey, DoorInteractable> doorsByConnection = new();
 
     public MansionModel CurrentMansion { get; private set; }
 
-    public void GenerateMansion()
+    public MansionModel GenerateMansion()
     {
         CurrentMansion = null;
         roomConnections.Clear();
@@ -63,7 +70,7 @@ public class MansionGenerator : MonoBehaviour
         if (uniquePlacements == null || mansionFloorLayouts == null)
         {
             Debug.LogError($"Failed to place all unique mansion rooms after {MaxLayoutAttempts} layout attempts.");
-            return;
+            return null;
         }
 
         placedRooms = new Room[floorCount, width, height];
@@ -73,7 +80,24 @@ public class MansionGenerator : MonoBehaviour
         BindGeneratedFuseBoxes();
         RefreshDynamicRooms();
         RefreshRoomConnectionDoorwayPoints();
-        CurrentMansion = new MansionModel(GetGeneratedRooms(entranceRoom), roomConnections);
+        List<SpawnItemDefinition> initialSpawnItemDefinitions = GenerateMansionSpawnItemList();
+        CurrentMansion = new MansionModel(GetGeneratedRooms(entranceRoom), roomConnections, initialSpawnItemDefinitions);
+        return CurrentMansion;
+    }
+
+    private List<SpawnItemDefinition> GenerateMansionSpawnItemList()
+    {
+        if (itemNeeds == null || itemNeeds.Length == 0)
+        {
+            return new List<SpawnItemDefinition>();
+        }
+        var initialSpawnItemDefinitions = new List<SpawnItemDefinition>();
+        foreach (ItemNeed itemNeed in itemNeeds)
+        {
+            initialSpawnItemDefinitions.Add(itemNeed.Item);
+        }
+
+        return initialSpawnItemDefinitions;
     }
 
     private Cell[][,] GenerateLayouts()
@@ -160,7 +184,7 @@ public class MansionGenerator : MonoBehaviour
     {
         foreach (RoomPlacement placement in uniquePlacements)
         {
-            PlaceRoom(placement, true);
+            PlaceRoom(placement);
             mansionFloorLayouts[placement.Floor][placement.X, placement.Y].IsPlaced = true;
         }
 
@@ -184,7 +208,7 @@ public class MansionGenerator : MonoBehaviour
                         continue;
                     }
 
-                    PlaceRoom(placement, false);
+                    PlaceRoom(placement);
                     cell.IsPlaced = true;
                 }
             }
@@ -395,12 +419,12 @@ public class MansionGenerator : MonoBehaviour
         };
     }
 
-    private void PlaceRoom(RoomPlacement placement, bool isUnique)
+    private void PlaceRoom(RoomPlacement placement)
     {
         Vector3 position = GetRoomPosition(placement.Floor, placement.X, placement.Y);
         GameObject roomObject = Instantiate(placement.Prefab, position, placement.Rotation);
-        string prefix = isUnique ? "UniqueRoom" : "Room";
-        SetRoomIdAndParent(roomObject, $"{prefix}_Floor{placement.Floor}_{placement.X}_{placement.Y}", placement.Floor);
+        string roomName = $"{placement.Prefab.name}_Floor{placement.Floor}_{placement.X}_{placement.Y}";
+        SetRoomIdAndParent(roomObject, roomName, placement.Floor);
         Room room = roomObject.GetComponent<Room>();
         if (room == null)
         {

@@ -1,13 +1,8 @@
 using UnityEngine;
 
-public class TorchInteractable : MonoBehaviour, IInteractable
+public class TorchInteractable : ItemPickup
 {
-    public string GetInteractionPrompt(PlayerInteractor playerInteractor)
-    {
-        return "Press E to pick up the torch";
-    }
-
-    public void Interact(PlayerInteractor playerInteractor)
+    public override void Interact(PlayerInteractor playerInteractor)
     {
         if (playerInteractor.TryGetComponent<PlayerController>(out var player))
         {

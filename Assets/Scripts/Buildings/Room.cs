@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,13 @@ using UnityEngine;
 // Corridor: door to the north and south
 // Junction: door to the west, south, and east
 // Intersection: door to all four sides
+
+[Serializable]
+public class ItemNeed
+{
+    public SpawnItemDefinition Item;
+    public int Quantity;
+}
 
 public enum RoomDirection
 {
@@ -30,9 +38,14 @@ public enum RoomType
 public class Room : MonoBehaviour
 {
     public static readonly Vector3 RoomSize = new(37.5f, 13.5f, 37.5f);
+
+    [Header("Identity")]
     public string RoomId;
+
+    [Header("Spawn Points")]
     public PointNode PlayerSpawnPoint;
     public PointNode MonsterPoint;
+    public string[] SpawnTags;
 
     [Header("Door Points")]
     [SerializeField] protected PointNode northDoorPoint;
@@ -51,10 +64,20 @@ public class Room : MonoBehaviour
     [SerializeField] protected Room Up;
     [SerializeField] protected Room Down;
 
+    [Header("Room Settings")]
     [SerializeField] protected RoomType roomType;
-    public RoomType RoomType => roomType;
 
-    public string[] SpawnTags;
+    [Header("Child Containers")]
+    [SerializeField] GameObject itemSpawnPointsParent;
+    [SerializeField] GameObject lightObjectsParent;
+
+    [Header("Items")]
+    private List<SpawnItemDefinition> _requestedItems = new();
+    public IReadOnlyList<SpawnItemDefinition> RequestedItems => _requestedItems.AsReadOnly();
+    // Items to request on room generation, with quantities
+    [SerializeField] private List<ItemNeed> itemNeeds = new();
+
+    public RoomType RoomType => roomType;
 
     public void SetRoomType(RoomType type)
     {
@@ -105,8 +128,6 @@ public class Room : MonoBehaviour
             return connectedRooms;
         }
     }
-    [SerializeField] GameObject lightObjectsParent;
-
     protected virtual void Awake()
     {
         if (!lightObjectsParent)
@@ -120,6 +141,29 @@ public class Room : MonoBehaviour
             else
             {
                 Debug.LogWarning($"Room '{name}' is missing a reference to lightObjectsParent and could not find a child at 'Objects/Lights'.");
+            }
+        }
+        if (!itemSpawnPointsParent)
+        {
+            // root.ItemSpawnPoints
+            var itemSpawnPoints = transform.Find("ItemSpawnPoints");
+            if (itemSpawnPoints != null)
+            {
+                itemSpawnPointsParent = itemSpawnPoints.gameObject;
+            }
+            else
+            {
+                Debug.LogWarning($"Room '{name}' is missing a reference to itemSpawnPointsParent and could not find a child at 'ItemSpawnPoints'.");
+            }
+        }
+        if (itemNeeds != null && itemNeeds.Count > 0)
+        {
+            foreach (var itemNeed in itemNeeds)
+            {
+                for (int i = 0; i < itemNeed.Quantity; i++)
+                {
+                    _requestedItems.Add(itemNeed.Item);
+                }
             }
         }
     }
@@ -322,5 +366,24 @@ public class Room : MonoBehaviour
             RoomDirection.Down => downDoorPoint,
             _ => null
         };
+    }
+
+    public ItemSpawnPoint[] GetItemSpawnPoints()
+    {
+        if (itemSpawnPointsParent == null)
+        {
+            Debug.LogWarning($"Room '{name}' is missing a reference to itemSpawnPointsParent.");
+            return Array.Empty<ItemSpawnPoint>();
+        }
+
+        return itemSpawnPointsParent.GetComponentsInChildren<ItemSpawnPoint>();
+    }
+
+    public void RequestItem(SpawnItemDefinition item)
+    {
+        if (item != null && !_requestedItems.Contains(item))
+        {
+            _requestedItems.Add(item);
+        }
     }
 }

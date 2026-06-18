@@ -12,22 +12,27 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
+    [Header("State")]
     public GameState currentState = GameState.Playing;
 
+    [Header("Input")]
     [SerializeField] InputActionAsset InputActions;
 
-    InputActionMap _playerActionMap;
-
+    [Header("UI")]
     [SerializeField] GameObject GameOverPanel;
-
     [SerializeField] GameObject HUD;
 
+    [Header("Scene")]
     [SerializeField] string _gameSceneName;
 
+    [Header("Managers")]
     [SerializeField] ScoreManager ScoreManager;
-
     [SerializeField] MansionGenerator MansionGenerator;
     [SerializeField] MonsterSpawner MonsterSpawner;
+    [SerializeField] ItemSpawner ItemSpawner;
+
+    InputActionMap _playerActionMap;
+    MansionModel currentMansion;
 
 
     void Awake()
@@ -43,11 +48,15 @@ public class GameManager : MonoBehaviour
     {
         if (MansionGenerator != null)
         {
-            MansionGenerator.GenerateMansion();
+            currentMansion = MansionGenerator.GenerateMansion();
         }
         if (MonsterSpawner != null)
         {
-            MonsterSpawner.SpawnMonster(MansionGenerator != null ? MansionGenerator.CurrentMansion : null);
+            MonsterSpawner.SpawnMonster(currentMansion);
+        }
+        if (ItemSpawner != null)
+        {
+            ItemSpawner.SpawnInitialItems(currentMansion);
         }
     }
 

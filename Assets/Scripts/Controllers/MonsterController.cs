@@ -12,14 +12,19 @@ public class MonsterController : MonoBehaviour
     public Room StartingRoom { get; set; }
     public MansionModel Mansion { get; set; }
     public RoomTracker RoomTracker { get; set; }
+    public GameManager GameManager { get; set; }
+    public PlayerAudioManager PlayerAudioManager { get; set; }
+
+    [Header("Roaming")]
     [SerializeField] float moveInterval = 5f;
-    [SerializeField] float escapeWindowDuration = 5f;
     [SerializeField] float travelSpeed = 1.5f;
     [SerializeField] float doorframeWaitTime = 1f;
     [SerializeField] string doorframeEmoteTrigger;
 
-    public GameManager GameManager { get; set; }
-    public PlayerAudioManager PlayerAudioManager { get; set; }
+    [Header("Encounter")]
+    [SerializeField] float escapeWindowDuration = 5f;
+
+    [Header("Audio")]
     [SerializeField] MonsterAudioManager MonsterAudioManager;
 
     GameState _currentGameState;

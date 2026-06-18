@@ -4,9 +4,15 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class RitualInteractable : MonoBehaviour, IHoldInteractable
 {
+    [Header("Ritual Objects")]
     [SerializeField] List<RitualCandle> candles;
+
+    [Header("Audio")]
     [SerializeField] AudioSource ritualAudioSource;
+
+    [Header("Scoring")]
     [SerializeField] ScoreManager scoreManager;
+
     private readonly float interactionTime = 10f; // Time required to complete the ritual
     private float currentInteractionTime = 0f;
     private bool _isActive = true; // false = ritual needs to be completed, true = ritual is complete

@@ -2,18 +2,20 @@ using UnityEngine;
 
 public class Landing : DynamicDoorRoom
 {
-    [Header("Landing Specific")]
+    [Header("Stair Meshes")]
     [SerializeField] GameObject leftStaircase;
     [SerializeField] GameObject leftStairsCeiling;
     [SerializeField] GameObject rightStaircase;
     [SerializeField] GameObject rightStairsCeiling;
     [SerializeField] GameObject floorsParent;
 
+    [Header("Stair Door Points")]
     [SerializeField] PointNode upDoorPointLeft;
     [SerializeField] PointNode upDoorPointRight;
     [SerializeField] PointNode downDoorPointLeft;
     [SerializeField] PointNode downDoorPointRight;
 
+    [Header("Floor")]
     [SerializeField] private int floor = 0;
 
     protected override void Start()

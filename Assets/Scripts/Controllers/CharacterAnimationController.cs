@@ -9,6 +9,7 @@ public abstract class CharacterAnimationController : MonoBehaviour
         Run = 2
     }
 
+    [Header("Animation")]
     [SerializeField] Animator _animator;
 
     readonly int _currentGaitHash = Animator.StringToHash("CurrentGait");

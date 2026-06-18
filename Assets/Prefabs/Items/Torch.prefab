@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7149415723032684147}
   - component: {fileID: 1134252447348675628}
   - component: {fileID: 4369162055350652772}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Torch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,3 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220a9ee755e3b5d44acfb00420a1b4b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TorchInteractable
+  itemDefinition: {fileID: 11400000, guid: 3cec2fed25d5fe644b29e9aefc2a97ee, type: 2}
+  PickupSound: {fileID: 0}
+  scoreManager: {fileID: 0}
