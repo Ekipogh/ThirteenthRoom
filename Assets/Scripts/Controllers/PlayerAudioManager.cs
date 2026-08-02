@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerAudioManager : MonoBehaviour
 {
     [Header("Breathing Sources")]
-    [SerializeField] AudioSource NormalBreathingAudioSource;
     [SerializeField] AudioSource SprintingBreathingAudioSource;
     [SerializeField] AudioSource RecoveringBreathingAudioSource;
 
@@ -28,19 +27,15 @@ public class PlayerAudioManager : MonoBehaviour
     bool _isRecovering;
     bool _isMonsterEncounterActive;
     bool _hasBreathingState;
-    float _normalBreathingVolume = 1f;
     float _sprintingBreathingVolume = 1f;
     float _recoveringBreathingVolume = 1f;
-    float _normalBreathingTargetVolume;
     float _sprintingBreathingTargetVolume;
     float _recoveringBreathingTargetVolume;
 
     void Awake()
     {
-        _normalBreathingVolume = GetConfiguredVolume(NormalBreathingAudioSource);
         _sprintingBreathingVolume = GetConfiguredVolume(SprintingBreathingAudioSource);
         _recoveringBreathingVolume = GetConfiguredVolume(RecoveringBreathingAudioSource);
-        SetVolumeIfPresent(NormalBreathingAudioSource, 0f);
         SetVolumeIfPresent(SprintingBreathingAudioSource, 0f);
         SetVolumeIfPresent(RecoveringBreathingAudioSource, 0f);
 
@@ -58,7 +53,6 @@ public class PlayerAudioManager : MonoBehaviour
 
     void Update()
     {
-        FadeBreathingAudio(NormalBreathingAudioSource, _normalBreathingTargetVolume);
         FadeBreathingAudio(SprintingBreathingAudioSource, _sprintingBreathingTargetVolume);
         FadeBreathingAudio(RecoveringBreathingAudioSource, _recoveringBreathingTargetVolume);
     }
@@ -142,21 +136,17 @@ public class PlayerAudioManager : MonoBehaviour
         if (_isSprinting)
         {
             PlayIfNeeded(SprintingBreathingAudioSource);
-            _normalBreathingTargetVolume = 0f;
             _recoveringBreathingTargetVolume = 0f;
             _sprintingBreathingTargetVolume = _sprintingBreathingVolume;
         }
         else if (_isRecovering)
         {
             PlayIfNeeded(RecoveringBreathingAudioSource);
-            _normalBreathingTargetVolume = 0f;
             _sprintingBreathingTargetVolume = 0f;
             _recoveringBreathingTargetVolume = _recoveringBreathingVolume;
         }
         else
         {
-            PlayIfNeeded(NormalBreathingAudioSource);
-            _normalBreathingTargetVolume = _normalBreathingVolume;
             _sprintingBreathingTargetVolume = 0f;
             _recoveringBreathingTargetVolume = 0f;
         }
@@ -164,7 +154,6 @@ public class PlayerAudioManager : MonoBehaviour
 
     void FadeOutBreathing()
     {
-        _normalBreathingTargetVolume = 0f;
         _sprintingBreathingTargetVolume = 0f;
         _recoveringBreathingTargetVolume = 0f;
     }
