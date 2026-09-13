@@ -37,7 +37,7 @@ public enum RoomType
 
 public class Room : MonoBehaviour
 {
-    public static readonly Vector3 RoomSize = new(37.5f, 13.5f, 37.5f);
+    public static readonly Vector3 RoomSize = new(37.5f, 13.75f, 37.5f);
 
     [Header("Identity")]
     public string RoomId;
