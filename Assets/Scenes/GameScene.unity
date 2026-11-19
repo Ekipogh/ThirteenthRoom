@@ -2355,8 +2355,10 @@ MonoBehaviour:
   genericJuntionPrefabs:
   - {fileID: 2140723340129324856, guid: ba5b561a55fb65b44b9d2e7ba5a272b9, type: 3}
   - {fileID: 923786071263119788, guid: 972a29f07ce682d4f810cc1cce08e5d9, type: 3}
+  - {fileID: 7523562404241891084, guid: 66163f70dec9daa4d963f1babc10a8f4, type: 3}
   genericIntersectionPrefabs:
   - {fileID: 9093866243136800058, guid: ee8c822fbff2bbd4ba88d033d616e472, type: 3}
+  - {fileID: 1528233476011991783, guid: 16b39413d53a8314cb5683ce8a7e47b7, type: 3}
   doorPrefab: {fileID: 7258648829098508881, guid: 92dac4b9c59b2824c94ef59d37c8a291, type: 3}
   doorParent: {fileID: 941413729}
   floorParent: {fileID: 243102480}
