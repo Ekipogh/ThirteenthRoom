@@ -524,6 +524,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallTorch (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Range
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Shadows.m_Resolution
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2794866251353483842, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18
@@ -562,6 +578,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2794866251353483842, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5857361222627104878, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1194,6 +1214,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallTorch
       objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Range
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Shadows.m_Resolution
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2794866251353483842, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18
@@ -1232,6 +1268,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2794866251353483842, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5857361222627104878, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1334,6 +1374,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallTorch (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Range
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Shadows.m_Resolution
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2794866251353483842, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -18.25
@@ -1372,6 +1428,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2794866251353483842, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5857361222627104878, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2394,6 +2454,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallTorch (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Range
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529562872098435287, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_Shadows.m_Resolution
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2794866251353483842, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -18.25
@@ -2432,6 +2508,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2794866251353483842, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5857361222627104878, guid: 862fff030e814a24ab04dc336017d60d, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

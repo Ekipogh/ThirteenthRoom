@@ -1326,6 +1326,14 @@ PrefabInstance:
       propertyPath: IsOn
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3494363607149455570, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3494363607149455570, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Intensity
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3682276313608476970, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.161
@@ -1333,6 +1341,14 @@ PrefabInstance:
     - target: {fileID: 7293998332460509546, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_Name
       value: WallLight (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406772427664596199, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406772427664596199, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Intensity
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7681382076544012534, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1372,6 +1388,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7681382076544012534, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690035686090474934, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912144022920386395, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2002,6 +2026,54 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2026338781969628856}
     m_Modifications:
+    - target: {fileID: 543546678269749519, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2233323572807790907, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2233323572807790907, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Intensity
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2389514158719990111, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481481529655522743, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481481529655522743, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Intensity
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3491175023976521693, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537531861176067992, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537531861176067992, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Intensity
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711048075994423715, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4574704460298959589, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4574704460298959589, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Intensity
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 6043500613971202092, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
       propertyPath: m_Name
       value: CeilingLight
@@ -2046,9 +2118,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6500247518957000056, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500247518957000056, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Intensity
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 7094477884898515866, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
       propertyPath: IsOn
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8163675562804194579, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223633448948474336, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0023332834
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223633448948474336, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.8575
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223633448948474336, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.005833328
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523204917395772021, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523204917395772021, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
+      propertyPath: m_Intensity
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8708334053920361209, guid: 107df4d8249d89b49b7195d216919af6, type: 3}
       propertyPath: m_Name
@@ -2080,7 +2184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 0
   m_CustomShadowLayers: 0
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
@@ -2568,6 +2672,14 @@ PrefabInstance:
       propertyPath: IsOn
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3494363607149455570, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3494363607149455570, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Intensity
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3682276313608476970, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.16
@@ -2575,6 +2687,14 @@ PrefabInstance:
     - target: {fileID: 7293998332460509546, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_Name
       value: WallLight (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406772427664596199, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406772427664596199, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Intensity
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7681382076544012534, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2614,6 +2734,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7681382076544012534, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690035686090474934, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912144022920386395, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4843,6 +4971,14 @@ PrefabInstance:
       propertyPath: IsOn
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3494363607149455570, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3494363607149455570, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Intensity
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3682276313608476970, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.16
@@ -4850,6 +4986,14 @@ PrefabInstance:
     - target: {fileID: 7293998332460509546, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_Name
       value: WallLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406772427664596199, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Range
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406772427664596199, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_Intensity
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7681382076544012534, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4889,6 +5033,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7681382076544012534, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7690035686090474934, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912144022920386395, guid: 7f2b7a4f20967a5428d68bde3bc67639, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
