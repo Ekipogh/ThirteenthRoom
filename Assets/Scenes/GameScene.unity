@@ -2342,18 +2342,23 @@ MonoBehaviour:
   genericBaseRoomPrefabs:
   - {fileID: 2648397103870277830, guid: dd5496e8e75f48d45b300e507e1eae31, type: 3}
   - {fileID: 2648397103870277830, guid: a62c2d4ab8ec135478ec2eab1a95f3f8, type: 3}
-  - {fileID: 2648397103870277830, guid: 198bc1623376bb647b2853de9c1e21df, type: 3}
+  - {fileID: 7379705244923111728, guid: 1969e700e510ade41b32e3fc03e9b048, type: 3}
   genericCorridorPrefabs:
   - {fileID: 2648397103870277830, guid: 95141e30925fc3d4fbee79d3fffc68d8, type: 3}
-  - {fileID: 2648397103870277830, guid: cdd5c0b56b226dc4d96cf9831cdcb68d, type: 3}
+  - {fileID: 355520661602556354, guid: 6df24c0c06d6ab04fb8a81ce3a7cf8bb, type: 3}
+  - {fileID: 5786471558812987936, guid: aebd87e40169bdb428da25af8a0e3a10, type: 3}
+  - {fileID: 5915340331345267977, guid: 83f3fb9af9b79bc47a3ba414a8a33fa0, type: 3}
   genericCornerPrefabs:
-  - {fileID: 2648397103870277830, guid: e2ee1a43e5b43fc4e89df0c48a3e1746, type: 3}
   - {fileID: 2648397103870277830, guid: 87e6b404b4630464f9e65ee977c8a7ee, type: 3}
   - {fileID: 2648397103870277830, guid: c07b65ebe6c45114f9fbc65a0aeea597, type: 3}
+  - {fileID: 2648397103870277830, guid: b43228ef78a797249878434ecf5c384f, type: 3}
   genericJuntionPrefabs:
-  - {fileID: 2648397103870277830, guid: f957a50929e743d4c9204b99939bf206, type: 3}
+  - {fileID: 2140723340129324856, guid: ba5b561a55fb65b44b9d2e7ba5a272b9, type: 3}
+  - {fileID: 923786071263119788, guid: 972a29f07ce682d4f810cc1cce08e5d9, type: 3}
+  - {fileID: 7523562404241891084, guid: 66163f70dec9daa4d963f1babc10a8f4, type: 3}
   genericIntersectionPrefabs:
-  - {fileID: 2648397103870277830, guid: 0787d218f4769f043a7ca5634ea3e44e, type: 3}
+  - {fileID: 9093866243136800058, guid: ee8c822fbff2bbd4ba88d033d616e472, type: 3}
+  - {fileID: 1528233476011991783, guid: 16b39413d53a8314cb5683ce8a7e47b7, type: 3}
   doorPrefab: {fileID: 7258648829098508881, guid: 92dac4b9c59b2824c94ef59d37c8a291, type: 3}
   doorParent: {fileID: 941413729}
   floorParent: {fileID: 243102480}
