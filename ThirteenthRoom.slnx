@@ -68,6 +68,7 @@
   <Project Path="Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
   <Project Path="glTFast.Newtonsoft.csproj" />
+  <Project Path="Mansion.Navigation.PlayMode.Tests.csproj" />
   <Project Path="Unity.AI.Tracing.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.2D.Editor.Overrides.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.Assistant.csproj" />

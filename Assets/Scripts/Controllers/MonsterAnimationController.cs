@@ -37,7 +37,7 @@ public class MonsterAnimationController : CharacterAnimationController
         _currentGait = GetSmoothedGait(speed);
         UpdateLocomotion(speed, _currentGait);
 
-        bool isAttacking = _currentState == MonsterState.EscapeWindow || _currentState == MonsterState.Attacking;
+        bool isAttacking = monsterController.IsGameplayActive && _currentState == MonsterState.Attacking;
         Animator.speed = _currentGait == Gait.Idle || isAttacking ? 1f : speed * locomotionPlaybackSpeed;
         Animator.SetBool(_isAttackingHash, isAttacking);
     }

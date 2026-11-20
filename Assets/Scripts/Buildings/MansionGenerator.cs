@@ -45,10 +45,12 @@ public class MansionGenerator : MonoBehaviour
     private readonly Dictionary<DoorKey, DoorInteractable> doorsByConnection = new();
 
     public MansionModel CurrentMansion { get; private set; }
+    public bool NavigationReady { get; private set; }
 
     public MansionModel GenerateMansion()
     {
         CurrentMansion = null;
+        NavigationReady = false;
         roomConnections.Clear();
         doorsByConnection.Clear();
         CreateFloorParentObjects();
@@ -82,6 +84,9 @@ public class MansionGenerator : MonoBehaviour
         RefreshRoomConnectionDoorwayPoints();
         List<SpawnItemDefinition> initialSpawnItemDefinitions = GenerateMansionSpawnItemList();
         CurrentMansion = new MansionModel(GetGeneratedRooms(entranceRoom), roomConnections, initialSpawnItemDefinitions);
+        var navigation = GetComponent<MansionNavigation>();
+        if (navigation == null) navigation = gameObject.AddComponent<MansionNavigation>();
+        NavigationReady = navigation.Build(CurrentMansion, floorParent.transform);
         return CurrentMansion;
     }
 

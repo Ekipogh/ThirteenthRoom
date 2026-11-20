@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 public class DoorInteractable : MonoBehaviour, IInteractable
 {
@@ -12,6 +14,46 @@ public class DoorInteractable : MonoBehaviour, IInteractable
     AudioSource closeAudioSource;
     const float OpenAngle = 90f;
     const float AngleEpsilon = 0.1f;
+
+    NavMeshObstacle _navigationObstacle;
+    public bool IsMoving => _isMoving;
+    public bool IsPassable => !_isMoving && Mathf.Abs(GetCurrentRelativeAngle()) >= OpenAngle - AngleEpsilon;
+
+    public void ConfigureNavigation()
+    {
+        var modifier = GetComponent<NavMeshModifier>();
+        if (modifier == null) modifier = gameObject.AddComponent<NavMeshModifier>();
+        modifier.ignoreFromBuild = true;
+        if (_navigationObstacle != null) return;
+        _navigationObstacle = GetComponent<NavMeshObstacle>();
+        if (_navigationObstacle == null) _navigationObstacle = gameObject.AddComponent<NavMeshObstacle>();
+        _navigationObstacle.shape = NavMeshObstacleShape.Box;
+        Bounds bounds = new Bounds(_doorLocalCenter, Vector3.zero);
+        foreach (Collider collider in GetComponentsInChildren<Collider>())
+        {
+            if (collider.isTrigger) continue;
+            Bounds world = collider.bounds;
+            for (int i = 0; i < 8; i++)
+            {
+                Vector3 corner = world.center + Vector3.Scale(world.extents,
+                    new Vector3((i & 1) == 0 ? -1 : 1, (i & 2) == 0 ? -1 : 1, (i & 4) == 0 ? -1 : 1));
+                bounds.Encapsulate(transform.InverseTransformPoint(corner));
+            }
+        }
+        _navigationObstacle.center = bounds.center;
+        _navigationObstacle.size = Vector3.Max(bounds.size, new Vector3(0.2f, 2f, 0.2f));
+        _navigationObstacle.carving = true;
+        _navigationObstacle.carveOnlyStationary = false;
+        _navigationObstacle.enabled = !IsPassable;
+    }
+
+    public void OpenFrom(Vector3 position)
+    {
+        if (IsPassable || (_isMoving && !Mathf.Approximately(_targetRelativeAngle, 0f))) return;
+        _targetRelativeAngle = ComputeOpenTarget(position);
+        if (openAudioSource != null) openAudioSource.Play();
+        _isMoving = true;
+    }
 
     bool _isMoving;
     float _closedLocalY;
@@ -78,6 +120,7 @@ public class DoorInteractable : MonoBehaviour, IInteractable
 
     void Update()
     {
+        if (_navigationObstacle != null) _navigationObstacle.enabled = !IsPassable;
         if (_isMoving)
         {
             float currentRelative = GetCurrentRelativeAngle();

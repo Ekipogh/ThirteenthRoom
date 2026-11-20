@@ -9,6 +9,7 @@ public class PlayerAudioManager : MonoBehaviour
 
     [Header("One-Shot Sources")]
     [SerializeField] AudioSource GaspAudioSource;
+    [SerializeField, Min(0f)] float GaspVolumeMultiplier = 3f;
     [SerializeField] AudioSource PickupAudioSource;
 
     [Header("Breathing Settings")]
@@ -124,6 +125,12 @@ public class PlayerAudioManager : MonoBehaviour
         if (_isMonsterEncounterActive)
         {
             FadeOutBreathing();
+            // The gasp is shorter than the normal breathing fade. Make room
+            // for the entire cue instead of masking it with sprint/recovery.
+            SetVolumeIfPresent(SprintingBreathingAudioSource, 0f);
+            SetVolumeIfPresent(RecoveringBreathingAudioSource, 0f);
+            PauseIfPresent(SprintingBreathingAudioSource);
+            PauseIfPresent(RecoveringBreathingAudioSource);
             PlayGasp();
             return;
         }
@@ -214,7 +221,8 @@ public class PlayerAudioManager : MonoBehaviour
     {
         if (GaspAudioSource != null && GaspAudioSource.clip != null)
         {
-            GaspAudioSource.PlayOneShot(GaspAudioSource.clip);
+            GaspAudioSource.priority = 32;
+            GaspAudioSource.PlayOneShot(GaspAudioSource.clip, GaspVolumeMultiplier);
         }
     }
 

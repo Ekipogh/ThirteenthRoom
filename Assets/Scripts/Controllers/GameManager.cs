@@ -52,7 +52,8 @@ public class GameManager : MonoBehaviour
         }
         if (MonsterSpawner != null)
         {
-            MonsterSpawner.SpawnMonster(currentMansion);
+            if (MansionGenerator != null && MansionGenerator.NavigationReady)
+                MonsterSpawner.SpawnMonster(currentMansion);
         }
         if (ItemSpawner != null)
         {
