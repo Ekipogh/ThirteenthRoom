@@ -18,9 +18,6 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     public bool IsHeadBobEnabled = true;
 
-    [Header("UI")]
-    public Microlight.MicroBar.MicroBar StaminaBar;
-
     [Header("Audio")]
     [SerializeField] PlayerAudioManager AudioManager;
 
@@ -115,42 +112,6 @@ public class PlayerController : MonoBehaviour
         InputActions.FindActionMap("Player").Enable();
 
         _isInitialized = true;
-
-        if (StaminaBar != null)
-        {
-            StaminaBar.Initialize(_maxStamina);
-            StaminaBar.UpdateBar(_stamina, true);
-            StaminaBar.gameObject.SetActive(false);
-            _lastDisplayedStamina = _stamina;
-        }
-    }
-
-    void UpdateStaminaBar()
-    {
-        if (StaminaBar == null) return;
-
-        if (Mathf.Abs(_stamina - _lastDisplayedStamina) <= _staminaChangeEpsilon)
-        {
-            return;
-        }
-
-        bool shouldShowBar = _stamina < _maxStamina;
-        if (shouldShowBar && !StaminaBar.gameObject.activeSelf)
-        {
-            StaminaBar.gameObject.SetActive(true);
-        }
-
-        Microlight.MicroBar.UpdateAnim updateAnim = _stamina < _lastDisplayedStamina
-            ? Microlight.MicroBar.UpdateAnim.Damage
-            : Microlight.MicroBar.UpdateAnim.Heal;
-
-        StaminaBar.UpdateBar(_stamina, updateAnim);
-        _lastDisplayedStamina = _stamina;
-
-        if (!shouldShowBar && StaminaBar.gameObject.activeSelf)
-        {
-            StaminaBar.gameObject.SetActive(false);
-        }
     }
 
     bool IsMoving()
@@ -168,7 +129,6 @@ public class PlayerController : MonoBehaviour
         ProcessMovement();
         SprintingHeadForwardOffset();
         HeadBob();
-        UpdateStaminaBar();
     }
 
     void SprintingHeadForwardOffset()
