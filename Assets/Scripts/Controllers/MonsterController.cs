@@ -33,6 +33,8 @@ public class MonsterController : MonoBehaviour
     [SerializeField] float attackDuration = 1f;
     [Header("Audio")]
     [SerializeField] MonsterAudioManager MonsterAudioManager;
+    [SerializeField, Min(0f)] float alertCooldown = 15f;
+    float _alertCooldownRemaining;
 
     NavMeshAgent _agent;
     Animator _animator;
@@ -112,7 +114,14 @@ public class MonsterController : MonoBehaviour
     void ChangeState(MonsterState state)
     {
         if (CurrentState == state) return;
+        if (state == MonsterState.Chasing && CurrentState == MonsterState.Roaming &&
+            _alertCooldownRemaining <= 0f)
+        {
+            MonsterAudioManager?.PlayAlertSound();
+            _alertCooldownRemaining = Mathf.Max(0f, alertCooldown);
+        }
         CurrentState = state;
+        UpdateVocalAudio();
         _nextDestination = 0f;
         _waitingDoor = null;
         _agent.ResetPath();
@@ -139,6 +148,8 @@ public class MonsterController : MonoBehaviour
 
     void Update()
     {
+        if (Playing) _alertCooldownRemaining = Mathf.Max(0f, _alertCooldownRemaining - Time.deltaTime);
+        UpdateVocalAudio();
         if (_agent == null || !_agent.isOnNavMesh) return;
         if (!Playing)
         {
@@ -336,7 +347,14 @@ public class MonsterController : MonoBehaviour
 
     void OnDisable()
     {
+        MonsterAudioManager?.StopVocals();
         if (_agent != null && _agent.isOnNavMesh) { _agent.isStopped = true; _agent.ResetPath(); }
         PlayerAudioManager?.SetMonsterEncounterActive(false);
+    }
+
+    void UpdateVocalAudio()
+    {
+        MonsterAudioManager?.UpdateVocalState(CurrentState,
+            GameManager != null ? GameManager.currentState : GameState.Playing);
     }
 }
