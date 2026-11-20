@@ -1,0 +1,5 @@
+{
+    "name": "Mansion.Navigation.PlayMode.Tests",
+    "optionalUnityReferences": ["TestAssemblies"],
+    "defineConstraints": ["UNITY_INCLUDE_TESTS"]
+}

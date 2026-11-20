@@ -15,21 +15,35 @@ public class MonsterSpawner : MonoBehaviour
 
     public void SpawnMonster(MansionModel mansion)
     {
-        if (MonsterDefinitions.Length == 0)
+        if (mansion == null || MonsterDefinitions == null || MonsterDefinitions.Length == 0)
         {
             Debug.LogWarning("No monster definitions assigned to the MonsterSpawner.");
             return;
         }
         var randomMonsterDef = MonsterDefinitions[Random.Range(0, MonsterDefinitions.Length)];
+        if (randomMonsterDef == null || randomMonsterDef.MonsterPrefab == null) return;
         var spawnableRooms = GetSpawnableRooms(randomMonsterDef.SpawnTags);
         if (spawnableRooms.Count == 0)
         {
             Debug.LogWarning("No spawnable rooms found for the monster with tags: " + string.Join(", ", randomMonsterDef.SpawnTags));
             return;
         }
-        var randomRoom = spawnableRooms[Random.Range(0, spawnableRooms.Count)];
+        Room randomRoom = null;
+        Vector3 spawnPosition = default;
+        while (spawnableRooms.Count > 0)
+        {
+            int index = Random.Range(0, spawnableRooms.Count);
+            Room candidate = spawnableRooms[index];
+            spawnableRooms.RemoveAt(index);
+            if (MansionNavigation.TryRoomPoint(candidate, out spawnPosition)) { randomRoom = candidate; break; }
+        }
+        if (randomRoom == null)
+        {
+            Debug.LogError("No valid monster spawn position on the mansion NavMesh.");
+            return;
+        }
         // Instantiate the monster prefab in the selected room
-        var monsterInstance = Instantiate(randomMonsterDef.MonsterPrefab, randomRoom.transform.position, Quaternion.identity);
+        var monsterInstance = Instantiate(randomMonsterDef.MonsterPrefab, spawnPosition, Quaternion.identity);
         MonsterController monsterController = monsterInstance.GetComponent<MonsterController>();
         if (monsterController != null)
         {

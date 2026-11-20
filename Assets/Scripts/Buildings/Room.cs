@@ -286,7 +286,7 @@ public class Room : MonoBehaviour
 
         if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z))
         {
-            return direction.x > 0f ? RoomDirection.East : RoomDirection.West;
+            return direction.x > 0f ? RoomDirection.West : RoomDirection.East;
         }
 
         return direction.z > 0f ? RoomDirection.South : RoomDirection.North;
@@ -306,14 +306,15 @@ public class Room : MonoBehaviour
         };
     }
 
+    // MansionGenerator.GetRoomPosition maps increasing maze columns to negative world X.
     protected static Vector3 DirectionToVector(RoomDirection direction)
     {
         return direction switch
         {
             RoomDirection.North => Vector3.back,
             RoomDirection.South => Vector3.forward,
-            RoomDirection.East => Vector3.right,
-            RoomDirection.West => Vector3.left,
+            RoomDirection.East => Vector3.left,
+            RoomDirection.West => Vector3.right,
             RoomDirection.Up => Vector3.up,
             RoomDirection.Down => Vector3.down,
             _ => Vector3.zero
