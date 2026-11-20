@@ -1,0 +1,5 @@
+{
+  "name": "Mansion.PlayerHead.Editor.Tests",
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}
