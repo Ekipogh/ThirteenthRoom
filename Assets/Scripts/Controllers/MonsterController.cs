@@ -112,6 +112,11 @@ public class MonsterController : MonoBehaviour
     void ChangeState(MonsterState state)
     {
         if (CurrentState == state) return;
+        if (state == MonsterState.Chasing &&
+            (CurrentState == MonsterState.Roaming || CurrentState == MonsterState.Searching))
+        {
+            MonsterAudioManager?.PlayAlertSound();
+        }
         CurrentState = state;
         _nextDestination = 0f;
         _waitingDoor = null;
