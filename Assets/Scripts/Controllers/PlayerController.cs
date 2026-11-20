@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     const float FootstepDistanceThreshold = 2.5f; // distance player must travel before triggering next footstep sound
 
     readonly float _sprintMultiplier = 2f;
-    readonly float _sprintHeadForwardOffset = 0.7f;
+    const float _headForwardOffset = 0.9f;
 
     Vector2 _moveInput = new();
     float _moveSpeed = 5f;
@@ -127,17 +127,17 @@ public class PlayerController : MonoBehaviour
         }
 
         ProcessMovement();
-        SprintingHeadForwardOffset();
+        MaintainHeadForwardOffset();
         HeadBob();
     }
 
-    void SprintingHeadForwardOffset()
+    void MaintainHeadForwardOffset()
     {
         if (HeadJoint == null) return;
 
         Vector3 localPosition = GetPitchTransform().localPosition;
-        float targetZ = _moveInput.magnitude > 0.1f ? _sprintHeadForwardOffset : 0f;
-        localPosition.z = Mathf.Lerp(localPosition.z, targetZ, Time.deltaTime * 5f);
+        // Keep the eye point in front of the open neck, including when movement stops.
+        localPosition.z = _headForwardOffset;
         GetPitchTransform().localPosition = localPosition;
     }
 
