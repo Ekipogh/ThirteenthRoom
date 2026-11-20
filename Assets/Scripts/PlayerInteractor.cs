@@ -132,10 +132,10 @@ public class PlayerInteractor : MonoBehaviour
     {
         Ray ray = new(headTransform.position, headTransform.forward);
         Debug.DrawRay(ray.origin, ray.direction * interactionRange, Color.green);
-        if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactableLayerMask) &&
+        if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactableLayerMask, QueryTriggerInteraction.Collide) &&
             !IsInteractionObstructed(ray, hit))
         {
-            if (hit.collider.TryGetComponent<IHoldInteractable>(out var holdInteractable))
+            if (GetInteractionOwner(hit.collider) is IHoldInteractable holdInteractable)
             {
                 _currentHoldTarget = holdInteractable;
                 _currentInteractableTarget = null;
@@ -144,7 +144,7 @@ public class PlayerInteractor : MonoBehaviour
                 return;
             }
 
-            if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
+            if (GetInteractionOwner(hit.collider) is IInteractable interactable)
             {
                 _currentHoldTarget = null;
                 _currentInteractableTarget = interactable;
