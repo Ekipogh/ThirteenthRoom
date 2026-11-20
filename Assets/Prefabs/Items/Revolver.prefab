@@ -831,6 +831,7 @@ GameObject:
   - component: {fileID: 5692183186277249326}
   - component: {fileID: 879340197348469107}
   - component: {fileID: 1764050269163811007}
+  - component: {fileID: 1372364672627983377}
   m_Layer: 3
   m_Name: Revolver
   m_TagString: Untagged
@@ -975,8 +976,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
   itemDefinition: {fileID: 11400000, guid: 13688d3768249b348ba63d2465ad4b56, type: 2}
-  PickupSound: {fileID: 0}
+  PickupSound: {fileID: 8300000, guid: 3b0903d7faf9d8646820feefc74c49c4, type: 3}
   scoreManager: {fileID: 0}
+--- !u!135 &1372364672627983377
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766266616257962877}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.00001
+  m_Center: {x: 0, y: 0.017480891, z: 0.14249474}
 --- !u!1 &8554428521306780056
 GameObject:
   m_ObjectHideFlags: 0

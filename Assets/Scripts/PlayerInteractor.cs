@@ -59,6 +59,9 @@ public class PlayerInteractor : MonoBehaviour
             return;
         }
 
+        // Input callbacks can run before Update; validate visibility at the moment of use.
+        CheckForInteractables();
+
         if (_currentHoldTarget != null)
         {
             BeginHeldInteraction(_currentHoldTarget);
@@ -129,7 +132,8 @@ public class PlayerInteractor : MonoBehaviour
     {
         Ray ray = new(headTransform.position, headTransform.forward);
         Debug.DrawRay(ray.origin, ray.direction * interactionRange, Color.green);
-        if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactableLayerMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, interactionRange, interactableLayerMask) &&
+            !IsInteractionObstructed(ray, hit))
         {
             if (hit.collider.TryGetComponent<IHoldInteractable>(out var holdInteractable))
             {
@@ -155,6 +159,14 @@ public class PlayerInteractor : MonoBehaviour
         interactionPrompt.gameObject.SetActive(false);
     }
 
+    static bool IsInteractionObstructed(Ray ray, RaycastHit targetHit)
+    {
+        // The target mask excludes walls. Check every solid layer separately so
+        // walls and closed doors block interaction, while trigger volumes do not.
+        return Physics.Raycast(ray, out RaycastHit obstruction, targetHit.distance,
+                   ~0, QueryTriggerInteraction.Ignore) &&
+               obstruction.collider != targetHit.collider;
+    }
     static string FormatInteractionPrompt(string interactionAction)
     {
         if (string.IsNullOrWhiteSpace(interactionAction))

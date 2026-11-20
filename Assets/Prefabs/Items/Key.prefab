@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4568527897220736634}
   - component: {fileID: 6835019893728685273}
   - component: {fileID: 3100565521226717032}
+  - component: {fileID: 4157543632362366393}
   m_Layer: 3
   m_Name: Key
   m_TagString: Untagged
@@ -156,5 +157,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SafeKey
   itemDefinition: {fileID: 11400000, guid: 07bff7f8fa003b24ea9fbc57570494c2, type: 2}
   PickupSound: {fileID: 8300000, guid: f9766e387f337e14c9e2451e2773df1f, type: 3}
-  DestroyOrDisable: 1
   scoreManager: {fileID: 0}
+--- !u!135 &4157543632362366393
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9086674187349361492}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.17
+  m_Center: {x: 0, y: 0.0004750099, z: 0.07898672}

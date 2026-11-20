@@ -9,7 +9,7 @@ public class ItemPickup : MonoBehaviour, IInteractable
     [Header("Scoring")]
     [SerializeField] ScoreManager scoreManager;
 
-    public string GetInteractionPrompt(PlayerInteractor playerInteractor)
+    public virtual string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
         return $"Press E to pick up {itemDefinition.DisplayName}";
     }
