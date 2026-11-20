@@ -161,11 +161,31 @@ public class PlayerInteractor : MonoBehaviour
 
     static bool IsInteractionObstructed(Ray ray, RaycastHit targetHit)
     {
-        // The target mask excludes walls. Check every solid layer separately so
-        // walls and closed doors block interaction, while trigger volumes do not.
-        return Physics.Raycast(ray, out RaycastHit obstruction, targetHit.distance,
-                   ~0, QueryTriggerInteraction.Ignore) &&
-               obstruction.collider != targetHit.collider;
+        var targetOwner = GetInteractionOwner(targetHit.collider);
+        // A door's interaction trigger and solid child mesh belong to the same
+        // object. Ignore its own geometry, but still check every separate blocker.
+        foreach (RaycastHit obstruction in Physics.RaycastAll(ray, targetHit.distance,
+                     ~0, QueryTriggerInteraction.Ignore))
+        {
+            if (obstruction.collider == targetHit.collider)
+                continue;
+
+            if (targetOwner != null && GetInteractionOwner(obstruction.collider) == targetOwner)
+                continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    static Component GetInteractionOwner(Collider collider)
+    {
+        var holdTarget = collider.GetComponentInParent<IHoldInteractable>();
+        if (holdTarget is Component holdComponent)
+            return holdComponent;
+
+        return collider.GetComponentInParent<IInteractable>() as Component;
     }
     static string FormatInteractionPrompt(string interactionAction)
     {
