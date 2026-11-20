@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2342677058421144826}
   - component: {fileID: -6736141464139169316}
   - component: {fileID: 5524774956501429768}
+  - component: {fileID: 5405000583136057782}
   m_Layer: 3
   m_Name: FuseItem
   m_TagString: Untagged
@@ -77,8 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPickup
   itemDefinition: {fileID: 11400000, guid: 4ed630ce514cf17428b0a00886f0159f, type: 2}
-  PickupSound: {fileID: 0}
-  DestroyOrDisable: 1
+  PickupSound: {fileID: 8300000, guid: ea10e965ff2a1d54a88c573bdb6c8870, type: 3}
   scoreManager: {fileID: 0}
 --- !u!136 &5524774956501429768
 CapsuleCollider:
@@ -102,6 +102,27 @@ CapsuleCollider:
   m_Radius: 0.06
   m_Height: 0.4
   m_Direction: 0
+  m_Center: {x: -0.15, y: 0, z: 0}
+--- !u!135 &5405000583136057782
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221722224330119678}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.35
   m_Center: {x: -0.15, y: 0, z: 0}
 --- !u!1 &611381311568929594
 GameObject:

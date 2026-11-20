@@ -71,7 +71,7 @@ MonoBehaviour:
   openAngle: -90
   openSpeed: 120
   safeKeyItem: {fileID: 11400000, guid: 2330e3b3ae2150a44aad9ca521d32a2d, type: 2}
-  openSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: b1334dbf63b8b12469d492e285f8003d, type: 3}
 --- !u!1001 &4464975406826577884
 PrefabInstance:
   m_ObjectHideFlags: 0

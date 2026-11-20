@@ -125,6 +125,10 @@ public class ItemSpawner : MonoBehaviour
         if (instance.TryGetComponent<ITargetable>(out var targetable))        {
             targetable.TargetID = spawnDefinition.targetID;
         }
+        if (instance.TryGetComponent<SafeKey>(out var safeKey))
+        {
+            safeKey.SafeNumber = spawnDefinition.SafeNumber;
+        }
         spawnPoint.MarkAsOccupied();
     }
 }

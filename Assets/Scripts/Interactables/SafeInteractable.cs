@@ -3,6 +3,15 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class SafeInteractable : MonoBehaviour, IInteractable
 {
+    static int _nextSafeNumber;
+    public int SafeNumber { get; private set; }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetSafeNumbers()
+    {
+        _nextSafeNumber = 1;
+    }
+
     [Header("Door")]
     [SerializeField] Transform safeDoor;
     [SerializeField] float openAngle = -90f;
@@ -23,6 +32,7 @@ public class SafeInteractable : MonoBehaviour, IInteractable
 
     void Awake()
     {
+        SafeNumber = ++_nextSafeNumber;
         _collider = GetComponent<Collider>();
         if (safeDoor != null)
         {
@@ -52,6 +62,7 @@ public class SafeInteractable : MonoBehaviour, IInteractable
             requiredItemId = room.name + "_SafeKey_" + randomSuffix;
             safeKeyItem = Instantiate(safeKeyItem);
             safeKeyItem.targetID = requiredItemId;
+            safeKeyItem.SafeNumber = SafeNumber;
             room.RequestItem(safeKeyItem);
         }
     }
@@ -59,7 +70,7 @@ public class SafeInteractable : MonoBehaviour, IInteractable
     public string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {
         bool hasKey = playerInteractor.Inventory.HasInstanceItem(safeKeyItem.ItemDefinition, requiredItemId);
-        return hasKey ? "Open the safe" : "The safe is locked";
+        return hasKey ? $"Open the safe #{SafeNumber}" : $"The safe #{SafeNumber} is locked";
     }
 
     public void Interact(PlayerInteractor playerInteractor)

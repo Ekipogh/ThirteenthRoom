@@ -425,7 +425,7 @@ Transform:
   m_GameObject: {fileID: 6853372846638134547}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071074, z: -0, w: 0.70710623}
-  m_LocalPosition: {x: 0.09453763, y: 0, z: 0.000011336058}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -10634,7 +10634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.9905264
+      value: 2.9905264
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10642,23 +10642,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8660254
+      value: 0.61237246
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.6123725
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5
+      value: 0.3535534
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -0.35355338
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -10666,7 +10666,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4683713846910486, guid: 9a75e8fa96dda0f47902efcd937e2313, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

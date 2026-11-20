@@ -6,4 +6,5 @@ public class SpawnItemDefinition : ScriptableObject
     public ItemDefinition ItemDefinition;
     public GameObject ItemPrefab;
     public string targetID;
+    [System.NonSerialized] public int SafeNumber;
 }
