@@ -48,7 +48,7 @@ if [ "$current_version" != "$cached_version" ] || [ ! -f "$zip_path" ]; then
     else
         echo "Cached archive missing. Downloading artifacts version $current_version..."
     fi
-    curl -L -o "$zip_path" "$NEXUS_URL/repository/teamcity-raw/thirteenthroom/$current_version/Assets.zip"
+    curl --fail -L -o "$zip_path" "$NEXUS_URL/repository/teamcity-raw/thirteenthroom/$current_version/Assets.zip"
     if [ $? -ne 0 ]; then
         echo "Failed to download artifacts. Please check the URL and your network connection."
         exit 1

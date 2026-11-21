@@ -68,9 +68,16 @@ else {
         $encodedCredentials = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($loginPassword))
         $headers = @{ Authorization = "Basic " + $encodedCredentials }
 
-        Invoke-WebRequest -Uri $url `
-            -OutFile $ZipPath `
-            -Headers $headers
+        try {
+            Invoke-WebRequest -Uri $url `
+                -OutFile $ZipPath `
+                -Headers $headers `
+                -ErrorAction Stop
+        }
+        catch {
+            Write-Error "Failed to download artifacts from $url. $($_.Exception.Message)"
+            exit 1
+        }
     }
     else {
         Write-Host "Versions match, but extracted artifacts are missing. Reusing cached archive."
