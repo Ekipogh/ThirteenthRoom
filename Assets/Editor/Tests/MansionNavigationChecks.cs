@@ -83,7 +83,10 @@ public static class MansionNavigationChecks
             Assert(monster.CurrentState == MonsterState.Chasing, "Visible player must start chase"); checks++;
             wall.SetActive(true); Physics.SyncTransforms();
             Call(monster, "Update");
-            Assert(monster.CurrentState == MonsterState.Searching, "Losing sight must start search"); checks++;
+            Assert(monster.CurrentState == MonsterState.Chasing, "Brief occlusion must preserve chase"); checks++;
+            Set(monster, "_concealedFor", 9f);
+            Call(monster, "Update");
+            Assert(monster.CurrentState == MonsterState.Searching, "Sustained concealment must start search"); checks++;
             Set(monster, "_searchUntil", Time.time - 1f);
             Set(monster, "_nextDestination", 0f);
             Call(monster, "Update");

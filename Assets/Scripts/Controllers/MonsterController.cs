@@ -6,6 +6,18 @@ public enum MonsterState { Roaming, Chasing, Searching, Attacking }
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterController : MonoBehaviour
 {
+    public MonsterDefinition Definition { get; set; }
+    readonly MonsterAggressionProfile _fallbackProfile = new MonsterAggressionProfile();
+    readonly MonsterAggression _fallbackAggression = new MonsterAggression();
+    MonsterAggressionProfile Profile => Definition != null && Definition.Aggression != null ? Definition.Aggression : _fallbackProfile;
+    MonsterAggression Aggression => GameManager != null ? GameManager.Aggression : _fallbackAggression;
+    public float CurrentAggression => Aggression.GetLevel(Profile);
+    public bool IsMaximumHunt => Aggression.IsMaximumHunt(Profile);
+    float TrackingDuration => Mathf.Lerp(Profile.TrackingSeconds.x, Profile.TrackingSeconds.y, CurrentAggression / 99f);
+    float SearchDuration => Mathf.Lerp(Profile.SearchSeconds.x, Profile.SearchSeconds.y, CurrentAggression / 99f);
+    float _concealedFor, _distantConcealedFor;
+    bool _wasMaximumHunt;
+
     public Room StartingRoom { get; set; }
     public MansionModel Mansion { get; set; }
     public RoomTracker RoomTracker { get; set; }
@@ -26,7 +38,6 @@ public class MonsterController : MonoBehaviour
     [Header("Pursuit")]
     [SerializeField] float chaseSpeed = 3f;
     [SerializeField] float destinationRefresh = 0.2f;
-    [SerializeField] float searchDuration = 6f;
     [Header("Attack")]
     [SerializeField] float attackReach = 1.5f;
     [SerializeField] float attackImpactDelay = 0.5f;
@@ -78,12 +89,29 @@ public class MonsterController : MonoBehaviour
     {
         if (RoomTracker == null) return false;
         Vector3 eye = transform.position + Vector3.up * eyeHeight;
-        CharacterController playerBody = RoomTracker.GetComponent<CharacterController>();
-        Vector3 target = playerBody != null ? playerBody.bounds.center : PlayerPosition + Vector3.up * eyeHeight;
-        Vector3 direction = target - eye;
+        Bounds bounds = PlayerBounds();
+        Vector3 direction = bounds.center - eye;
         if (direction.sqrMagnitude > viewRange * viewRange) return false;
         Vector3 horizontal = Vector3.ProjectOnPlane(direction, Vector3.up);
         if (requireFieldOfView && Vector3.Angle(transform.forward, horizontal) > fieldOfView * 0.5f) return false;
+        Vector3 side = Vector3.Cross(Vector3.up, horizontal.normalized);
+        float radius = Mathf.Min(bounds.extents.x, bounds.extents.z) * 0.8f;
+        return ClearSight(eye, bounds.center + Vector3.up * bounds.extents.y * 0.8f)
+            || ClearSight(eye, bounds.center)
+            || ClearSight(eye, bounds.center + side * radius)
+            || ClearSight(eye, bounds.center - side * radius);
+    }
+
+    Bounds PlayerBounds()
+    {
+        CharacterController body = RoomTracker.GetComponent<CharacterController>();
+        return body != null ? body.bounds : new Bounds(PlayerPosition + Vector3.up * eyeHeight * 0.5f,
+            new Vector3(1f, eyeHeight, 1f));
+    }
+
+    bool ClearSight(Vector3 eye, Vector3 target)
+    {
+        Vector3 direction = target - eye;
         foreach (RaycastHit hit in Physics.RaycastAll(eye, direction.normalized, direction.magnitude, sightMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.transform.IsChildOf(transform) || hit.transform == transform) continue;
@@ -108,7 +136,10 @@ public class MonsterController : MonoBehaviour
         Vector3 delta = Vector3.ProjectOnPlane(PlayerPosition - transform.position, Vector3.up);
         CharacterController body = RoomTracker.GetComponent<CharacterController>();
         float reach = attackReach + (body != null ? body.radius * RoomTracker.transform.lossyScale.x : 0f);
-        return delta.sqrMagnitude <= reach * reach && CanSeePlayer(false);
+        if (delta.sqrMagnitude > reach * reach) return false;
+        Bounds bounds = PlayerBounds();
+        Vector3 eye = transform.position + Vector3.up * eyeHeight;
+        return ClearSight(eye, bounds.center) || ClearSight(eye, bounds.center + Vector3.up * bounds.extents.y * 0.8f);
     }
 
     void ChangeState(MonsterState state)
@@ -130,7 +161,7 @@ public class MonsterController : MonoBehaviour
         if (state == MonsterState.Searching)
         {
             _searchUntil = float.PositiveInfinity;
-            _searchTravelUntil = Time.time + Mathf.Max(10f, searchDuration * 5f);
+            _searchTravelUntil = Time.time + Mathf.Max(10f, SearchDuration * 5f);
             _searchReached = false;
         }
         if (state == MonsterState.Roaming)
@@ -148,6 +179,7 @@ public class MonsterController : MonoBehaviour
 
     void Update()
     {
+        if (Playing && GameManager == null) _fallbackAggression.Advance(Time.deltaTime);
         if (Playing) _alertCooldownRemaining = Mathf.Max(0f, _alertCooldownRemaining - Time.deltaTime);
         UpdateVocalAudio();
         if (_agent == null || !_agent.isOnNavMesh) return;
@@ -179,17 +211,11 @@ public class MonsterController : MonoBehaviour
                 if (CanAttackPlayer()) GameManager?.OnPlayerDeath();
             }
             if (Time.time - _attackStarted >= Mathf.Max(attackImpactDelay, attackDuration))
-                ChangeState(CanSeePlayer(false) ? MonsterState.Chasing : MonsterState.Searching);
+                ChangeState(MonsterState.Chasing);
             return;
         }
 
-        bool visible = CanDetectPlayer();
-        if (visible)
-        {
-            _lastSeen = PlayerPosition;
-            ChangeState(MonsterState.Chasing);
-        }
-        else if (CurrentState == MonsterState.Chasing) ChangeState(MonsterState.Searching);
+        UpdatePursuit(Time.deltaTime);
 
         if (CurrentState == MonsterState.Chasing && CanAttackPlayer())
         {
@@ -205,6 +231,30 @@ public class MonsterController : MonoBehaviour
         else if (CurrentState == MonsterState.Chasing) NavigateTo(_lastSeen, MansionNavigation.FindRoom(Mansion, _lastSeen));
         else Search();
         CheckProgress();
+    }
+
+    void UpdatePursuit(float deltaTime)
+    {
+        if (RoomTracker == null) return;
+        bool maximum = IsMaximumHunt;
+        if (_wasMaximumHunt && !maximum) _concealedFor = _distantConcealedFor = 0f;
+        _wasMaximumHunt = maximum;
+        bool visible = CanDetectPlayer();
+        if (maximum || visible)
+        {
+            _concealedFor = _distantConcealedFor = 0f;
+            _lastSeen = PlayerPosition;
+            ChangeState(MonsterState.Chasing);
+        }
+        else if (CurrentState == MonsterState.Chasing)
+        {
+            _concealedFor += Mathf.Max(0f, deltaTime);
+            bool distant = (PlayerPosition - transform.position).sqrMagnitude > Profile.EscapeDistance * Profile.EscapeDistance;
+            _distantConcealedFor = distant ? _distantConcealedFor + Mathf.Max(0f, deltaTime) : 0f;
+            if (_concealedFor >= TrackingDuration || (distant && _distantConcealedFor >= Profile.DistantConcealmentSeconds))
+                ChangeState(MonsterState.Searching);
+            else _lastSeen = PlayerPosition;
+        }
     }
 
     bool HandleDoorWait()
@@ -313,7 +363,7 @@ public class MonsterController : MonoBehaviour
             if (Vector3.Distance(transform.position, _lastSeen) < 1f)
             {
                 _searchReached = true;
-                _searchUntil = Time.time + searchDuration;
+                _searchUntil = Time.time + SearchDuration;
                 _agent.ResetPath();
             }
             else NavigateTo(_lastSeen, MansionNavigation.FindRoom(Mansion, _lastSeen));

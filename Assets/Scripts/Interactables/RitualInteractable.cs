@@ -4,6 +4,23 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class RitualInteractable : MonoBehaviour, IHoldInteractable
 {
+    public event System.Action<RitualInteractable, bool> StateChanged;
+    public bool IsComplete => _isActive;
+    GameManager _aggressionOwner;
+
+    public void BindAggressionOwner(GameManager owner)
+    {
+        if (_aggressionOwner == owner) return;
+        if (_aggressionOwner != null) _aggressionOwner.UnregisterRitual(this);
+        _aggressionOwner = owner;
+        if (_aggressionOwner != null) _aggressionOwner.RegisterRitual(this);
+    }
+    void OnDestroy()
+    {
+        if (_aggressionOwner != null) _aggressionOwner.UnregisterRitual(this);
+    }
+    bool GameplayActive => _aggressionOwner == null || _aggressionOwner.currentState == GameState.Playing;
+
     [Header("Ritual Objects")]
     [SerializeField] List<RitualCandle> candles;
 
@@ -15,7 +32,7 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     private readonly float interactionTime = 10f; // Time required to complete the ritual
     private float currentInteractionTime = 0f;
-    private bool _isActive = true; // false = ritual needs to be completed, true = ritual is complete
+    private bool _isActive = false; // false = ritual needs to be completed, true = ritual is complete
     private bool _isPerformingRitual = false;
 
     private readonly float _deactivateChance = 0.1f;
@@ -26,6 +43,7 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     void Update()
     {
+        if (!GameplayActive) return;
         if (_isActive)
         {
             _deactivateTimer += Time.deltaTime;
@@ -50,7 +68,9 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     private void DeactivateRitual()
     {
+        if (!_isActive) return;
         _isActive = false;
+        StateChanged?.Invoke(this, false);
         if (candles == null)
         {
             return;
@@ -70,13 +90,16 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     private void CompleteRitual()
     {
+        if (_isActive) return;
         _isActive = true;
+        StateChanged?.Invoke(this, true);
         currentInteractionTime = 0f;
         StopRitualMusic();
     }
 
     public void BeginHoldInteract(PlayerInteractor interactor)
     {
+        if (!GameplayActive) return;
         if (!_isActive)
         {
             StartRitualMusic();
@@ -85,7 +108,7 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     public void HoldInteract(PlayerInteractor interactor, float deltaTime)
     {
-        if (_isActive)
+        if (!GameplayActive || _isActive)
         {
             return;
         }

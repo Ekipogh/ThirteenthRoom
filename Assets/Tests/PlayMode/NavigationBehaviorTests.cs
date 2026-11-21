@@ -14,7 +14,7 @@ public class NavigationBehaviorTests
         // runner without forcing an assembly-definition migration of the game.
         Type checks = Type.GetType("MansionNavigationChecks, Assembly-CSharp-Editor", true);
         object result = checks.GetMethod("RunFocusedChecks").Invoke(null, null);
-        Assert.That(result, Is.EqualTo("23 focused navigation checks passed"));
+        Assert.That(result, Is.EqualTo("24 focused navigation checks passed"));
     }
 }
 #endif
