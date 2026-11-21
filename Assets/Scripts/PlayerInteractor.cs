@@ -162,23 +162,30 @@ public class PlayerInteractor : MonoBehaviour
     static bool IsInteractionObstructed(Ray ray, RaycastHit targetHit)
     {
         var targetOwner = GetInteractionOwner(targetHit.collider);
-        // A door's interaction trigger and solid child mesh belong to the same
-        // object. Ignore its own geometry, but still check every separate blocker.
         foreach (RaycastHit obstruction in Physics.RaycastAll(ray, targetHit.distance,
                      ~0, QueryTriggerInteraction.Ignore))
         {
-            if (obstruction.collider == targetHit.collider)
+            var collider = obstruction.collider;
+            var owner = GetInteractionOwner(collider);
+            if (collider == targetHit.collider || (targetOwner != null && owner == targetOwner))
                 continue;
 
-            if (targetOwner != null && GetInteractionOwner(obstruction.collider) == targetOwner)
+            // Safes deliberately disable their interaction collider when opened.
+            // Their physical hull can still enclose the visible contents.
+            if (owner is SafeInteractable safe)
+            {
+                if (safe.GetComponent<Collider>().enabled)
+                    return true;
                 continue;
+            }
 
-            return true;
+            if (owner is DoorInteractable || owner is MainDoorsInteractable ||
+                collider.GetComponentInParent<InteractionBlocker>() != null)
+                return true;
         }
 
         return false;
     }
-
     static Component GetInteractionOwner(Collider collider)
     {
         var holdTarget = collider.GetComponentInParent<IHoldInteractable>();

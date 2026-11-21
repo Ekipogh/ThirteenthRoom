@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4063992258380719305}
+  - component: {fileID: 2802783987241589699}
   m_Layer: 0
   m_Name: StairCase
   m_TagString: Untagged
@@ -1670,3 +1671,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8609122238139267341, guid: 4b1ddb186dccdb34aa5d735b007d1801, type: 3}
   m_PrefabInstance: {fileID: 8043102315143369415}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2802783987241589699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418310215268595497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac84d3497efe64438fa96626d8c0e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionBlocker

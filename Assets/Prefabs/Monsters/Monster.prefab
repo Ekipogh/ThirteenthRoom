@@ -680,7 +680,6 @@ Transform:
   m_Children:
   - {fileID: 6010094211976036631}
   - {fileID: 672684013796611717}
-  - {fileID: 6630288033636633616}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6200854791622715947
@@ -708,7 +707,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   chaseSpeed: 3
   destinationRefresh: 0.2
-  searchDuration: 6
   attackReach: 1.5
   attackImpactDelay: 0.5
   attackDuration: 1
@@ -748,6 +746,7 @@ MonoBehaviour:
   footstepDistanceThreshold: 2.3
   AlertSoundsObject: {fileID: 4755443554174277879}
   ChaseAudioSource: {fileID: 3331725656211797367}
+  BreathingAudioSource: {fileID: 4691560731533196183}
 --- !u!195 &1048849831274875751
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -799,6 +798,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6630288033636633616}
   - {fileID: 4410928439389218646}
   - {fileID: 6726619490823745910}
   - {fileID: 1287729301421545799}
@@ -1087,12 +1087,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3728091294820273249}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -4.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4456720640695318403}
+  m_Father: {fileID: 672684013796611717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &3331725656211797367
 AudioSource:
@@ -1107,7 +1107,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: a388d4cfbc884fb4abb57f2b7572efc9, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
