@@ -5,7 +5,7 @@ public class ItemSpawner : MonoBehaviour
 {
     [SerializeField] Transform itemParent;
 
-    public void SpawnInitialItems(MansionModel mansion)
+    public void SpawnInitialItems(MansionModel mansion, ScoreManager scoreManager = null)
     {
         if (mansion == null)
         {
@@ -26,7 +26,7 @@ public class ItemSpawner : MonoBehaviour
 
             if (TrySelectSpawnPoint(itemDefinition, availableSpawnPoints, out ItemSpawnPoint chosenSpawnPoint))
             {
-                SpawnItem(itemDefinition, chosenSpawnPoint);
+                SpawnItem(itemDefinition, chosenSpawnPoint, scoreManager);
                 availableSpawnPoints.Remove(chosenSpawnPoint);
                 continue;
             }
@@ -113,7 +113,7 @@ public class ItemSpawner : MonoBehaviour
         return itemDefinition.name;
     }
 
-    private void SpawnItem(SpawnItemDefinition spawnDefinition, ItemSpawnPoint spawnPoint)
+    private void SpawnItem(SpawnItemDefinition spawnDefinition, ItemSpawnPoint spawnPoint, ScoreManager scoreManager)
     {
         if (spawnDefinition == null || spawnPoint == null)
         {
@@ -122,6 +122,7 @@ public class ItemSpawner : MonoBehaviour
         }
 
         var instance = Instantiate(spawnDefinition.ItemPrefab, spawnPoint.transform.position, Quaternion.identity, itemParent);
+        if (scoreManager != null) scoreManager.BindHierarchy(instance);
         if (instance.TryGetComponent<ITargetable>(out var targetable))        {
             targetable.TargetID = spawnDefinition.targetID;
         }
