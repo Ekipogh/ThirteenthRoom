@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ItemPickup : MonoBehaviour, IInteractable
+public class ItemPickup : MonoBehaviour, IInteractable, IScoreReceiver
 {
     [Header("Item")]
     [SerializeField] ItemDefinition itemDefinition;
@@ -8,6 +8,8 @@ public class ItemPickup : MonoBehaviour, IInteractable
 
     [Header("Scoring")]
     [SerializeField] ScoreManager scoreManager;
+
+    public void BindScoreManager(ScoreManager manager) => scoreManager = manager;
 
     public virtual string GetInteractionPrompt(PlayerInteractor playerInteractor)
     {

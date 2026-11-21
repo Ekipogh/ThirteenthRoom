@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class RitualInteractable : MonoBehaviour, IHoldInteractable
+public class RitualInteractable : MonoBehaviour, IHoldInteractable, IScoreReceiver
 {
     public event System.Action<RitualInteractable, bool> StateChanged;
     public bool IsComplete => _isActive;
@@ -29,6 +29,8 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     [Header("Scoring")]
     [SerializeField] ScoreManager scoreManager;
+
+    public void BindScoreManager(ScoreManager manager) => scoreManager = manager;
 
     private readonly float interactionTime = 10f; // Time required to complete the ritual
     private float currentInteractionTime = 0f;

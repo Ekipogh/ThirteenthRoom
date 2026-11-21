@@ -89,11 +89,14 @@ public class GameManager : MonoBehaviour
         }
         if (currentMansion != null)
             foreach (Room room in currentMansion.Rooms)
+            {
+                if (ScoreManager != null) ScoreManager.BindHierarchy(room.gameObject);
                 foreach (RitualInteractable ritual in room.GetComponentsInChildren<RitualInteractable>(true))
                     ritual.BindAggressionOwner(this);
+            }
         if (ItemSpawner != null)
         {
-            ItemSpawner.SpawnInitialItems(currentMansion);
+            ItemSpawner.SpawnInitialItems(currentMansion, ScoreManager);
         }
     }
 

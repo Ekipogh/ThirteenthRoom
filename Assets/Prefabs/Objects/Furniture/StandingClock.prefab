@@ -373,7 +373,8 @@ GameObject:
   - component: {fileID: 2636140071111394619}
   - component: {fileID: 2604753548053344989}
   - component: {fileID: 325434394442400973}
-  m_Layer: 0
+  - component: {fileID: 3755735061638478454}
+  m_Layer: 3
   m_Name: StandingClock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,6 +495,23 @@ MonoBehaviour:
   hoursHand: {fileID: 2653092001109070263}
   minutesHand: {fileID: 2652568523653938685}
   pendulum: {fileID: 2652996222202032593}
+  tickingSound: {fileID: 7104957444305624838}
+--- !u!114 &3755735061638478454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2650274178524756315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfaf698432da4ec45a899995b5edad9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClockInteractable
+  scoreManager: {fileID: 0}
+  _fixingScore: 10
+  _breakSound: {fileID: 8300000, guid: b55927723ebf5094aa57ae22adc7d784, type: 3}
+  _clock: {fileID: 325434394442400973}
 --- !u!1 &6306531334348687252
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FuseBox : MonoBehaviour, IInteractable
+public class FuseBox : MonoBehaviour, IInteractable, IScoreReceiver
 {
     [Header("Controlled Rooms")]
     [SerializeField] List<Room> rooms;
@@ -23,6 +23,8 @@ public class FuseBox : MonoBehaviour, IInteractable
     public float ScoreReward = 20f;
 
     [SerializeField] ScoreManager scoreManager;
+
+    public void BindScoreManager(ScoreManager manager) => scoreManager = manager;
 
     readonly float _timerDuration = 5 * 60f;
     readonly float _fuseBlowChance = 0.3f;
