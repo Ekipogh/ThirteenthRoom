@@ -47,6 +47,7 @@ public class MonsterSpawner : MonoBehaviour
         MonsterController monsterController = monsterInstance.GetComponent<MonsterController>();
         if (monsterController != null)
         {
+            monsterController.Definition = randomMonsterDef;
             monsterController.StartingRoom = randomRoom;
             monsterController.Mansion = mansion;
             monsterController.RoomTracker = RoomTracker;

@@ -31,6 +31,38 @@ public class GameManager : MonoBehaviour
     [SerializeField] MonsterSpawner MonsterSpawner;
     [SerializeField] ItemSpawner ItemSpawner;
 
+    [Header("Monster Aggression")]
+    [SerializeField, Range(-99f, 99f)] float monsterDifficultyOffset;
+    public MonsterAggression Aggression { get; } = new MonsterAggression();
+
+    public void SetAggressionModifier(string id, float amount, float durationSeconds = 0f) => Aggression.SetModifier(id, amount, durationSeconds);
+    public void RemoveAggressionModifier(string id) => Aggression.RemoveModifier(id);
+    public void SetMaximumHunt(string id, bool active) => Aggression.SetMaximumHunt(id, active);
+    public void SetMonsterDifficultyOffset(float offset)
+    {
+        monsterDifficultyOffset = Mathf.Clamp(offset, -99f, 99f);
+        Aggression.DifficultyOffset = monsterDifficultyOffset;
+    }
+
+    void Update()
+    {
+        Aggression.DifficultyOffset = monsterDifficultyOffset;
+        if (currentState == GameState.Playing) Aggression.Advance(Time.deltaTime);
+    }
+
+    public void RegisterRitual(RitualInteractable ritual)
+    {
+        ritual.StateChanged -= OnRitualStateChanged;
+        ritual.StateChanged += OnRitualStateChanged;
+        Aggression.SetRitualFailed(ritual, !ritual.IsComplete);
+    }
+    public void UnregisterRitual(RitualInteractable ritual)
+    {
+        ritual.StateChanged -= OnRitualStateChanged;
+        Aggression.UnregisterRitual(ritual);
+    }
+    void OnRitualStateChanged(RitualInteractable ritual, bool complete) => Aggression.SetRitualFailed(ritual, !complete);
+
     InputActionMap _playerActionMap;
     MansionModel currentMansion;
 
@@ -55,6 +87,10 @@ public class GameManager : MonoBehaviour
             if (MansionGenerator != null && MansionGenerator.NavigationReady)
                 MonsterSpawner.SpawnMonster(currentMansion);
         }
+        if (currentMansion != null)
+            foreach (Room room in currentMansion.Rooms)
+                foreach (RitualInteractable ritual in room.GetComponentsInChildren<RitualInteractable>(true))
+                    ritual.BindAggressionOwner(this);
         if (ItemSpawner != null)
         {
             ItemSpawner.SpawnInitialItems(currentMansion);
@@ -63,6 +99,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        Aggression.Reset();
         Time.timeScale = 1f;
         currentState = GameState.Playing;
         EnableDisableInput(true);

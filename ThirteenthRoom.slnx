@@ -21,11 +21,11 @@
   <Project Path="Unity.PerformanceTesting.Editor.csproj" />
   <Project Path="glTFast.Editor.csproj" />
   <Project Path="Unity.AI.Assistant.UI.Editor.csproj" />
-  <Project Path="Unity.AI.Toolkit.Utility.csproj" />
   <Project Path="UnityEngine.TestRunner.csproj" />
+  <Project Path="Unity.AI.Toolkit.Utility.csproj" />
   <Project Path="Unity.Burst.csproj" />
-  <Project Path="Unity.AI.MCP.Editor.csproj" />
   <Project Path="Unity.AI.Generators.Redux.csproj" />
+  <Project Path="Unity.AI.MCP.Editor.csproj" />
   <Project Path="glTFast.csproj" />
   <Project Path="Unity.VisualScripting.Flow.Editor.csproj" />
   <Project Path="Unity.Pipeline.Editor.csproj" />
