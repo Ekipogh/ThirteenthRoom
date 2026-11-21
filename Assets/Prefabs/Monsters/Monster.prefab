@@ -747,6 +747,7 @@ MonoBehaviour:
   AlertSoundsObject: {fileID: 4755443554174277879}
   ChaseAudioSource: {fileID: 3331725656211797367}
   BreathingAudioSource: {fileID: 4691560731533196183}
+  VocalFadeDuration: 0.35
 --- !u!195 &1048849831274875751
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1105,7 +1106,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: a388d4cfbc884fb4abb57f2b7572efc9, type: 3}
+  m_Resource: {fileID: 8300000, guid: d020bd12b5889eb4ebb762a614c60777, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.7
   m_Pitch: 1
