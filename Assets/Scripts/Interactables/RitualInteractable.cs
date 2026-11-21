@@ -64,17 +64,6 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
         {
             ritualAudioSource = GetComponent<AudioSource>();
         }
-        foreach (RitualCandle candle in candles)
-        {
-            if(_isActive)
-            {
-                candle.LightCandle();
-            }
-            else
-            {
-                candle.ExtinguishCandle();
-            }
-        }
     }
 
     private void DeactivateRitual()
