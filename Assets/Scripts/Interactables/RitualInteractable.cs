@@ -32,7 +32,7 @@ public class RitualInteractable : MonoBehaviour, IHoldInteractable
 
     private readonly float interactionTime = 10f; // Time required to complete the ritual
     private float currentInteractionTime = 0f;
-    private bool _isActive = true; // false = ritual needs to be completed, true = ritual is complete
+    private bool _isActive = false; // false = ritual needs to be completed, true = ritual is complete
     private bool _isPerformingRitual = false;
 
     private readonly float _deactivateChance = 0.1f;
