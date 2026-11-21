@@ -447,6 +447,7 @@ MonoBehaviour:
   MansionGenerator: {fileID: 1834823127}
   MonsterSpawner: {fileID: 1230654232}
   ItemSpawner: {fileID: 950438321}
+  monsterDifficultyOffset: 0
 --- !u!82 &215205836 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 6566583718351814405, guid: 8519ea8510910054e89b8c58ff4b4b03, type: 3}
@@ -2552,6 +2553,10 @@ PrefabInstance:
     - target: {fileID: 2732123479864053736, guid: 8519ea8510910054e89b8c58ff4b4b03, type: 3}
       propertyPath: m_Name
       value: TorchOn
+      objectReference: {fileID: 0}
+    - target: {fileID: 2777256725458581386, guid: 8519ea8510910054e89b8c58ff4b4b03, type: 3}
+      propertyPath: Priority
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 3249065698686715447, guid: 8519ea8510910054e89b8c58ff4b4b03, type: 3}
       propertyPath: m_IsActive

@@ -177,6 +177,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CandeSkull
       objectReference: {fileID: 0}
+    - target: {fileID: 822527153782411246, guid: 10147f8f8eccd834c9153f90dd6a2cd1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675690490483501166, guid: 10147f8f8eccd834c9153f90dd6a2cd1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6980625158881165654, guid: 10147f8f8eccd834c9153f90dd6a2cd1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.26
@@ -323,9 +331,49 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2157668944699208170, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3470896341446447320, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4315597100235611639, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4956104058621358106, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356686646070690830, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5910992540358716360, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6203973051747973908, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6907114747879700141, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
       propertyPath: m_Name
       value: CandleStick
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358741968148982470, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8309170514760222598, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546960863421123692, guid: b67d21792de41c6499c257e3c4f4824a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -396,6 +444,14 @@ PrefabInstance:
     - target: {fileID: 390277824314477226, guid: 10147f8f8eccd834c9153f90dd6a2cd1, type: 3}
       propertyPath: m_Name
       value: CandeSkull2
+      objectReference: {fileID: 0}
+    - target: {fileID: 822527153782411246, guid: 10147f8f8eccd834c9153f90dd6a2cd1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675690490483501166, guid: 10147f8f8eccd834c9153f90dd6a2cd1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6980625158881165654, guid: 10147f8f8eccd834c9153f90dd6a2cd1, type: 3}
       propertyPath: m_LocalPosition.x

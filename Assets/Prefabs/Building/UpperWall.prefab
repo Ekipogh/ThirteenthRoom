@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4908451886620321522}
+  - component: {fileID: 6460121890248700649}
   m_Layer: 0
   m_Name: UpperWall
   m_TagString: Untagged
@@ -201,3 +202,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4042414822246174, guid: c81cd845ebf49f843b4b60a75d8888ad, type: 3}
   m_PrefabInstance: {fileID: 6681953130808730316}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6460121890248700649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492676661771769648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac84d3497efe64438fa96626d8c0e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionBlocker

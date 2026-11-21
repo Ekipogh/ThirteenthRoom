@@ -9,9 +9,17 @@ public class MonsterAudioManager : MonoBehaviour
     [Header("Vocals")]
     [SerializeField] GameObject AlertSoundsObject;
     [SerializeField] AudioSource ChaseAudioSource;
+    [SerializeField] AudioSource BreathingAudioSource;
+
+    [SerializeField, Min(0.01f)] float VocalFadeDuration = 0.35f;
+
+    float _chaseVolume, _breathingVolume;
+    float _chaseTarget, _breathingTarget;
+    bool _vocalsSuspended, _stopChaseWhenSilent;
 
     AudioSource _activeAlert;
     bool _alertPaused, _chaseStarted, _chasePaused;
+    bool _breathingPaused;
 
     List<AudioSource> _footstepAudioSources;
     List<AudioSource> _alertSoundSources;
@@ -19,6 +27,10 @@ public class MonsterAudioManager : MonoBehaviour
 
     void Awake()
     {
+        _chaseVolume = ChaseAudioSource != null ? ChaseAudioSource.volume : 1f;
+        _breathingVolume = BreathingAudioSource != null ? BreathingAudioSource.volume : 1f;
+        _breathingTarget = _breathingVolume;
+        if (ChaseAudioSource != null) ChaseAudioSource.volume = 0f;
         _footstepAudioSources = new List<AudioSource>();
         if (FootStepSourceObject != null)
         {
@@ -88,9 +100,11 @@ public class MonsterAudioManager : MonoBehaviour
 
     public void UpdateVocalState(MonsterState state, GameState gameplay)
     {
-        if (gameplay == GameState.GameOver || state == MonsterState.Roaming)
+        _vocalsSuspended = gameplay == GameState.Paused || gameplay == GameState.GameOver;
+        if (gameplay == GameState.GameOver)
         {
             StopVocals();
+            PauseBreathing();
             return;
         }
         if (gameplay == GameState.Paused)
@@ -101,7 +115,15 @@ public class MonsterAudioManager : MonoBehaviour
                 _alertPaused = true;
             }
             PauseChase();
+            PauseBreathing();
             return;
+        }
+        _stopChaseWhenSilent = state == MonsterState.Roaming;
+        if (_stopChaseWhenSilent && _activeAlert != null)
+        {
+            _activeAlert.Stop();
+            _activeAlert = null;
+            _alertPaused = false;
         }
         if (_alertPaused && _activeAlert != null)
         {
@@ -109,23 +131,62 @@ public class MonsterAudioManager : MonoBehaviour
             _alertPaused = false;
         }
         if (_activeAlert != null && !_activeAlert.isPlaying) _activeAlert = null;
-        if (state != MonsterState.Chasing || _activeAlert != null)
+        bool chasing = state == MonsterState.Chasing;
+        _breathingTarget = chasing ? 0f : _breathingVolume;
+        _chaseTarget = chasing && _activeAlert == null ? _chaseVolume : 0f;
+        if (_breathingTarget > 0f && _breathingPaused && BreathingAudioSource != null)
         {
-            PauseChase();
-            return;
+            BreathingAudioSource.UnPause();
+            _breathingPaused = false;
         }
         if (ChaseAudioSource == null || ChaseAudioSource.clip == null) return;
-        if (_chasePaused)
+        if (_chasePaused && (_chaseTarget > 0f || ChaseAudioSource.volume > 0f))
         {
             ChaseAudioSource.UnPause();
             _chasePaused = false;
         }
-        else if (!_chaseStarted)
+        else if (!_chaseStarted && _chaseTarget > 0f)
         {
+            ChaseAudioSource.volume = 0f;
             ChaseAudioSource.loop = true;
             ChaseAudioSource.Play();
             _chaseStarted = true;
         }
+    }
+
+    void Update() => FadeVocals(Time.deltaTime);
+
+    void FadeVocals(float deltaTime)
+    {
+        if (_vocalsSuspended) return;
+        float duration = Mathf.Max(0.01f, VocalFadeDuration);
+        if (BreathingAudioSource != null)
+        {
+            BreathingAudioSource.volume = Mathf.MoveTowards(BreathingAudioSource.volume,
+                _breathingTarget, _breathingVolume * deltaTime / duration);
+            if (_breathingTarget == 0f && BreathingAudioSource.volume == 0f) PauseBreathing();
+        }
+        if (ChaseAudioSource != null && _chaseStarted)
+        {
+            ChaseAudioSource.volume = Mathf.MoveTowards(ChaseAudioSource.volume,
+                _chaseTarget, _chaseVolume * deltaTime / duration);
+            if (_chaseTarget == 0f && ChaseAudioSource.volume == 0f)
+            {
+                if (_stopChaseWhenSilent)
+                {
+                    ChaseAudioSource.Stop();
+                    _chaseStarted = _chasePaused = false;
+                }
+                else PauseChase();
+            }
+        }
+    }
+
+    void PauseBreathing()
+    {
+        if (BreathingAudioSource == null || !BreathingAudioSource.isPlaying) return;
+        BreathingAudioSource.Pause();
+        _breathingPaused = true;
     }
 
     void PauseChase()
@@ -139,6 +200,8 @@ public class MonsterAudioManager : MonoBehaviour
     {
         if (_activeAlert != null) _activeAlert.Stop();
         if (ChaseAudioSource != null && _chaseStarted) ChaseAudioSource.Stop();
+        _chaseTarget = 0f;
+        if (ChaseAudioSource != null) ChaseAudioSource.volume = 0f;
         _activeAlert = null;
         _alertPaused = _chaseStarted = _chasePaused = false;
     }

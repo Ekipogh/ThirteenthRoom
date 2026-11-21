@@ -24,15 +24,17 @@ public class MonsterVocalAudioTests
         public readonly GameObject Root = new GameObject("Monster vocal fixture");
         public readonly AudioClip Clip = AudioClip.Create("Vocal fixture", 441000, 1, 44100, false);
         public readonly Component Audio;
-        public readonly AudioSource Alert, Chase;
+        public readonly AudioSource Alert, Chase, Breathing;
         public Fixture()
         {
             Root.SetActive(false);
             Alert = Source("Alert");
             Chase = Source("Chase");
+            Breathing = Source("Breathing");
             Audio = Root.AddComponent(Gameplay("MonsterAudioManager"));
             Set(Audio, "AlertSoundsObject", Alert.gameObject);
             Set(Audio, "ChaseAudioSource", Chase);
+            Set(Audio, "BreathingAudioSource", Breathing);
             Root.SetActive(true);
         }
         AudioSource Source(string name)
@@ -44,11 +46,83 @@ public class MonsterVocalAudioTests
             source.clip = Clip;
             return source;
         }
-        public void Update(string state, string game = "Playing") => Call(Audio, "UpdateVocalState", State(state), Game(game));
+        public void Update(string state, string game = "Playing", bool settle = true)
+        {
+            Call(Audio, "UpdateVocalState", State(state), Game(game));
+            if (settle) Call(Audio, "FadeVocals", 1f);
+        }
         public void Dispose()
         {
             UnityEngine.Object.DestroyImmediate(Root);
             UnityEngine.Object.DestroyImmediate(Clip);
+        }
+    }
+
+    [UnityTest]
+    public IEnumerator VocalsCrossfadeAndReverseSmoothlyAtConfiguredVolumes()
+    {
+        using (var f = new Fixture())
+        {
+            f.Breathing.loop = true;
+            f.Breathing.Play();
+            f.Update("Chasing", settle: false);
+            Assert.That(f.Breathing.volume, Is.EqualTo(1f));
+            Assert.That(f.Chase.volume, Is.Zero);
+            Call(f.Audio, "FadeVocals", 0.175f);
+            Assert.That(f.Breathing.isPlaying && f.Chase.isPlaying, Is.True);
+            Assert.That(f.Breathing.volume, Is.EqualTo(0.5f).Within(0.001f));
+            Assert.That(f.Chase.volume, Is.EqualTo(0.5f).Within(0.001f));
+            f.Update("Searching", settle: false);
+            Assert.That(f.Chase.volume, Is.EqualTo(0.5f).Within(0.001f));
+            Call(f.Audio, "FadeVocals", 0.0875f);
+            Assert.That(f.Breathing.volume, Is.EqualTo(0.75f).Within(0.001f));
+            Assert.That(f.Chase.volume, Is.EqualTo(0.25f).Within(0.001f));
+            f.Update("Chasing", settle: false);
+            Call(f.Audio, "FadeVocals", 1f);
+            Assert.That(f.Breathing.isPlaying, Is.False);
+            Assert.That(f.Chase.volume, Is.EqualTo(1f));
+            f.Update("Roaming", settle: false);
+            Assert.That(f.Chase.isPlaying, Is.True, "Roaming must fade before stopping");
+            Call(f.Audio, "FadeVocals", 0.175f);
+            Assert.That(f.Breathing.volume, Is.EqualTo(0.5f).Within(0.001f));
+            Assert.That(f.Chase.volume, Is.EqualTo(0.5f).Within(0.001f));
+            f.Update("Roaming", "Paused");
+            Assert.That(f.Breathing.isPlaying || f.Chase.isPlaying, Is.False);
+            Assert.That(f.Chase.volume, Is.EqualTo(0.5f).Within(0.001f));
+            f.Update("Roaming");
+            Assert.That(f.Chase.isPlaying, Is.False);
+            Assert.That(f.Chase.timeSamples, Is.Zero);
+            Assert.That(f.Breathing.volume, Is.EqualTo(1f));
+            yield return null;
+        }
+    }
+
+    [UnityTest]
+    public IEnumerator BreathingPausesDuringChaseAndResumesWithoutRewinding()
+    {
+        using (var f = new Fixture())
+        {
+            f.Breathing.loop = true;
+            f.Breathing.Play();
+            f.Breathing.timeSamples = 44100;
+            f.Update("Chasing");
+            Assert.That(f.Breathing.isPlaying, Is.False);
+            f.Update("Chasing");
+            f.Update("Searching", "Paused");
+            Assert.That(f.Breathing.isPlaying, Is.False);
+            foreach (var state in new[] { "Searching", "Attacking", "Roaming" })
+            {
+                f.Update(state);
+                Assert.That(f.Breathing.isPlaying, Is.True);
+                Assert.That(f.Breathing.timeSamples, Is.GreaterThanOrEqualTo(44100));
+                f.Update("Chasing");
+                Assert.That(f.Breathing.isPlaying, Is.False);
+            }
+            f.Update("Roaming", "GameOver");
+            Assert.That(f.Breathing.isPlaying, Is.False);
+            Set(f.Audio, "BreathingAudioSource", null);
+            Assert.DoesNotThrow(() => f.Update("Roaming"));
+            yield return null;
         }
     }
 

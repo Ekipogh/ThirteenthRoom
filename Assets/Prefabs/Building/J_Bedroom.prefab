@@ -172,6 +172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9115837039644981747}
+  - component: {fileID: 8024280223729958112}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -291,6 +292,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2111240864311460063}
+  - component: {fileID: 7598347398699445739}
   m_Layer: 0
   m_Name: Ceiling
   m_TagString: Untagged
@@ -347,6 +349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2800581905276329755}
+  - component: {fileID: 9194636060458454584}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -9600,3 +9603,39 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4475437784802512, guid: 740e6eddae4579243bf292c40f4b0f01, type: 3}
   m_PrefabInstance: {fileID: 9208998965340056865}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8024280223729958112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2490617796390440140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac84d3497efe64438fa96626d8c0e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionBlocker
+--- !u!114 &7598347398699445739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6978964252318613526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac84d3497efe64438fa96626d8c0e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionBlocker
+--- !u!114 &9194636060458454584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8843948390648768671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac84d3497efe64438fa96626d8c0e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionBlocker

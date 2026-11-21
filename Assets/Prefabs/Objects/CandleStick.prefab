@@ -117,7 +117,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 381
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -280,7 +280,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 381
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -407,7 +407,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 381
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -593,7 +593,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 381
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -720,7 +720,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 381
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -777,6 +777,10 @@ PrefabInstance:
     - target: {fileID: 1031290125071246, guid: 530f205aaafe6524983ab0c3ffea2b3e, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Candle_Stand_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1031290125071246, guid: 530f205aaafe6524983ab0c3ffea2b3e, type: 3}
+      propertyPath: m_Layer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4345058297090552, guid: 530f205aaafe6524983ab0c3ffea2b3e, type: 3}
       propertyPath: m_LocalScale.x
