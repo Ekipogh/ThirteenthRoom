@@ -16,15 +16,12 @@ public class LightObject : MonoBehaviour
     public bool IsOn = true;
     public bool IsPowered = true;
 
-    Renderer _modelRenderer;
+    Renderer[] _modelRenderers;
     MaterialPropertyBlock _propertyBlock;
 
     void Awake()
     {
-        if (model != null && !model.TryGetComponent(out _modelRenderer))
-        {
-            _modelRenderer = model.GetComponentInChildren<Renderer>(true);
-        }
+        _modelRenderers = model != null ? model.GetComponentsInChildren<Renderer>(true) : System.Array.Empty<Renderer>();
 
         ApplyLightState();
     }
@@ -52,12 +49,12 @@ public class LightObject : MonoBehaviour
             lights.SetActive(lightIsOn);
         }
 
-        if (_modelRenderer != null)
+        foreach (Renderer modelRenderer in _modelRenderers ?? System.Array.Empty<Renderer>())
         {
             _propertyBlock ??= new MaterialPropertyBlock();
-            _modelRenderer.GetPropertyBlock(_propertyBlock);
+            modelRenderer.GetPropertyBlock(_propertyBlock);
             _propertyBlock.SetColor(EmissionColorId, lightIsOn ? onEmissionColor : offEmissionColor);
-            _modelRenderer.SetPropertyBlock(_propertyBlock);
+            modelRenderer.SetPropertyBlock(_propertyBlock);
         }
     }
 }

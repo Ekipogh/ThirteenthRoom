@@ -1,0 +1,4 @@
+SouthDoorPoint=(0.00, 0.00, 18.75) rotation=(0.00000, 0.00000, 0.00000, 1.00000)
+EastDoorPoint=(-18.75, 0.00, 0.00) rotation=(0.00000, 0.00000, 0.00000, 1.00000)
+GUID=b43228ef78a797249878434ecf5c384f
+RoomType=Corner
