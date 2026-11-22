@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -42,6 +43,26 @@ public class GameManager : MonoBehaviour
     {
         monsterDifficultyOffset = Mathf.Clamp(offset, -99f, 99f);
         Aggression.DifficultyOffset = monsterDifficultyOffset;
+    }
+
+    readonly HashSet<MonsterController> _agitationListeners = new HashSet<MonsterController>();
+    internal void RegisterMonster(MonsterController monster) => _agitationListeners.Add(monster);
+    internal void UnregisterMonster(MonsterController monster) => _agitationListeners.Remove(monster);
+
+    public void ReportAgitation(Vector3 origin, AgitationProfile profile)
+    {
+        if (currentState != GameState.Playing || profile == null || !profile.IsValid ||
+            !AgitationProfile.Finite(origin.x) || !AgitationProfile.Finite(origin.y) || !AgitationProfile.Finite(origin.z)) return;
+        foreach (MonsterController monster in _agitationListeners)
+            if (monster != null) monster.ReceiveAgitation(origin, profile);
+    }
+
+    public void ResetAgitation()
+    {
+        foreach (MonsterController monster in _agitationListeners)
+            if (monster != null) monster.ClearInvestigation();
+        foreach (AgitationEmitter emitter in FindObjectsByType<AgitationEmitter>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (emitter.Owner == this) emitter.StopContinuous();
     }
 
     void Update()
@@ -94,6 +115,9 @@ public class GameManager : MonoBehaviour
                 foreach (RitualInteractable ritual in room.GetComponentsInChildren<RitualInteractable>(true))
                     ritual.BindAggressionOwner(this);
             }
+        // Includes the player and generated room emitters, even on inactive objects.
+        foreach (AgitationEmitter emitter in FindObjectsByType<AgitationEmitter>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (emitter.gameObject.scene == gameObject.scene) emitter.BindOwner(this);
         if (ItemSpawner != null)
         {
             ItemSpawner.SpawnInitialItems(currentMansion, ScoreManager);
@@ -102,6 +126,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        ResetAgitation();
         Aggression.Reset();
         Time.timeScale = 1f;
         currentState = GameState.Playing;
