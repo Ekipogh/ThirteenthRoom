@@ -10,7 +10,8 @@ public class MonsterAnimationController : CharacterAnimationController
     [SerializeField] float speedSmoothingTime = 0.15f;
     [SerializeField] float startWalkingSpeed = 0.15f;
     [SerializeField] float stopWalkingSpeed = 0.05f;
-    [SerializeField] float locomotionPlaybackSpeed = 0.333f;
+    [SerializeField, Min(0f)] float locomotionPlaybackSpeed = 0.15f;
+    [SerializeField] Vector2 locomotionPlaybackRange = new Vector2(0.5f, 1.1f);
 
     readonly int _isAttackingHash = Animator.StringToHash("Attack");
 
@@ -38,7 +39,10 @@ public class MonsterAnimationController : CharacterAnimationController
         UpdateLocomotion(speed, _currentGait);
 
         bool isAttacking = monsterController.IsGameplayActive && _currentState == MonsterState.Attacking;
-        Animator.speed = _currentGait == Gait.Idle || isAttacking ? 1f : speed * locomotionPlaybackSpeed;
+        // Navigation speed must not turn the heavy Monster's gait into a sprinting cartoon.
+        // Keep idle/attack timing independent of the bounded locomotion rate.
+        Animator.speed = _currentGait == Gait.Idle || isAttacking ? 1f
+            : Mathf.Clamp(speed * locomotionPlaybackSpeed, locomotionPlaybackRange.x, locomotionPlaybackRange.y);
         Animator.SetBool(_isAttackingHash, isAttacking);
     }
 

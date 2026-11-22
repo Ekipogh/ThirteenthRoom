@@ -90,7 +90,7 @@ public static class MonsterPursuitChecks
             player.transform.position += Vector3.forward; Physics.SyncTransforms();
             Call(monster, "UpdatePursuit", 2f); Check(monster.CurrentState == MonsterState.Chasing, "Short concealment preserves chase");
             Check(Get<Vector3>(monster, "_lastSeen") == player.transform.position, "Grace tracks current position");
-            Call(monster, "Update"); Near(agent.speed, 3f, "Occlusion grace retains chase speed");
+            Call(monster, "Update"); Near(agent.speed, Mathf.Lerp(6f,8.5f,monster.CurrentAgitation/100f), "Occlusion grace retains chase speed");
             cover.SetActive(false); Physics.SyncTransforms(); Call(monster, "UpdatePursuit", 0f);
             Near(Get<float>(monster, "_concealedFor"), 0f, "Reacquisition resets concealment");
             cover.SetActive(true); Physics.SyncTransforms(); Call(monster, "UpdatePursuit", 3f);

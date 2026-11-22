@@ -15,6 +15,19 @@ MonoBehaviour:
   MonsterPrefab: {fileID: 2437999656922981052, guid: 8b57a4e52ff4bd04da01d4ed1a9ece6c, type: 3}
   SpawnTags:
   - Cellar
+  Activity:
+    PatrolSpeed: {x: 3, y: 5}
+    InvestigationSpeed: {x: 4, y: 6}
+    ChaseSpeed: {x: 6, y: 8.5}
+    PatrolPauseSeconds: {x: 2, y: 0.25}
+    HearingRadiusMultiplier: {x: 0.1, y: 1.6}
+    NoiseStrengthMultiplier: {x: 0.125, y: 2}
+    InvestigationDurationMultiplier: {x: 0.125, y: 2}
+    NoiseBonusPerStrength: 10
+    MaximumNoiseBonus: 30
+    NoiseDecayPerSecond: 2
+    DestinationsBeforeFloorChange: 3
+    FailedDestinationSeconds: 15
   Aggression:
     BaseLevel: 20
     TimeIncrease:

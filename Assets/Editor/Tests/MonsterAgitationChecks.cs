@@ -35,6 +35,9 @@ public static class MonsterAgitationChecks
             go=new GameObject("Monster"); go.transform.SetParent(Root.transform); go.transform.position=Origin;
             Monster=go.AddComponent<MonsterController>(); Monster.GameManager=Manager;
             Monster.GetComponent<NavMeshAgent>().Warp(Origin); Call(Monster,"Start");
+            // Isolate base emitter/hearing contracts from progression multipliers.
+            var response = Get<MonsterActivityProfile>(Monster, "_fallbackActivity");
+            response.HearingRadiusMultiplier = response.NoiseStrengthMultiplier = response.InvestigationDurationMultiplier = Vector2.one;
             Profile=ScriptableObject.CreateInstance<AgitationProfile>(); Profile.HearingRadius=30f; Profile.InvestigationSeconds=12f; Profile.Strength=2f;
         }
         public AgitationEmitter Emitter(GameObject go)
@@ -61,7 +64,7 @@ public static class MonsterAgitationChecks
             Check(m.CurrentState==MonsterState.Roaming,"Outside 3D radius ignored");
             f.Manager.ReportAgitation(f.Origin+Vector3.up*30f,p);
             Check(m.CurrentState==MonsterState.Investigating,"Radius boundary heard across floors");
-            Call(m,"Update"); Near(m.GetComponent<NavMeshAgent>().speed,1.5f,"Investigation uses travel speed");
+            Call(m,"Update"); Near(m.GetComponent<NavMeshAgent>().speed,Mathf.Lerp(4f,6f,m.CurrentAgitation/100f),"Investigation uses agitation speed");
             Vector3 original=m.InvestigationOrigin; p.InvestigationSeconds=99f;
             Call(m,"AdvanceInvestigation",2f); Near(m.InvestigationSecondsRemaining,10f- Time.deltaTime,"Duration snapshotted");
             Check(m.InvestigationOrigin==original,"Unreachable source remains a position snapshot");
