@@ -7710,6 +7710,8 @@ GameObject:
   - component: {fileID: 1654817135328078222}
   - component: {fileID: 4357931089736812854}
   - component: {fileID: 3532741819243505536}
+  - component: {fileID: 625291839425303857}
+  - component: {fileID: 4806527391487847390}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7812,6 +7814,8 @@ MonoBehaviour:
   TorchLight: {fileID: 3249065698686715447}
   TorchOnAudio: {fileID: 2289116246937267526}
   TorchOffAudio: {fileID: 6566583718351814405}
+  sprintAgitation: {fileID: 625291839425303857}
+  walkAgitation: {fileID: 4806527391487847390}
 --- !u!114 &2631475564358754445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7880,6 +7884,36 @@ MonoBehaviour:
   RecoveringBreathingHighStaminaVolume: 0
   FootStepSourceObject: {fileID: 2132146735408680337}
   SprintFootStepSourceObject: {fileID: 3046918811565069997}
+--- !u!114 &625291839425303857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6453614356037081260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca89616a20a5354189e62edc78f2379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AgitationEmitter
+  owner: {fileID: 0}
+  profile: {fileID: 11400000, guid: 860ac42c13f764c40ab35b890d295637, type: 2}
+  repeatSeconds: 1
+--- !u!114 &4806527391487847390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6453614356037081260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca89616a20a5354189e62edc78f2379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AgitationEmitter
+  owner: {fileID: 0}
+  profile: {fileID: 11400000, guid: eebe9d450a89b4245917ac9f23412526, type: 2}
+  repeatSeconds: 1
 --- !u!1 &6834106283464222847
 GameObject:
   m_ObjectHideFlags: 0

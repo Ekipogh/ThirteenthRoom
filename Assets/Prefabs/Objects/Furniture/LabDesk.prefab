@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3979623628337058244}
   - component: {fileID: 4826994509565663346}
   - component: {fileID: 842099003750621101}
+  - component: {fileID: 617250783592039516}
   m_Layer: 3
   m_Name: LabDesk
   m_TagString: Untagged
@@ -78,6 +79,22 @@ MonoBehaviour:
   potionDef: {fileID: 11400000, guid: e98694e421471144b864a041c3a18117, type: 2}
   PotionMakingAudio: {fileID: 9134250658373440576}
   _interactionTime: 5
+  brewingAgitation: {fileID: 617250783592039516}
+--- !u!114 &617250783592039516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6221486729331236741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fca89616a20a5354189e62edc78f2379, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::AgitationEmitter
+  owner: {fileID: 0}
+  profile: {fileID: 11400000, guid: 09f11a93a548da44996bac6b1ddfdfdb, type: 2}
+  repeatSeconds: 1
 --- !u!1 &7855552788504072693
 GameObject:
   m_ObjectHideFlags: 0

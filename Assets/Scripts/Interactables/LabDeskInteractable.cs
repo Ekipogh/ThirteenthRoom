@@ -9,6 +9,8 @@ public class LabDeskInteractable : MonoBehaviour, IHoldInteractable, IScoreRecei
     [SerializeField] AudioSource PotionMakingAudio;
     [SerializeField, Min(0.01f)] float _interactionTime = 5f;
 
+    [SerializeField] AgitationEmitter brewingAgitation;
+
     PlayerInteractor _activePlayer;
     float _elapsed;
     bool _isMakingPotion;
@@ -27,6 +29,7 @@ public class LabDeskInteractable : MonoBehaviour, IHoldInteractable, IScoreRecei
         _elapsed = 0f;
         _completed = false;
         _isMakingPotion = true;
+        brewingAgitation?.TickContinuous(true, 0f);
         if (PotionMakingAudio != null)
         {
             PotionMakingAudio.loop = true;
@@ -44,10 +47,15 @@ public class LabDeskInteractable : MonoBehaviour, IHoldInteractable, IScoreRecei
         }
         if (float.IsNaN(deltaTime) || float.IsInfinity(deltaTime) || deltaTime <= 0f) return;
         _elapsed += deltaTime;
-        if (_elapsed < Mathf.Max(0.01f, _interactionTime)) return;
+        if (_elapsed < Mathf.Max(0.01f, _interactionTime))
+        {
+            brewingAgitation?.TickContinuous(true, deltaTime);
+            return;
+        }
 
         // Finish this press before rewards so subsequent callbacks cannot repeat it.
         _isMakingPotion = false;
+        brewingAgitation?.StopContinuous();
         StopAudio();
         if (!playerInteractor.Inventory.RemoveItem(berryDef)) return;
         playerInteractor.Inventory.AddItem(potionDef);
@@ -78,6 +86,7 @@ public class LabDeskInteractable : MonoBehaviour, IHoldInteractable, IScoreRecei
         _activePlayer = null;
         _elapsed = 0f;
         _isMakingPotion = false;
+        brewingAgitation?.StopContinuous();
         _completed = false;
         StopAudio();
     }

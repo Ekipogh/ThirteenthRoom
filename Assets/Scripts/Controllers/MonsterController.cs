@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum MonsterState { Roaming, Chasing, Searching, Attacking }
+public enum MonsterState { Roaming, Chasing, Searching, Attacking, Investigating }
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterController : MonoBehaviour
@@ -21,7 +21,96 @@ public class MonsterController : MonoBehaviour
     public Room StartingRoom { get; set; }
     public MansionModel Mansion { get; set; }
     public RoomTracker RoomTracker { get; set; }
-    public GameManager GameManager { get; set; }
+    GameManager _gameManager;
+    public GameManager GameManager
+    {
+        get => _gameManager;
+        set
+        {
+            if (_gameManager == value) return;
+            if (_gameManager != null) _gameManager.UnregisterMonster(this);
+            ClearInvestigation();
+            _gameManager = value;
+            if (_gameManager != null && isActiveAndEnabled) _gameManager.RegisterMonster(this);
+        }
+    }
+    Vector3 _agitationOrigin;
+    float _agitationRemaining, _agitationStrength;
+    bool _agitationReached;
+    public Vector3 InvestigationOrigin => _agitationOrigin;
+    public float InvestigationSecondsRemaining => _agitationRemaining;
+
+    void OnEnable()
+    {
+        if (GameManager != null) GameManager.RegisterMonster(this);
+    }
+
+    public void ReceiveAgitation(Vector3 origin, AgitationProfile profile)
+    {
+        if (!isActiveAndEnabled || !Playing || profile == null || !profile.IsValid || IsMaximumHunt ||
+            CurrentState == MonsterState.Chasing || CurrentState == MonsterState.Attacking ||
+            !AgitationProfile.Finite(origin.x) || !AgitationProfile.Finite(origin.y) || !AgitationProfile.Finite(origin.z) ||
+            Vector3.Distance(transform.position, origin) > profile.HearingRadius) return;
+        if (CurrentState == MonsterState.Investigating && _agitationRemaining > 0f && profile.Strength < _agitationStrength) return;
+        if (_agent == null || !_agent.isOnNavMesh) return;
+        ChangeState(MonsterState.Investigating);
+        _agitationOrigin = origin;
+        _agitationRemaining = profile.InvestigationSeconds;
+        _agitationStrength = profile.Strength;
+        _agitationReached = false;
+        _waitingDoor = null;
+        _nextDestination = 0f;
+        _agent.ResetPath();
+        _agent.isStopped = false;
+    }
+
+    public void ClearInvestigation()
+    {
+        _agitationRemaining = _agitationStrength = 0f;
+        _agitationOrigin = default;
+        _agitationReached = false;
+        if (CurrentState == MonsterState.Investigating) ChangeState(MonsterState.Roaming);
+    }
+
+    void AdvanceInvestigation(float deltaTime)
+    {
+        if (!Playing || CurrentState != MonsterState.Investigating) return;
+        _agitationRemaining = Mathf.Max(0f, _agitationRemaining - Mathf.Max(0f, deltaTime));
+        if (_agitationRemaining <= 0f) ClearInvestigation();
+    }
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying || !isActiveAndEnabled ||
+            CurrentState != MonsterState.Investigating || _agitationRemaining <= 0f) return;
+
+        Color previousColor = Gizmos.color;
+        Gizmos.color = new Color(1f, 0.55f, 0.1f);
+        Gizmos.DrawWireSphere(_agitationOrigin, 0.75f);
+        Gizmos.DrawLine(_agitationOrigin - Vector3.right, _agitationOrigin + Vector3.right);
+        Gizmos.DrawLine(_agitationOrigin - Vector3.forward, _agitationOrigin + Vector3.forward);
+        Gizmos.DrawLine(_agitationOrigin, _agitationOrigin + Vector3.up * 2f);
+        Gizmos.DrawLine(transform.position, _agitationOrigin);
+        Gizmos.color = previousColor;
+        UnityEditor.Handles.Label(_agitationOrigin + Vector3.up * 2.2f,
+            $"Agitation | strength {_agitationStrength:0.##} | {_agitationRemaining:0.0}s remaining");
+    }
+#endif
+    void Investigate()
+    {
+        if (!_agitationReached)
+        {
+            if (Vector3.Distance(transform.position, _agitationOrigin) < 1f)
+            {
+                _agitationReached = true;
+                _agent.ResetPath();
+            }
+            else NavigateTo(_agitationOrigin, MansionNavigation.FindRoom(Mansion, _agitationOrigin));
+        }
+        else SearchNearby(_agitationOrigin);
+    }
+
     public PlayerAudioManager PlayerAudioManager { get; set; }
 
     [Header("Roaming")]
@@ -145,18 +234,23 @@ public class MonsterController : MonoBehaviour
     void ChangeState(MonsterState state)
     {
         if (CurrentState == state) return;
-        if (state == MonsterState.Chasing && CurrentState == MonsterState.Roaming &&
+        if (state == MonsterState.Chasing && (CurrentState == MonsterState.Roaming || CurrentState == MonsterState.Investigating) &&
             _alertCooldownRemaining <= 0f)
         {
             MonsterAudioManager?.PlayAlertSound();
             _alertCooldownRemaining = Mathf.Max(0f, alertCooldown);
         }
+        if (state != MonsterState.Investigating)
+        {
+            _agitationRemaining = _agitationStrength = 0f;
+            _agitationOrigin = default;
+            _agitationReached = false;
+        }
         CurrentState = state;
         UpdateVocalAudio();
         _nextDestination = 0f;
         _waitingDoor = null;
-        _agent.ResetPath();
-        _agent.isStopped = false;
+        if (_agent != null && _agent.isOnNavMesh) { _agent.ResetPath(); _agent.isStopped = false; }
         PlayerAudioManager?.SetMonsterEncounterActive(state == MonsterState.Chasing || state == MonsterState.Searching || state == MonsterState.Attacking);
         if (state == MonsterState.Searching)
         {
@@ -216,6 +310,7 @@ public class MonsterController : MonoBehaviour
         }
 
         UpdatePursuit(Time.deltaTime);
+        AdvanceInvestigation(Time.deltaTime);
 
         if (CurrentState == MonsterState.Chasing && CanAttackPlayer())
         {
@@ -229,6 +324,7 @@ public class MonsterController : MonoBehaviour
 
         if (CurrentState == MonsterState.Roaming) Roam();
         else if (CurrentState == MonsterState.Chasing) NavigateTo(_lastSeen, MansionNavigation.FindRoom(Mansion, _lastSeen));
+        else if (CurrentState == MonsterState.Investigating) Investigate();
         else Search();
         CheckProgress();
     }
@@ -368,10 +464,15 @@ public class MonsterController : MonoBehaviour
             }
             else NavigateTo(_lastSeen, MansionNavigation.FindRoom(Mansion, _lastSeen));
         }
-        else if (!_agent.hasPath || _agent.remainingDistance < 0.5f)
+        else SearchNearby(_lastSeen);
+    }
+
+    void SearchNearby(Vector3 origin)
+    {
+        if (!_agent.hasPath || _agent.remainingDistance < 0.5f)
         {
             Vector2 offset = Random.insideUnitCircle * 3f;
-            SetDestination(_lastSeen + new Vector3(offset.x, 0f, offset.y));
+            SetDestination(origin + new Vector3(offset.x, 0f, offset.y));
         }
     }
 
@@ -397,6 +498,8 @@ public class MonsterController : MonoBehaviour
 
     void OnDisable()
     {
+        if (GameManager != null) GameManager.UnregisterMonster(this);
+        ClearInvestigation();
         MonsterAudioManager?.StopVocals();
         if (_agent != null && _agent.isOnNavMesh) { _agent.isStopped = true; _agent.ResetPath(); }
         PlayerAudioManager?.SetMonsterEncounterActive(false);

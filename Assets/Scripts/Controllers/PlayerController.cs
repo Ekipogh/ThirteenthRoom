@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioSource TorchOnAudio;
     [SerializeField] AudioSource TorchOffAudio;
 
+    [Header("Agitation")]
+    [SerializeField] AgitationEmitter sprintAgitation;
+    [SerializeField] AgitationEmitter walkAgitation;
+
     const float _maxStamina = 100f;
     const float _staminaRegenRate = 5f;
     const float _staminaDrainRate = 10f;
@@ -85,6 +89,12 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogWarning($"PlayerController: StartingRoom '{StartingRoom.name}' has no PlayerSpawnPoint assigned.");
         }
+    }
+
+    void OnDisable()
+    {
+        sprintAgitation?.StopContinuous();
+        walkAgitation?.StopContinuous();
     }
 
     void Start()
@@ -199,7 +209,13 @@ public class PlayerController : MonoBehaviour
             _velocity.y += Physics.gravity.y * Time.deltaTime;
 
         Vector3 delta = (move * speed + _velocity) * Time.deltaTime;
+        bool wasGrounded = _characterController.isGrounded;
+        Vector3 before = transform.position;
         _characterController.Move(delta);
+        bool groundedMoved = IsMoving() && wasGrounded && _characterController.isGrounded &&
+            Vector3.ProjectOnPlane(transform.position - before, Vector3.up).sqrMagnitude > 0.000001f;
+        sprintAgitation?.TickContinuous(isSprinting && _stamina > 0f && groundedMoved, Time.deltaTime);
+        walkAgitation?.TickContinuous(!isSprinting && groundedMoved, Time.deltaTime);
     }
 
     void ProcessLook(InputValue value)
