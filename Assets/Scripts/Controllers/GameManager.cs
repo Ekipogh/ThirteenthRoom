@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     public void ResetAgitation()
     {
         foreach (MonsterController monster in _agitationListeners)
-            if (monster != null) monster.ClearInvestigation();
+            if (monster != null) monster.ResetActivity();
         foreach (AgitationEmitter emitter in FindObjectsByType<AgitationEmitter>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             if (emitter.Owner == this) emitter.StopContinuous();
     }

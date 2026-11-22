@@ -15,6 +15,12 @@ public class MonsterController : MonoBehaviour
     public bool IsMaximumHunt => Aggression.IsMaximumHunt(Profile);
     float TrackingDuration => Mathf.Lerp(Profile.TrackingSeconds.x, Profile.TrackingSeconds.y, CurrentAggression / 99f);
     float SearchDuration => Mathf.Lerp(Profile.SearchSeconds.x, Profile.SearchSeconds.y, CurrentAggression / 99f);
+    readonly MonsterActivityProfile _fallbackActivity = new MonsterActivityProfile();
+    readonly MonsterPatrolMemory _patrol = new MonsterPatrolMemory();
+    MonsterActivityProfile Activity => Definition != null && Definition.Activity != null ? Definition.Activity : _fallbackActivity;
+    float _noiseBonus, _activitySeconds, _roamPauseStarted;
+    public float CurrentAgitation => Mathf.Clamp(CurrentAggression + _noiseBonus, 0f, 100f);
+    float PatrolPause => Activity.Pause(CurrentAgitation);
     float _concealedFor, _distantConcealedFor;
     bool _wasMaximumHunt;
 
@@ -29,7 +35,7 @@ public class MonsterController : MonoBehaviour
         {
             if (_gameManager == value) return;
             if (_gameManager != null) _gameManager.UnregisterMonster(this);
-            ClearInvestigation();
+            ResetActivity();
             _gameManager = value;
             if (_gameManager != null && isActiveAndEnabled) _gameManager.RegisterMonster(this);
         }
@@ -47,16 +53,23 @@ public class MonsterController : MonoBehaviour
 
     public void ReceiveAgitation(Vector3 origin, AgitationProfile profile)
     {
-        if (!isActiveAndEnabled || !Playing || profile == null || !profile.IsValid || IsMaximumHunt ||
-            CurrentState == MonsterState.Chasing || CurrentState == MonsterState.Attacking ||
-            !AgitationProfile.Finite(origin.x) || !AgitationProfile.Finite(origin.y) || !AgitationProfile.Finite(origin.z) ||
-            Vector3.Distance(transform.position, origin) > profile.HearingRadius) return;
-        if (CurrentState == MonsterState.Investigating && _agitationRemaining > 0f && profile.Strength < _agitationStrength) return;
+        if (!isActiveAndEnabled || !Playing || profile == null || !profile.IsValid ||
+            !AgitationProfile.Finite(origin.x) || !AgitationProfile.Finite(origin.y) || !AgitationProfile.Finite(origin.z)) return;
+        float aggression = CurrentAggression;
+        float radius = Activity.HearingRadius(profile.HearingRadius, aggression);
+        float strength = Activity.NoiseStrength(profile.Strength, aggression);
+        float duration = Activity.InvestigationDuration(profile.InvestigationSeconds, aggression);
+        if (!AgitationProfile.Finite(radius) || !AgitationProfile.Finite(strength) || !AgitationProfile.Finite(duration) ||
+            Vector3.Distance(transform.position, origin) > radius) return;
         if (_agent == null || !_agent.isOnNavMesh) return;
+        _noiseBonus = Mathf.Max(_noiseBonus, Mathf.Min(Mathf.Max(0f, Activity.MaximumNoiseBonus),
+            strength * Mathf.Max(0f, Activity.NoiseBonusPerStrength)));
+        if (IsMaximumHunt || CurrentState == MonsterState.Chasing || CurrentState == MonsterState.Attacking) return;
+        if (CurrentState == MonsterState.Investigating && _agitationRemaining > 0f && strength < _agitationStrength) return;
         ChangeState(MonsterState.Investigating);
         _agitationOrigin = origin;
-        _agitationRemaining = profile.InvestigationSeconds;
-        _agitationStrength = profile.Strength;
+        _agitationRemaining = duration;
+        _agitationStrength = strength;
         _agitationReached = false;
         _waitingDoor = null;
         _nextDestination = 0f;
@@ -70,6 +83,36 @@ public class MonsterController : MonoBehaviour
         _agitationOrigin = default;
         _agitationReached = false;
         if (CurrentState == MonsterState.Investigating) ChangeState(MonsterState.Roaming);
+    }
+
+    public void ResetActivity()
+    {
+        _noiseBonus = _activitySeconds = 0f;
+        _patrol.Reset();
+        _hasRoamTarget = false;
+        ClearInvestigation();
+        _roamAfter = _roamPauseStarted = Time.time;
+    }
+
+    void AdvanceActivity(float deltaTime)
+    {
+        if (!Playing) return;
+        float seconds = Mathf.Max(0f, deltaTime);
+        _activitySeconds += seconds;
+        _noiseBonus = Mathf.Max(0f, _noiseBonus - Mathf.Max(0f, Activity.NoiseDecayPerSecond) * seconds);
+    }
+
+    void SchedulePatrolPause()
+    {
+        _roamPauseStarted = Time.time;
+        _roamAfter = Time.time + PatrolPause;
+    }
+
+    void FailPatrolDestination()
+    {
+        if (_hasRoamTarget) _patrol.Fail(_roamRoom, _activitySeconds, Activity.FailedDestinationSeconds);
+        _hasRoamTarget = false;
+        _roamAfter = _roamPauseStarted = Time.time;
     }
 
     void AdvanceInvestigation(float deltaTime)
@@ -114,8 +157,6 @@ public class MonsterController : MonoBehaviour
     public PlayerAudioManager PlayerAudioManager { get; set; }
 
     [Header("Roaming")]
-    [SerializeField] float moveInterval = 5f;
-    [SerializeField] float travelSpeed = 1.5f;
     [SerializeField] float doorframeWaitTime = 1f;
     [SerializeField] string doorframeEmoteTrigger;
     [Header("Perception")]
@@ -125,11 +166,12 @@ public class MonsterController : MonoBehaviour
     [SerializeField] float eyeHeight = 4.8f;
     [SerializeField] LayerMask sightMask = ~0;
     [Header("Pursuit")]
-    [SerializeField] float chaseSpeed = 3f;
     [SerializeField] float destinationRefresh = 0.2f;
     [Header("Attack")]
-    [SerializeField] float attackReach = 1.5f;
-    [SerializeField] float attackImpactDelay = 0.5f;
+    [SerializeField, Min(0f)] float attackReach = 3f;
+    [Tooltip("Extra reach during the committed swing, so a small step back cannot cancel it.")]
+    [SerializeField, Min(0f)] float attackFollowThroughReach = 2f;
+    [SerializeField, Min(0f)] float attackImpactDelay = 0.35f;
     [SerializeField] float attackDuration = 1f;
     [Header("Audio")]
     [SerializeField] MonsterAudioManager MonsterAudioManager;
@@ -162,8 +204,10 @@ public class MonsterController : MonoBehaviour
     {
         _currentRoom = StartingRoom;
         _previousPosition = _progressPosition = transform.position;
+        _nextProgressCheck = Time.time + 3f;
         CurrentState = MonsterState.Roaming;
-        _roamAfter = Time.time + moveInterval;
+        _patrol.Visit(_currentRoom);
+        _roamAfter = _roamPauseStarted = Time.time;
         if (!_agent.isOnNavMesh)
         {
             Debug.LogError("Monster was spawned outside the mansion NavMesh; navigation disabled.", this);
@@ -219,12 +263,14 @@ public class MonsterController : MonoBehaviour
         return CanSeePlayer(!nearby && CurrentState != MonsterState.Chasing);
     }
 
-    public bool CanAttackPlayer()
+    public bool CanAttackPlayer() => IsPlayerInAttackReach(attackReach);
+
+    bool IsPlayerInAttackReach(float monsterReach)
     {
         if (RoomTracker == null || Mathf.Abs(PlayerPosition.y - transform.position.y) > 1.25f) return false;
         Vector3 delta = Vector3.ProjectOnPlane(PlayerPosition - transform.position, Vector3.up);
         CharacterController body = RoomTracker.GetComponent<CharacterController>();
-        float reach = attackReach + (body != null ? body.radius * RoomTracker.transform.lossyScale.x : 0f);
+        float reach = Mathf.Max(0f, monsterReach) + (body != null ? body.radius * Mathf.Max(Mathf.Abs(RoomTracker.transform.lossyScale.x), Mathf.Abs(RoomTracker.transform.lossyScale.z)) : 0f);
         if (delta.sqrMagnitude > reach * reach) return false;
         Bounds bounds = PlayerBounds();
         Vector3 eye = transform.position + Vector3.up * eyeHeight;
@@ -247,6 +293,9 @@ public class MonsterController : MonoBehaviour
             _agitationReached = false;
         }
         CurrentState = state;
+        if (state != MonsterState.Roaming) _hasRoamTarget = false;
+        _progressPosition = transform.position;
+        _nextProgressCheck = Time.time + 3f;
         UpdateVocalAudio();
         _nextDestination = 0f;
         _waitingDoor = null;
@@ -261,7 +310,7 @@ public class MonsterController : MonoBehaviour
         if (state == MonsterState.Roaming)
         {
             _hasRoamTarget = false;
-            _roamAfter = Time.time + moveInterval;
+            SchedulePatrolPause();
         }
         if (state == MonsterState.Attacking)
         {
@@ -273,6 +322,7 @@ public class MonsterController : MonoBehaviour
 
     void Update()
     {
+        AdvanceActivity(Time.deltaTime);
         if (Playing && GameManager == null) _fallbackAggression.Advance(Time.deltaTime);
         if (Playing) _alertCooldownRemaining = Mathf.Max(0f, _alertCooldownRemaining - Time.deltaTime);
         UpdateVocalAudio();
@@ -287,11 +337,14 @@ public class MonsterController : MonoBehaviour
             _searchTravelUntil += Time.deltaTime;
             _doorWaitUntil += Time.deltaTime;
             _roamAfter += Time.deltaTime;
+            _roamPauseStarted += Time.deltaTime;
+            _nextProgressCheck += Time.deltaTime;
             return;
         }
         _agent.isStopped = false;
         PlayerAudioManager?.SetMonsterEncounterActive(CurrentState == MonsterState.Chasing || CurrentState == MonsterState.Searching || CurrentState == MonsterState.Attacking);
         _currentRoom = MansionNavigation.FindRoom(Mansion, transform.position) ?? _currentRoom;
+        _patrol.Visit(_currentRoom);
         MonsterAudioManager?.PlayFootstepForDistance(Vector3.ProjectOnPlane(transform.position - _previousPosition, Vector3.up).magnitude);
         _previousPosition = transform.position;
 
@@ -302,7 +355,7 @@ public class MonsterController : MonoBehaviour
             if (!_impactApplied && Time.time - _attackStarted >= attackImpactDelay)
             {
                 _impactApplied = true;
-                if (CanAttackPlayer()) GameManager?.OnPlayerDeath();
+                if (IsPlayerInAttackReach(attackReach + attackFollowThroughReach)) GameManager?.OnPlayerDeath();
             }
             if (Time.time - _attackStarted >= Mathf.Max(attackImpactDelay, attackDuration))
                 ChangeState(MonsterState.Chasing);
@@ -317,7 +370,9 @@ public class MonsterController : MonoBehaviour
             ChangeState(MonsterState.Attacking);
             return;
         }
-        _agent.speed = CurrentState == MonsterState.Chasing ? chaseSpeed : travelSpeed;
+        _agent.speed = Activity.Speed(CurrentState, CurrentAgitation);
+        if (CurrentState == MonsterState.Roaming && !_hasRoamTarget)
+            _roamAfter = Mathf.Min(_roamAfter, _roamPauseStarted + PatrolPause);
         if (HandleDoorWait()) return;
         if (Time.time < _nextDestination) return;
         _nextDestination = Time.time + Mathf.Max(0.05f, destinationRefresh);
@@ -363,8 +418,7 @@ public class MonsterController : MonoBehaviour
             if (Time.time > _doorWaitUntil + 5f)
             {
                 _waitingDoor = null;
-                _hasRoamTarget = false;
-                _roamAfter = Time.time + moveInterval;
+                FailPatrolDestination();
             }
             return true;
         }
@@ -423,7 +477,8 @@ public class MonsterController : MonoBehaviour
             if (MansionNavigation.TrySample(origin + new Vector3(offset.x, 0f, offset.y), out point)
                 && MansionNavigation.FindRoom(Mansion, point) == room) return true;
         }
-        return MansionNavigation.TrySample(origin, out point, 4f);
+        return MansionNavigation.TrySample(origin, out point, 4f)
+            && MansionNavigation.FindRoom(Mansion, point) == room;
     }
 
     void Roam()
@@ -431,23 +486,28 @@ public class MonsterController : MonoBehaviour
         if (Time.time < _roamAfter || _currentRoom == null) return;
         if (!_hasRoamTarget)
         {
-            var connections = Mansion?.GetConnections(_currentRoom);
-            _roamRoom = connections != null && connections.Count > 0 && Random.value < 0.75f
-                ? connections[Random.Range(0, connections.Count)].To : _currentRoom;
-            _hasRoamTarget = TryRoamPoint(_roamRoom, out _roamTarget);
-            if (!_hasRoamTarget) { _roamAfter = Time.time + moveInterval; return; }
+            // Try other reachable destinations immediately when a room has no usable point.
+            int attempts = Mathf.Max(1, Mansion != null ? Mansion.Rooms.Count : 1);
+            for (int i = 0; i < attempts && !_hasRoamTarget; i++)
+            {
+                _roamRoom = _patrol.Choose(Mansion, _currentRoom, _activitySeconds, Activity.DestinationsBeforeFloorChange) ?? _currentRoom;
+                _hasRoamTarget = TryRoamPoint(_roamRoom, out _roamTarget);
+                if (!_hasRoamTarget) _patrol.Fail(_roamRoom, _activitySeconds, Activity.FailedDestinationSeconds);
+                if (_roamRoom == _currentRoom) break;
+            }
+            if (!_hasRoamTarget) { SchedulePatrolPause(); return; }
         }
         if (_currentRoom == _roamRoom && Vector3.Distance(transform.position, _roamTarget) < 0.8f)
         {
             _hasRoamTarget = false;
+            _patrol.Complete(_roamRoom);
             _agent.ResetPath();
-            _roamAfter = Time.time + moveInterval;
+            SchedulePatrolPause();
             if (Random.value < 0.3f) _currentRoom.GetLightSwitch()?.SwitchLight(false);
         }
         else if (!NavigateTo(_roamTarget, _roamRoom))
         {
-            _hasRoamTarget = false;
-            _roamAfter = Time.time + 1f;
+            FailPatrolDestination();
         }
     }
 
@@ -483,8 +543,7 @@ public class MonsterController : MonoBehaviour
         if (_agent.hasPath && Vector3.Distance(_progressPosition, transform.position) < 0.1f)
         {
             _agent.ResetPath();
-            _hasRoamTarget = false;
-            _roamAfter = Time.time + 1f;
+            FailPatrolDestination();
         }
         _progressPosition = transform.position;
     }
@@ -499,7 +558,7 @@ public class MonsterController : MonoBehaviour
     void OnDisable()
     {
         if (GameManager != null) GameManager.UnregisterMonster(this);
-        ClearInvestigation();
+        ResetActivity();
         MonsterAudioManager?.StopVocals();
         if (_agent != null && _agent.isOnNavMesh) { _agent.isStopped = true; _agent.ResetPath(); }
         PlayerAudioManager?.SetMonsterEncounterActive(false);
