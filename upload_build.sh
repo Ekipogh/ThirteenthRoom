@@ -12,6 +12,17 @@ if [[ $# -ne 2 ]]; then
     exit 2
 fi
 
+os_type=$(uname -s)
+os_directory=""
+if [[ $os_type == Linux ]]; then
+    os_directory="linux"
+elif [[ $os_type == Darwin ]]; then
+    os_directory="macos"
+else
+    echo "Unsupported OS: $os_type" >&2
+    exit 1
+fi
+
 version=$1
 build_number=$2
 
@@ -52,7 +63,7 @@ archive_path="$temp_dir/ThirteensRoom.zip"
 (cd "$build_dir" && zip -qr "$archive_path" .)
 
 nexus_url=${NEXUS_URL%/}
-upload_url="$nexus_url/repository/teamcity-raw/thirteenthroom/releases/$version/$build_number/ThirteensRoom.zip"
+upload_url="$nexus_url/repository/teamcity-raw/thirteenthroom/releases/$os_directory/$version/$build_number/ThirteensRoom.zip"
 
 echo "Uploading build $version ($build_number) to $upload_url"
 curl --fail --location --silent --show-error \

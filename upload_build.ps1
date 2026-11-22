@@ -47,7 +47,7 @@ try {
     $baseUrl = $env:NEXUS_URL.TrimEnd("/")
     $escapedVersion = [Uri]::EscapeDataString($Version)
     $escapedBuildNumber = [Uri]::EscapeDataString($BuildNumber)
-    $url = "$baseUrl/repository/teamcity-raw/thirteenthroom/releases/$escapedVersion/$escapedBuildNumber/ThirteensRoom.zip"
+    $url = "$baseUrl/repository/teamcity-raw/thirteenthroom/releases/windows/$escapedVersion/$escapedBuildNumber/ThirteensRoom.zip"
 
     $loginPassword = "{0}:{1}" -f $env:NEXUS_USERNAME, $env:NEXUS_PASSWORD
     $encodedCredentials = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($loginPassword))
