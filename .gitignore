@@ -74,6 +74,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 .vscode/
 .env
+AgentScripts/
 
 Assets.zip
 Assets.zip.meta
