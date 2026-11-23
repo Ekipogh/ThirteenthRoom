@@ -7,8 +7,29 @@ public class RitualCandle : MonoBehaviour
     [SerializeField] List<GameObject> pointLights;
     [SerializeField] List<GameObject> flameParticles;
 
+    static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
+    MaterialPropertyBlock _emissionBlock;
+
+    void Awake()
+    {
+        SetEmission(pointLights != null && pointLights.Exists(light => light != null && light.activeSelf));
+    }
+
+    void SetEmission(bool lit)
+    {
+        _emissionBlock ??= new MaterialPropertyBlock();
+        foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+        {
+            if (renderer is ParticleSystemRenderer) continue;
+            renderer.GetPropertyBlock(_emissionBlock);
+            _emissionBlock.SetColor(EmissionColorId, lit ? Color.white : Color.black);
+            renderer.SetPropertyBlock(_emissionBlock);
+        }
+    }
+
     public void LightCandle()
     {
+        SetEmission(true);
         foreach (GameObject light in pointLights)
         {
             light.SetActive(true);
@@ -22,6 +43,7 @@ public class RitualCandle : MonoBehaviour
 
     public void ExtinguishCandle()
     {
+        SetEmission(false);
         foreach (GameObject light in pointLights)
         {
             light.SetActive(false);

@@ -26,3 +26,27 @@ The initial ambient floor was too dark to locate wall switches. Raised flat ambi
 The 12 m range and 2.5 intensity did not reach across 37.5 m rooms, especially from chandeliers mounted nearly 12 m above the floor. Electrical point lights now use 28 m range and combined fixture intensity (chandelier 30, paired fixtures 10, single fixtures 5), preserving one enabled light per consolidated fixture, hard shadows, and the readable ambient baseline. Candle and torch settings are unchanged.
 
 Retained chandelier light is positioned 0.25 m below the model bounds to avoid its opaque body blocking illumination. A fixed camera in CR_Gallery was captured with room lights off and on, with torch disabled and Play Mode paused. Visually confirmed stronger floor and wall illumination when powered. Disabled redundant components remain disabled; ambient baseline stays (0.16, 0.18, 0.22).
+
+## Dungeon firelight — 22 November 2026
+
+J_DungeonRoom is lit exclusively by its four existing wall torches. Removed the unused wall switch. Torch Lights remain outside LightObject electrical control, so FuseBox and electrical switch operations cannot extinguish them. No global electrical-light behavior was changed.
+
+Each torch now uses realtime warm amber light (RGB 1, 0.57, 0.25), base intensity 12 and range 22, with hard shadows to keep light contained. The previous intensity 1/range 5 could not reach the floor from the 8-unit mounting height. The intended result is readable, localized firelight with darker areas than a powered room; the scene ambient settings remain intact.
+
+TorchLightFlicker layers two smooth noise frequencies with unique authored phases. Intensity varies around the authored baseline within an 18% envelope, avoiding abrupt random flashes and synchronized pulses. Disabling the component restores its baseline. Existing flame effects remain.
+
+Validation: inspected fixture-only dungeon and powered-storage prefab renders without diagnostic lights. In Play Mode, 586 advancing frames over 3 seconds confirmed all four lights animate (observed intensity 9.957–13.335). All torches remained active through fuse off/on while five electrical fixtures lost/regained power; disabling flicker restored intensity 12. Console errors: zero. This is visual/function verification, not a GPU performance benchmark.
+
+Run AgentScripts/DungeonTorchChecks.cs with script eval in Play Mode; its real-frame result is written to Temp/DungeonTorchRuntime.txt. [Dungeon lighting preview](RoomLayouts/DungeonTorchLighting.png).
+
+## Fixture emission and switch audit — 22 November 2026
+
+Audited all 25 Building room prefabs. Connected six functional lamps (Landing console, two bedroom lamps, two office lamps and ritual-room floor lamp) to Objects/Lights using LightObject, so room switches, fuse boxes, and existing electrical gameplay operate them together. Added modest local point lights where missing (intensity 3, range 12, hard shadows). The office desk lamp's nested light was replaced with an owned switched light because reparenting its inherited light did not persist through prefab save/reload.
+
+Made 13 decorative renderers non-emissive, including both library desk lamps, unused candle stands and dining candelabra. Library desk lamp Light components are disabled. Generated non-emissive material variants are local to these fixture props; the shared mansion atlas and glass materials remain intact elsewhere.
+
+LightObject now applies emission state to every renderer under its model, including glass children. RitualCandle synchronizes its model emission with LightCandle/ExtinguishCandle. Dungeon torches retain independent firelight and fuse immunity.
+
+Play Mode validation: all 25 prefabs, 83 electrical fixtures through switch off/on and fuse off/on, eight ritual candles, and 13 non-emissive decorative renderers passed. The check requires actual enabled positive-output Light components, not emission alone. Inspected Landing lamp off/on fixture renders: the glass is dark when off and the console/floor are illuminated when on. Console errors: zero.
+
+Repeat using AgentScripts/RoomFixtureChecks.cs entry RoomFixtureChecks.Run in Play Mode. [Lamp off](RoomLayouts/LandingLampOff.png) · [Lamp on](RoomLayouts/LandingLampOn.png).
