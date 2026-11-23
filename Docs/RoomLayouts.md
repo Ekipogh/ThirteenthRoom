@@ -120,3 +120,11 @@ Replaced the uneven cross and narrow rear extension with a balanced chamber, sho
 The permanent builder exposes RebuildGarden and retains this arrangement during full rebuilds. All 15 garden marker-to-marker navigation paths pass, along with the 18-room navigation suite, corner/ceiling/door-seam checks, and all 18 Play Mode interaction fixtures (32 active targets). Preview images were visually inspected using diagnostic lighting; no generated-mansion seed sweep was rerun for this single-room revision.
 
 [Top-down prefab preview](RoomLayouts/GardenTop.png) · [Player-height prefab preview](RoomLayouts/GardenPlayer.png).
+
+## Dining hall furnishings — 23 November 2026
+
+Replaced the crowded four-table arrangement with two six-seat banquet tables flanking the central aisle. Every chair now faces its matching place setting; dishes and decorative candelabra remain supported by the table surfaces. The rear sideboards have a dedicated serving area, with bowls and crockery placed on the usable counters rather than on top of their tall shelving. Removed redundant tables and their associated chairs/settings; moved the monster marker into the clear rear circulation space. Room shape, lighting setup, door anchors and doorway assemblies are unchanged.
+
+Visually inspected diagnostic top-down and player-height prefab renders. All 15 dining hall marker-to-marker navigation paths pass, as does the full 18-room navigation suite and saved identity/door/bounds validation. This pass did not rerun generated-mansion seed sweeps or Play Mode.
+
+Repeat authoring with DiningHallLayout.Run in AgentScripts/DiningHallLayout.cs. [Top-down preview](RoomLayouts/DiningTop.png) · [Player-height preview](RoomLayouts/DiningPlayer.png).
