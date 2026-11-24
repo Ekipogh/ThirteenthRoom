@@ -5,6 +5,7 @@ public class PlantInteractable : MonoBehaviour, IInteractable
     [SerializeField] private GameObject fruitTransform;
     [SerializeField] private ItemDefinition fruitItemDefinition;
     [SerializeField] private float growTimer = 3 * 60f;
+    [SerializeField] private AudioClip pickUpSound;
     private float _timer = 0f;
     private bool _isGrowing = true;
 
@@ -63,5 +64,6 @@ public class PlantInteractable : MonoBehaviour, IInteractable
         fruitTransform.SetActive(false);
         _timer = 0f;
         _isGrowing = true;
+        playerInteractor.GetComponent<PlayerAudioManager>().PlayPickupSound(pickUpSound);
     }
 }
