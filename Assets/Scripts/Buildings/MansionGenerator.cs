@@ -53,41 +53,100 @@ public class MansionGenerator : MonoBehaviour
         NavigationReady = false;
         roomConnections.Clear();
         doorsByConnection.Clear();
-        CreateFloorParentObjects();
-        var entranceRoom = InitializeEntrance();
         Cell[][,] mansionFloorLayouts = null;
-        List<RoomPlacement> uniquePlacements = null;
-
+        List<RoomPlacement> placements = null;
+        List<ObjectDependencyPlanner.Assignment> objectAssignments = null;
+        string failure = "No compatible unique-room layout.";
         for (int attempt = 0; attempt < MaxLayoutAttempts; attempt++)
         {
             mansionFloorLayouts = GenerateLayouts();
-            uniquePlacements = CreateUniqueRoomPlacements(mansionFloorLayouts);
-
-            if (uniquePlacements != null)
-            {
-                break;
-            }
+            var uniquePlacements = CreateUniqueRoomPlacements(mansionFloorLayouts);
+            if (uniquePlacements != null && TryPlanRooms(mansionFloorLayouts, uniquePlacements,
+                out placements, out objectAssignments, out failure)) break;
+            placements = null;
         }
-        PlaceDoors(mansionFloorLayouts);
-        if (uniquePlacements == null || mansionFloorLayouts == null)
+        if (placements == null)
         {
-            Debug.LogError($"Failed to place all unique mansion rooms after {MaxLayoutAttempts} layout attempts.");
+            Debug.LogError($"Failed to plan mansion after {MaxLayoutAttempts} layout attempts: {failure}");
             return null;
         }
 
+        CreateFloorParentObjects();
+        var entranceRoom = InitializeEntrance();
+        PlaceDoors(mansionFloorLayouts);
         placedRooms = new Room[floorCount, width, height];
         InitializeStairs(mansionFloorLayouts, entranceRoom);
-        InitializeRooms(mansionFloorLayouts, uniquePlacements);
+        InitializeRooms(mansionFloorLayouts, placements);
         ConnectPlacedRooms(mansionFloorLayouts, entranceRoom);
         BindGeneratedFuseBoxes();
         RefreshDynamicRooms();
         RefreshRoomConnectionDoorwayPoints();
+        var objectRooms = new List<Room> { entranceRoom };
+        if (floorCount > 1)
+            for (int floor = 0; floor < floorCount; floor++)
+                objectRooms.Add(placedRooms[floor, width / 2, height - 1]);
+        foreach (var placement in placements)
+            objectRooms.Add(placedRooms[placement.Floor, placement.X, placement.Y]);
+        foreach (var assignment in objectAssignments)
+            ObjectDependencyPlanner.Points(objectRooms[assignment.RoomIndex])[assignment.PointIndex].Spawn(assignment.Definition);
+        foreach (var room in objectRooms)
+            foreach (var point in ObjectDependencyPlanner.Points(room))
+                if (point.SpawnedObject == null && point.DefaultObject != null) point.Spawn(point.DefaultObject);
         List<SpawnItemDefinition> initialSpawnItemDefinitions = GenerateMansionSpawnItemList();
         CurrentMansion = new MansionModel(GetGeneratedRooms(entranceRoom), roomConnections, initialSpawnItemDefinitions);
         var navigation = GetComponent<MansionNavigation>();
         if (navigation == null) navigation = gameObject.AddComponent<MansionNavigation>();
         NavigationReady = navigation.Build(CurrentMansion, floorParent.transform);
         return CurrentMansion;
+    }
+
+    private bool TryPlanRooms(Cell[][,] layouts, List<RoomPlacement> uniquePlacements,
+        out List<RoomPlacement> placements, out List<ObjectDependencyPlanner.Assignment> assignments, out string error)
+    {
+        placements = null;
+        assignments = null;
+        error = null;
+        var options = new List<List<RoomPlacement>>();
+        var rooms = new List<Room[]> { new[] { entrancePrefab != null ? entrancePrefab.GetComponent<Room>() : null } };
+        if (floorCount > 1)
+            for (int floor = 0; floor < floorCount; floor++)
+                rooms.Add(new[] { stairsPrefab != null ? stairsPrefab.GetComponent<Room>() : null });
+        var occupied = new HashSet<(int floor, int x, int y)>();
+        foreach (var placement in uniquePlacements)
+        {
+            occupied.Add((placement.Floor, placement.X, placement.Y));
+            options.Add(new List<RoomPlacement> { placement });
+            rooms.Add(new[] { placement.Prefab.GetComponent<Room>() });
+        }
+        foreach (var cell in GetAvailableCells())
+        {
+            if (occupied.Contains((cell.Floor, cell.X, cell.Y))) continue;
+            int mask = GetRequiredWorldDoorMask(layouts[cell.Floor][cell.X, cell.Y], cell.X, cell.Y);
+            var prefabs = new List<GameObject>(GetGenericPrefabsForDoorMask(mask));
+            Shuffle(prefabs);
+            var candidates = new List<RoomPlacement>();
+            var candidateRooms = new List<Room>();
+            foreach (var prefab in prefabs)
+            {
+                if (prefab == null) continue;
+                var type = GetGenericRoomType(mask);
+                if (!TryGetMatchingRotation(prefab, GetDoorMask(type), mask, out var rotation)) continue;
+                candidates.Add(new RoomPlacement(prefab, cell.Floor, cell.X, cell.Y, rotation, type));
+                candidateRooms.Add(prefab.GetComponent<Room>());
+            }
+            if (candidates.Count == 0)
+            {
+                error = $"No generic room fits floor {cell.Floor}, cell ({cell.X}, {cell.Y}), door mask {mask}.";
+                return false;
+            }
+            options.Add(candidates);
+            rooms.Add(candidateRooms.ToArray());
+        }
+        if (!ObjectDependencyPlanner.TryPlan(rooms, out var choices, out assignments, out error)) return false;
+        placements = new List<RoomPlacement>();
+        int offset = 1 + (floorCount > 1 ? floorCount : 0);
+        for (int i = 0; i < options.Count; i++) placements.Add(options[i][choices[offset + i]]);
+        return true;
     }
 
     private List<SpawnItemDefinition> GenerateMansionSpawnItemList()

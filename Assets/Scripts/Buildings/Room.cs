@@ -77,6 +77,10 @@ public class Room : MonoBehaviour
     // Items to request on room generation, with quantities
     [SerializeField] private List<ItemNeed> itemNeeds = new();
 
+    [Header("Object Dependencies")]
+    [SerializeField] private List<ObjectRequirement> objectRequirements = new();
+    public IReadOnlyList<ObjectRequirement> ObjectRequirements => objectRequirements;
+
     public RoomType RoomType => roomType;
 
     public void SetRoomType(RoomType type)

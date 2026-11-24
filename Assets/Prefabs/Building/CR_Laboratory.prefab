@@ -1433,6 +1433,9 @@ MonoBehaviour:
   itemSpawnPointsParent: {fileID: 0}
   lightObjectsParent: {fileID: 8839524743268339934}
   itemNeeds: []
+  objectRequirements:
+  - Object: {fileID: 11400000, guid: 1cf0deca81f8e314ea397dba06af000d, type: 2}
+    Quantity: 1
 --- !u!65 &1366830432929889583
 BoxCollider:
   m_ObjectHideFlags: 0
