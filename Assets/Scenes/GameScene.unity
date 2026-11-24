@@ -2344,6 +2344,7 @@ MonoBehaviour:
   - {fileID: 2648397103870277830, guid: dd5496e8e75f48d45b300e507e1eae31, type: 3}
   - {fileID: 2648397103870277830, guid: a62c2d4ab8ec135478ec2eab1a95f3f8, type: 3}
   - {fileID: 7379705244923111728, guid: 1969e700e510ade41b32e3fc03e9b048, type: 3}
+  - {fileID: 4655858410159539023, guid: 7460156c21cd21d4fb697cfb52bb3ed2, type: 3}
   genericCorridorPrefabs:
   - {fileID: 2648397103870277830, guid: 95141e30925fc3d4fbee79d3fffc68d8, type: 3}
   - {fileID: 355520661602556354, guid: 6df24c0c06d6ab04fb8a81ce3a7cf8bb, type: 3}
@@ -2358,6 +2359,7 @@ MonoBehaviour:
   - {fileID: 923786071263119788, guid: 972a29f07ce682d4f810cc1cce08e5d9, type: 3}
   - {fileID: 7523562404241891084, guid: 66163f70dec9daa4d963f1babc10a8f4, type: 3}
   - {fileID: 1528233476011991783, guid: 7d1feb3273da76a479bd8f75000faa98, type: 3}
+  - {fileID: 7099190585336080044, guid: 5c28010cf028e194eb0efe57571e0dd8, type: 3}
   genericIntersectionPrefabs:
   - {fileID: 9093866243136800058, guid: ee8c822fbff2bbd4ba88d033d616e472, type: 3}
   - {fileID: 1528233476011991783, guid: 16b39413d53a8314cb5683ce8a7e47b7, type: 3}
