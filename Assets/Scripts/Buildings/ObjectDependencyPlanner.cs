@@ -105,21 +105,28 @@ public static class ObjectDependencyPlanner
         error = $"Object '{missing.name}' requires {requirements[missing]} compatible points; selected rooms lack free compatible capacity.";
         string failure = error;
         // Change provider rooms only when needed, preserving the randomized first choice elsewhere.
-        // Same-capacity alternatives matter when other objects compete for flexible points.
+        // A provider for any current demand can free a flexible point for the missing object.
         for (int r = 0; r < options.Count && budget > 0; r++)
         {
             int previous = choices[r];
             for (int c = 0; c < options[r].Length && budget > 0; c++)
             {
                 if (c == previous) continue;
-                bool provides = false;
-                foreach (var point in Points(options[r][c])) if (point.Accepts(missing)) { provides = true; break; }
-                int oldNeed = 0, newNeed = 0;
-                foreach (var need in options[r][previous].ObjectRequirements)
-                    if (need.Object == missing) oldNeed = Math.Max(oldNeed, need.Quantity);
-                foreach (var need in options[r][c].ObjectRequirements)
-                    if (need.Object == missing) newNeed = Math.Max(newNeed, need.Quantity);
-                if (!provides && newNeed >= oldNeed) continue;
+                bool relevant = false;
+                var candidatePoints = Points(options[r][c]);
+                foreach (var requirement in requirements)
+                {
+                    foreach (var point in candidatePoints)
+                        if (point.Accepts(requirement.Key)) { relevant = true; break; }
+                    if (relevant) break;
+                    int oldNeed = 0, newNeed = 0;
+                    foreach (var need in options[r][previous].ObjectRequirements)
+                        if (need.Object == requirement.Key) oldNeed = Math.Max(oldNeed, need.Quantity);
+                    foreach (var need in options[r][c].ObjectRequirements)
+                        if (need.Object == requirement.Key) newNeed = Math.Max(newNeed, need.Quantity);
+                    if (newNeed < oldNeed) { relevant = true; break; }
+                }
+                if (!relevant) continue;
                 choices[r] = c;
                 if (Search(options, choices, visited, ref budget, out assignments, out error)) return true;
             }

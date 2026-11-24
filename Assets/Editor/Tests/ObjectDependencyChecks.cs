@@ -74,6 +74,13 @@ public static class ObjectDependencyChecks
             var flexible = MakeRoom("Flexible provider"); Point(flexible, a, b); Point(flexible, a);
             Needs(lab, Need(a), Need(b));
             Assert(ObjectDependencyPlanner.TryPlan(new[]{new[]{lab},new[]{flexible}}, out _, out assignments, out error) && assignments.Count == 2, "Global matching reassigns flexible point"); checks++;
+            var sharedPointRoom = MakeRoom("Single flexible provider"); Point(sharedPointRoom, a, b);
+            Assert(!ObjectDependencyPlanner.TryPlan(new[]{new[]{lab},new[]{sharedPointRoom},new[]{empty}}, out _, out _, out _), "One flexible point cannot satisfy both demands"); checks++;
+            Assert(ObjectDependencyPlanner.TryPlan(new[]{new[]{lab},new[]{sharedPointRoom},new[]{empty,provider}}, out choices, out assignments, out error, 2), error); checks++;
+            Assert(choices[2] == 1 && assignments.Count == 2 &&
+                assignments.Exists(x => x.RoomIndex == 1 && x.Definition == b) &&
+                assignments.Exists(x => x.RoomIndex == 2 && x.Definition == a),
+                "Competing demand provider frees flexible point within two search states"); checks++;
             Needs(lab, Need(a)); Needs(provider, Need(b));
             var furnitureRoom = MakeRoom("Furniture provider"); Point(furnitureRoom, b);
             Assert(ObjectDependencyPlanner.TryPlan(new[]{new[]{lab},new[]{empty,provider},new[]{empty,furnitureRoom}}, out choices, out assignments, out error) && choices[1] == 1 && choices[2] == 1 && assignments.Count == 2, "Provider-introduced requirements resolved"); checks++;
