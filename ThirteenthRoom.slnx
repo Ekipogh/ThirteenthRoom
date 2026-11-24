@@ -101,6 +101,7 @@
   <Project Path="Unity.CollabProxy.Editor.csproj" />
   <Project Path="Unity.AI.Toolkit.Async.csproj" />
   <Project Path="Unity.RenderPipeline.Universal.ShaderLibrary.csproj" />
+  <Project Path="Mansion.ObjectDependencies.Editor.Tests.csproj" />
   <Project Path="Unity.AI.Assistant.Bridge.Editor.csproj" />
   <Project Path="Unity.Pipeline.CodeGen.csproj" />
   <Project Path="Unity.AI.Toolkit.Compliance.csproj" />

@@ -103,6 +103,12 @@ public class GameManager : MonoBehaviour
         {
             currentMansion = MansionGenerator.GenerateMansion();
         }
+        if (currentMansion == null)
+        {
+            EnableDisableInput(false);
+            enabled = false;
+            return;
+        }
         if (MonsterSpawner != null)
         {
             if (MansionGenerator != null && MansionGenerator.NavigationReady)
