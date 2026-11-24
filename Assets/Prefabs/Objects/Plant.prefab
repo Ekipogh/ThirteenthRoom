@@ -987,6 +987,7 @@ MonoBehaviour:
   fruitTransform: {fileID: 1536202256150207022}
   fruitItemDefinition: {fileID: 11400000, guid: ee2013b13a832d945947fa634aec7182, type: 2}
   growTimer: 180
+  pickUpSound: {fileID: 8300000, guid: ea10e965ff2a1d54a88c573bdb6c8870, type: 3}
 --- !u!65 &8524337814750452504
 BoxCollider:
   m_ObjectHideFlags: 0

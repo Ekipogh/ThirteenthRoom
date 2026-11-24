@@ -17,7 +17,7 @@ public class ClockInteractable : MonoBehaviour, IInteractable, IScoreReceiver
     private bool _isBroken = false;
     [SerializeField] private float _fixingScore = 10f;
 
-    [SerializeField] AudioClip _breakSound;
+    [SerializeField] AudioSource _breakSound;
 
     [SerializeField] Clock _clock;
 
@@ -61,7 +61,7 @@ public class ClockInteractable : MonoBehaviour, IInteractable, IScoreReceiver
         _clock.IsBroken = true;
         if (_breakSound != null)
         {
-            AudioSource.PlayClipAtPoint(_breakSound, transform.position);
+            _breakSound.Play();
         }
     }
 
