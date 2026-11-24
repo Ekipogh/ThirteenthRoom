@@ -1082,6 +1082,7 @@ MonoBehaviour:
   itemSpawnPointsParent: {fileID: 0}
   lightObjectsParent: {fileID: 143366889357936769}
   itemNeeds: []
+  objectRequirements: []
 --- !u!65 &4777733418281094108
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5378,7 +5379,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4384842036761996, guid: 5319f220783b88f4b9b309dbe3e6b5ec, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.7071068
+      value: -0.7071069
       objectReference: {fileID: 0}
     - target: {fileID: 4384842036761996, guid: 5319f220783b88f4b9b309dbe3e6b5ec, type: 3}
       propertyPath: m_LocalRotation.x
@@ -5386,7 +5387,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4384842036761996, guid: 5319f220783b88f4b9b309dbe3e6b5ec, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: -0.70710677
       objectReference: {fileID: 0}
     - target: {fileID: 4384842036761996, guid: 5319f220783b88f4b9b309dbe3e6b5ec, type: 3}
       propertyPath: m_LocalRotation.z
@@ -5398,7 +5399,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4384842036761996, guid: 5319f220783b88f4b9b309dbe3e6b5ec, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4384842036761996, guid: 5319f220783b88f4b9b309dbe3e6b5ec, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

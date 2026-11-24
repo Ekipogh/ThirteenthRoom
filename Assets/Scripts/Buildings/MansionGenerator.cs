@@ -49,6 +49,11 @@ public class MansionGenerator : MonoBehaviour
 
     public MansionModel GenerateMansion()
     {
+        if (CurrentMansion != null)
+            foreach (Room oldRoom in CurrentMansion.Rooms)
+                if (oldRoom != null)
+                    foreach (var ladder in oldRoom.GetComponentsInChildren<EscapeLadderInteractable>(true))
+                        ladder.ClearDestination();
         CurrentMansion = null;
         NavigationReady = false;
         roomConnections.Clear();
@@ -97,6 +102,10 @@ public class MansionGenerator : MonoBehaviour
         var navigation = GetComponent<MansionNavigation>();
         if (navigation == null) navigation = gameObject.AddComponent<MansionNavigation>();
         NavigationReady = navigation.Build(CurrentMansion, floorParent.transform);
+        foreach (Room room in CurrentMansion.Rooms)
+            if (room != null)
+                foreach (var ladder in room.GetComponentsInChildren<EscapeLadderInteractable>(true))
+                    ladder.BindDestination(CurrentMansion, entranceRoom, playerController, NavigationReady);
         return CurrentMansion;
     }
 
@@ -359,7 +368,8 @@ public class MansionGenerator : MonoBehaviour
     private Cell[,] GenerateMansionLayout()
     {
         MazeGenerator mazeGenerator = new(width, height);
-        Cell[,] mansionLayout = mazeGenerator.GenerateMaze();
+        Cell[,] mansionLayout = mazeGenerator.GenerateMaze(newestBias: 0.7);
+        mazeGenerator.InjectLoops(loopChance: 0.1);
         return mansionLayout;
     }
 

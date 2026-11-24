@@ -330,6 +330,58 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>Checks the actual player capsule against the target room's floor and solid geometry.</summary>
+    public bool CanTeleportTo(Room target, Vector3 position, Quaternion rotation)
+    {
+        if (target == null || !target.gameObject.activeInHierarchy ||
+            !float.IsFinite(position.x) || !float.IsFinite(position.y) || !float.IsFinite(position.z)) return false;
+        var controller = GetComponent<CharacterController>();
+        Transform floor = target.transform.Find("Floor");
+        if (controller == null || floor == null) return false;
+        Vector3 local = target.transform.InverseTransformPoint(position);
+        if (Mathf.Abs(local.x) > Room.RoomSize.x * 0.5f - 0.5f ||
+            Mathf.Abs(local.z) > Room.RoomSize.z * 0.5f - 0.5f || Mathf.Abs(local.y) > 1.5f) return false;
+        bool supported = false;
+        foreach (RaycastHit hit in Physics.RaycastAll(position + Vector3.up * 0.5f, Vector3.down,
+                     1f, ~0, QueryTriggerInteraction.Ignore))
+            if (hit.collider.transform.IsChildOf(floor) && hit.normal.y > 0.7f) { supported = true; break; }
+        if (!supported) return false;
+
+        Vector3 scale = transform.lossyScale;
+        float radius = controller.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.z));
+        float halfHeight = Mathf.Max(radius, controller.height * Mathf.Abs(scale.y) * 0.5f);
+        Vector3 center = position + rotation * Vector3.Scale(controller.center, scale) + Vector3.up * 0.05f;
+        Vector3 segment = Vector3.up * (halfHeight - radius);
+        foreach (Collider obstacle in Physics.OverlapCapsule(center - segment, center + segment,
+                     Mathf.Max(0.01f, radius - 0.025f), ~0, QueryTriggerInteraction.Ignore))
+            if (!obstacle.transform.IsChildOf(transform)) return false;
+        return true;
+    }
+
+    public bool TryTeleportTo(Room target, Vector3 position, Quaternion rotation)
+    {
+        var tracker = RoomTracker != null ? RoomTracker : GetComponentInChildren<RoomTracker>();
+        if (tracker == null || !CanTeleportTo(target, position, rotation)) return false;
+        var controller = GetComponent<CharacterController>();
+        bool wasEnabled = controller.enabled;
+        controller.enabled = false;
+        try
+        {
+            transform.SetPositionAndRotation(position, Quaternion.Euler(0f, rotation.eulerAngles.y, 0f));
+            _velocity = Vector3.zero;
+            _distanceTraveled = 0f;
+            _pitch = 0f;
+            Transform pitchTransform = GetPitchTransform();
+            if (pitchTransform != transform) pitchTransform.localRotation = Quaternion.identity;
+            sprintAgitation?.StopContinuous();
+            walkAgitation?.StopContinuous();
+            tracker.Initialize(target);
+        }
+        finally { controller.enabled = wasEnabled; }
+        Physics.SyncTransforms();
+        return true;
+    }
+
     public void SetStartingRoom(Room room)
     {
         StartingRoom = room;
