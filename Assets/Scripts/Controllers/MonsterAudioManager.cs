@@ -118,7 +118,7 @@ public class MonsterAudioManager : MonoBehaviour
             PauseBreathing();
             return;
         }
-        _stopChaseWhenSilent = state == MonsterState.Roaming || state == MonsterState.Investigating;
+        _stopChaseWhenSilent = state == MonsterState.Roaming || state == MonsterState.Investigating || state == MonsterState.Stunned;
         if (_stopChaseWhenSilent && _activeAlert != null)
         {
             _activeAlert.Stop();

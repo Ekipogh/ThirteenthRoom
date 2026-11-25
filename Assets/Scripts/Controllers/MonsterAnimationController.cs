@@ -34,6 +34,7 @@ public class MonsterAnimationController : CharacterAnimationController
 
     void UpdateAnimator()
     {
+        if (monsterController.IsStunned) { Animator.SetBool(_isAttackingHash, false); Animator.speed = 0f; return; }
         float speed = GetMoveSpeed();
         _currentGait = GetSmoothedGait(speed);
         UpdateLocomotion(speed, _currentGait);

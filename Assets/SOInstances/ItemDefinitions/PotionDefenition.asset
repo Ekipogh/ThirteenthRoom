@@ -19,3 +19,11 @@ MonoBehaviour:
   IsUnique: 0
   IsConsumable: 1
   ScoreOnPickup: 0
+  UseEffect: 1
+  StaminaRestored: 50
+  Ammunition: {fileID: 0}
+  MagazineCapacity: 6
+  ShotRange: 25
+  ShotCooldown: 0.5
+  StunSeconds: 3
+  ShotAgitation: {fileID: 0}

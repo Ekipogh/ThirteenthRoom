@@ -7712,6 +7712,8 @@ GameObject:
   - component: {fileID: 3532741819243505536}
   - component: {fileID: 625291839425303857}
   - component: {fileID: 4806527391487847390}
+  - component: {fileID: 1766557733807452455}
+  - component: {fileID: 4493283018755752168}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7914,6 +7916,30 @@ MonoBehaviour:
   owner: {fileID: 0}
   profile: {fileID: 11400000, guid: eebe9d450a89b4245917ac9f23412526, type: 2}
   repeatSeconds: 1
+--- !u!114 &1766557733807452455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6453614356037081260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 066729dce04a0f24282105202b54d2b6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerItemController
+--- !u!114 &4493283018755752168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6453614356037081260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40f359fcaa7ce8647977a4b2ac29ee6f, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
 --- !u!1 &6834106283464222847
 GameObject:
   m_ObjectHideFlags: 0

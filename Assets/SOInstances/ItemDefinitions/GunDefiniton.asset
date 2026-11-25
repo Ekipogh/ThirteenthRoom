@@ -14,8 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemDefinition
   ItemId: gun
   DisplayName: Gun
-  ItemIcon: {fileID: 0}
+  ItemIcon: {fileID: 21300000, guid: d8151627046a57a44b9880955dbc2e0b, type: 3}
   Category: 3
   IsUnique: 1
   IsConsumable: 0
   ScoreOnPickup: 0
+  UseEffect: 2
+  StaminaRestored: 50
+  Ammunition: {fileID: 11400000, guid: 473498d96227e584aa9caa9e620c4afb, type: 2}
+  MagazineCapacity: 6
+  ShotRange: 25
+  ShotCooldown: 0.5
+  StunSeconds: 3
+  ShotAgitation: {fileID: 11400000, guid: 8347e07ec1da93848900bfe8e09e0bd0, type: 2}

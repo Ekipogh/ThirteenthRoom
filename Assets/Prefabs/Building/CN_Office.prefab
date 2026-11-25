@@ -570,6 +570,7 @@ MonoBehaviour:
   itemSpawnPointsParent: {fileID: 740476574645963079}
   lightObjectsParent: {fileID: 6800561772214909679}
   itemNeeds: []
+  objectRequirements: []
 --- !u!65 &6839703096496639273
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5433,15 +5434,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 712299937158896688, guid: 0cc033322c216f6468ac918c54622d0d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.723
+      value: -2.7546
       objectReference: {fileID: 0}
     - target: {fileID: 712299937158896688, guid: 0cc033322c216f6468ac918c54622d0d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.266
+      value: 1.561
       objectReference: {fileID: 0}
     - target: {fileID: 712299937158896688, guid: 0cc033322c216f6468ac918c54622d0d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.7
+      value: 2.6078
       objectReference: {fileID: 0}
     - target: {fileID: 712299937158896688, guid: 0cc033322c216f6468ac918c54622d0d, type: 3}
       propertyPath: m_LocalRotation.w

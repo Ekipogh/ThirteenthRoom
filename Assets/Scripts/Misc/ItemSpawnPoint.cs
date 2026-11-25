@@ -13,6 +13,7 @@ public class ItemSpawnPoint : MonoBehaviour
 
     public bool CanSpawnItem(SpawnItemDefinition itemDefinition)
     {
-        return _available && itemDefinition.ItemDefinition.Category == _itemCategory;
+        return _available && itemDefinition != null && itemDefinition.ItemDefinition != null &&
+            (_itemCategory == ItemCategory.Any || itemDefinition.ItemDefinition.Category == _itemCategory);
     }
 }
