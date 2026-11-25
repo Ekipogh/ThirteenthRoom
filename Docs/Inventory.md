@@ -18,7 +18,7 @@ The player prefab includes `PlayerItemController` and `InventoryUI`. The UI buil
 
 Opening the inventory stops player movement, look, interactions, and item use. It cancels held interactions and releases the cursor. The mansion continues running. Death closes inventory and leaves the cursor available for the game-over UI.
 
-Ordinary items stack by definition. Target-specific keys remain separate; their cells display the last six characters of their target ID. Active slots reference stacks, never move stock, and clear when that stack is exhausted. Reassigning the same stack moves its shortcut.
+Ordinary items stack by definition. Target-specific keys remain separate. Internal target IDs are hidden. Inventory cells and active slots show an optional detail line: safe keys retain their matching safe number (for example, `Safe #2`). Other items can supply `ItemDefinition.InventoryDetail`; instance-specific details override it. Blank details reserve no extra line, and long details use single-line ellipsis. Active slots reference stacks, never move stock, and clear when that stack is exhausted. Reassigning the same stack moves its shortcut.
 
 ## Item tuning
 

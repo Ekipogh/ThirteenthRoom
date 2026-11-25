@@ -195,6 +195,45 @@ public static class InventoryChecks
             eventObject.transform.SetParent(f.Root.transform);
             f.Items.SetInventoryOpen(true); Call(ui, "LateUpdate"); Canvas.ForceUpdateCanvases();
             Check(ui.InventoryPanel.rect.width > 0 && ui.GridContent.childCount >= 2, "Inventory grid lays out actual owned items");
+            var keyDefinition = ScriptableObject.CreateInstance<ItemDefinition>();
+            keyDefinition.DisplayName = "Safe Key";
+            keyDefinition.InventoryDetail = "An old key";
+            try
+            {
+                var keyObject = new GameObject("Numbered key", typeof(SafeKey));
+                keyObject.transform.SetParent(f.Root.transform);
+                var keyPickup = keyObject.GetComponent<SafeKey>();
+                typeof(ItemPickup).GetField("itemDefinition", Private).SetValue(keyPickup, keyDefinition);
+                keyPickup.TargetID = "private-safe-a"; keyPickup.SafeNumber = 2;
+                keyPickup.Interact(f.Interactor);
+                var keyEntry = new InventoryEntry(keyDefinition, "private-safe-a");
+                f.Items.Inventory.AddInstanceItem(keyDefinition, "private-safe-b", "Safe #3");
+                Check(f.Items.Inventory.GetInventoryDetail(keyEntry) == "Safe #2", "Pickup retains safe number in inventory storage");
+                Check(f.Items.Inventory.HasInstanceItem(keyDefinition, "private-safe-a") && !f.Items.Inventory.HasInstanceItem(keyDefinition, "wrong-safe"), "Display metadata preserves exact target matching");
+                Check(f.Items.Inventory.GetInventoryDetail(new InventoryEntry(keyDefinition, "private-safe-b")) == "Safe #3", "Keys retain distinct safe numbers");
+                f.Items.Slots.Assign(0, keyEntry); Call(ui, "LateUpdate");
+                var keyCell = ui.InventoryPanel.Find("ActiveSlot1").GetComponent<InventoryCellUI>();
+                var detail = Get<TMPro.TextMeshProUGUI>(keyCell, "_detail");
+                Check(detail.text == "Safe #2" && detail.gameObject.activeSelf, "Active slot displays safe detail without internal ID");
+                Check(ui.GridContent.GetComponentsInChildren<TMPro.TextMeshProUGUI>().Any(x => x.text == "Safe #2"), "Grid displays numbered key detail");
+                f.Items.Slots.Assign(1, keyEntry); Call(ui, "LateUpdate");
+                Check(!f.Items.Slots[0].HasValue && f.Items.Inventory.Quantity(keyEntry) == 1 && f.Items.Inventory.GetInventoryDetail(f.Items.Slots[1].Value) == "Safe #2", "Moving shortcut preserves detail and quantity");
+                keyCell.Bind(new InventoryEntry(keyDefinition), 1, false, f.Items.Inventory.GetInventoryDetail(new InventoryEntry(keyDefinition)));
+                Check(detail.text == "An old key", "Definition supplies fallback detail");
+                keyCell.Bind(keyEntry, 1, false, new string('W', 150));
+                Check(detail.textWrappingMode == TMPro.TextWrappingModes.NoWrap && detail.overflowMode == TMPro.TextOverflowModes.Ellipsis, "Long details use single-line ellipsis");
+                keyCell.Bind(new InventoryEntry(gun), 1, false);
+                Check(!detail.gameObject.activeSelf && Get<TMPro.TextMeshProUGUI>(keyCell, "_name").rectTransform.anchoredPosition.y == 8, "Missing detail uses name-only layout");
+                keyCell.Bind(null, 0, false);
+                Check(!detail.gameObject.activeSelf, "Empty slots hide detail");
+                f.Items.Slots.Clear(1);
+                f.Items.Inventory.RemoveInstanceItem(keyDefinition, "private-safe-a");
+                f.Items.Inventory.RemoveInstanceItem(keyDefinition, "private-safe-b");
+                f.Items.Inventory.AddInstanceItem(keyDefinition, "unnumbered");
+                Check(f.Items.Inventory.GetInventoryDetail(new InventoryEntry(keyDefinition, "unnumbered")) == "An old key", "Unnumbered instance falls back to authored detail");
+                f.Items.Inventory.RemoveInstanceItem(keyDefinition, "unnumbered");
+            }
+            finally { UnityEngine.Object.DestroyImmediate(keyDefinition); }
             var data = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, position = new Vector2(100, 100) };
             ui.BeginDrag(new InventoryEntry(gun), data); ui.Drop(5); Call(ui, "LateUpdate");
             Check(f.Items.Slots[5]?.Definition == gun && f.Items.Inventory.Quantity(gun) == 1, "Drag and drop assigns without moving inventory stock");

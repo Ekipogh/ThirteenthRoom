@@ -9,7 +9,7 @@ public class InventoryCellUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     int _slot;
     InventoryEntry? _entry;
     Image _background, _icon;
-    TextMeshProUGUI _name, _count, _number, _target;
+    TextMeshProUGUI _name, _count, _number, _detail;
     Outline _outline;
     bool _selected;
     public void Initialize(InventoryUI ui, int slot)
@@ -19,26 +19,29 @@ public class InventoryCellUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         _icon = InventoryUI.Icon(InventoryUI.Rect("Icon", transform, Vector2.zero, new Vector2((size.x - 60) / 2, 43), new Vector2(60, 60)));
         _name = InventoryUI.Label("Name", transform, new Vector2(8, 8), new Vector2(size.x - 16, 30), 18);
         _name.alignment = TextAlignmentOptions.Center;
-        _target = InventoryUI.Label("Target", transform, new Vector2(8, 3), new Vector2(size.x - 16, 18), 14);
-        _target.alignment = TextAlignmentOptions.Center;
-        _target.color = InventoryUI.AccentColor;
+        _detail = InventoryUI.Label("Detail", transform, new Vector2(8, 3), new Vector2(size.x - 16, 18), 14);
+        _detail.alignment = TextAlignmentOptions.Center;
+        _detail.color = InventoryUI.AccentColor;
+        _detail.textWrappingMode = TextWrappingModes.NoWrap;
+        _detail.overflowMode = TextOverflowModes.Ellipsis;
+        _detail.richText = false;
         _count = InventoryUI.Label("StackSize", transform, new Vector2(size.x - 58, 40), new Vector2(50, 26), 20);
         _count.alignment = TextAlignmentOptions.Right; _count.fontStyle = FontStyles.Bold;
         _number = InventoryUI.Label("SlotNumber", transform, new Vector2(8, size.y - 28), new Vector2(46, 24), 18);
         _number.color = InventoryUI.AccentColor;
         _outline = gameObject.AddComponent<Outline>(); _outline.effectDistance = new Vector2(2, -2); _outline.useGraphicAlpha = false;
     }
-    public void Bind(InventoryEntry? entry, int count, bool selected)
+    public void Bind(InventoryEntry? entry, int count, bool selected, string detail = null)
     {
         _entry = entry; _selected = selected;
         _icon.sprite = entry?.Definition != null ? entry.Value.Definition.ItemIcon : null;
         _icon.enabled = _icon.sprite != null;
-        bool targeted = entry.HasValue && entry.Value.IsInstance;
+        bool hasDetail = entry.HasValue && !string.IsNullOrWhiteSpace(detail);
         _name.text = entry.HasValue ? entry.Value.Definition.DisplayName : "Empty";
-        _name.rectTransform.anchoredPosition = new Vector2(8, targeted ? 22 : 8);
-        _name.rectTransform.sizeDelta = new Vector2(((RectTransform)transform).sizeDelta.x - 16, targeted ? 24 : 30);
-        string target = targeted ? entry.Value.TargetID ?? "" : "";
-        _target.text = targeted ? "ID " + (target.Length > 6 ? target.Substring(target.Length - 6) : target) : "";
+        _name.rectTransform.anchoredPosition = new Vector2(8, hasDetail ? 22 : 8);
+        _name.rectTransform.sizeDelta = new Vector2(((RectTransform)transform).sizeDelta.x - 16, hasDetail ? 24 : 30);
+        _detail.text = hasDetail ? detail : "";
+        _detail.gameObject.SetActive(hasDetail);
         _count.text = entry.HasValue ? "x" + count : "";
         _number.text = _slot >= 0 ? (_slot + 1).ToString() : "";
         _background.color = InventoryUI.CellColor;

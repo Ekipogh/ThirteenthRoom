@@ -7,6 +7,7 @@ public class ItemDefinition : ScriptableObject
 {
     public string ItemId;
     public string DisplayName;
+    public string InventoryDetail;
     public Sprite ItemIcon;
     public ItemCategory Category;
     public bool IsUnique;

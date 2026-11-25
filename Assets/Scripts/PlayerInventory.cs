@@ -52,11 +52,20 @@ public class PlayerInventory
         _items[item] = Quantity(item) + quantity;
         Changed?.Invoke();
     }
-    public void AddInstanceItem(ItemDefinition itemDefinition, string targetID)
+    public void AddInstanceItem(ItemDefinition itemDefinition, string targetID, string inventoryDetail = null)
     {
         if (itemDefinition == null) return;
-        _instanceItems.Add(new InstanceItem(itemDefinition, targetID));
+        _instanceItems.Add(new InstanceItem(itemDefinition, targetID, inventoryDetail));
         Changed?.Invoke();
+    }
+    public string GetInventoryDetail(InventoryEntry entry)
+    {
+        if (entry.IsInstance)
+        {
+            var item = _instanceItems.Find(x => x.Definition == entry.Definition && x.TargetID == entry.TargetID);
+            if (!string.IsNullOrWhiteSpace(item?.InventoryDetail)) return item.InventoryDetail;
+        }
+        return entry.Definition != null ? entry.Definition.InventoryDetail : null;
     }
     public bool HasItem(ItemDefinition item) => Quantity(item) > 0;
     public bool HasInstanceItem(ItemDefinition item, string targetID) => item != null && Quantity(new InventoryEntry(item, targetID)) > 0;
@@ -70,7 +79,7 @@ public class PlayerInventory
         Changed?.Invoke();
         return true;
     }
-    public bool RemoveInstanceItem(ItemDefinition item, string targetID)
+    public bool RemoveInstanceItem(ItemDefinition item, string targetID, string inventoryDetail = null)
     {
         int index = _instanceItems.FindIndex(x => x.Definition == item && x.TargetID == targetID);
         if (item == null || index < 0) return false;

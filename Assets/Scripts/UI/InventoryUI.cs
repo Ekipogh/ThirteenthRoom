@@ -151,7 +151,7 @@ public class InventoryUI : MonoBehaviour
             foreach (var entry in _owner.Inventory.Entries)
             {
                 var cell = CreateCell("InventoryItem", _content, Vector2.zero, new Vector2(172, 132));
-                cell.Initialize(this, -1); cell.Bind(entry, _owner.Inventory.Quantity(entry), false); _cells.Add(cell);
+                cell.Initialize(this, -1); cell.Bind(entry, _owner.Inventory.Quantity(entry), false, _owner.Inventory.GetInventoryDetail(entry)); _cells.Add(cell);
             }
             int rows = Mathf.CeilToInt(_cells.Count / 7f);
             _content.sizeDelta = new Vector2(1280, Mathf.Max(420, rows * 144 - 12));
@@ -160,7 +160,7 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < _slots.Count; i++)
         {
             var entry = _owner.Slots[i];
-            _slots[i].Bind(entry, entry.HasValue ? _owner.Inventory.Quantity(entry.Value) : 0, i == _owner.Slots.SelectedIndex);
+            _slots[i].Bind(entry, entry.HasValue ? _owner.Inventory.Quantity(entry.Value) : 0, i == _owner.Slots.SelectedIndex, entry.HasValue ? _owner.Inventory.GetInventoryDetail(entry.Value) : null);
         }
         var selected = _owner.Slots.Selected;
         var definition = selected?.Definition;

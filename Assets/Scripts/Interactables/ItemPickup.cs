@@ -17,6 +17,8 @@ public class ItemPickup : MonoBehaviour, IInteractable, IScoreReceiver
         return $"Press E to pick up {itemDefinition.DisplayName}";
     }
 
+    protected virtual string InventoryDetail => null;
+
     public virtual void Interact(PlayerInteractor playerInteractor)
     {
         if (itemDefinition == null || playerInteractor == null || playerInteractor.Inventory == null) return;
@@ -30,7 +32,7 @@ public class ItemPickup : MonoBehaviour, IInteractable, IScoreReceiver
         }
         if (this is ITargetable targetable)
         {
-            playerInteractor.Inventory.AddInstanceItem(itemDefinition, targetable.TargetID);
+            playerInteractor.Inventory.AddInstanceItem(itemDefinition, targetable.TargetID, InventoryDetail);
         }
         else
         {
