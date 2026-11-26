@@ -21,6 +21,19 @@ public class PlayerInteractor : MonoBehaviour
 
     private PlayerInventory _playerInventory;
     public PlayerInventory Inventory => _playerInventory;
+    bool _inventoryInputBlocked;
+    PlayerItemController _items;
+    bool InputBlocked => _inventoryInputBlocked || (_items != null && !_items.GameplayActive);
+    public void SetInventoryInputBlocked(bool blocked)
+    {
+        _inventoryInputBlocked = blocked;
+        if (!blocked && !InputBlocked) return;
+        _isInteractPressed = false;
+        EndHeldInteraction();
+        _currentInteractableTarget = null;
+        _currentHoldTarget = null;
+        if (interactionPrompt != null) interactionPrompt.gameObject.SetActive(false);
+    }
 
     void Awake()
     {
@@ -40,10 +53,12 @@ public class PlayerInteractor : MonoBehaviour
         }
 
         _playerInventory = new PlayerInventory();
+        _items = GetComponent<PlayerItemController>();
     }
 
     void Update()
     {
+        if (InputBlocked) { SetInventoryInputBlocked(_inventoryInputBlocked); return; }
         CheckForInteractables();
         RefreshInteractButtonState();
         UpdateHeldInteraction();
@@ -51,6 +66,7 @@ public class PlayerInteractor : MonoBehaviour
 
     void OnInteract(InputValue value)
     {
+        if (InputBlocked) { _isInteractPressed = false; EndHeldInteraction(); return; }
         _isInteractPressed = value.isPressed;
 
         if (!_isInteractPressed)

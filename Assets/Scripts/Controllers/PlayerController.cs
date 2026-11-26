@@ -64,7 +64,31 @@ public class PlayerController : MonoBehaviour
     bool _isTorchEnabled = false;
     bool _isInitialized;
 
+    bool _inventoryInputBlocked;
+    PlayerItemController _items;
+    public bool GameplayInputBlocked => _inventoryInputBlocked || (_items != null && !_items.GameplayActive);
     public float Stamina => _stamina;
+
+    public void SetInventoryInputBlocked(bool blocked)
+    {
+        _inventoryInputBlocked = blocked;
+        if (!blocked) return;
+        _moveInput = Vector2.zero;
+        _isSprinting = false;
+        sprintAgitation?.StopContinuous();
+        walkAgitation?.StopContinuous();
+        AudioManager?.SetSprinting(false);
+        AudioManager?.SetRecovering(_stamina < _maxStamina, _stamina / _maxStamina);
+    }
+
+    public bool RestoreStamina(float amount)
+    {
+        if (!float.IsFinite(amount) || amount <= 0f || _stamina >= _maxStamina) return false;
+        _stamina = Mathf.Min(_maxStamina, _stamina + amount);
+        AudioManager?.SetSprinting(_isSprinting && IsMoving());
+        AudioManager?.SetRecovering(!(_isSprinting && IsMoving()) && _stamina < _maxStamina, _stamina / _maxStamina);
+        return true;
+    }
 
     void InitializeStartingRoom()
     {
@@ -99,6 +123,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        _items = GetComponent<PlayerItemController>();
         InitializeStartingRoom();
         _characterController = GetComponent<CharacterController>();
         _colliderRadius = _characterController.radius;
@@ -153,6 +178,7 @@ public class PlayerController : MonoBehaviour
 
     private void ProcessMovement()
     {
+        if (GameplayInputBlocked) { _moveInput = Vector2.zero; _isSprinting = false; }
         bool isSprinting = _isSprinting && IsMoving() && _stamina > 0f;
 
         // Drain stamina if sprinting
@@ -220,7 +246,7 @@ public class PlayerController : MonoBehaviour
 
     void ProcessLook(InputValue value)
     {
-        if (Cursor.lockState != CursorLockMode.Locked) return;
+        if (GameplayInputBlocked || Cursor.lockState != CursorLockMode.Locked) return;
         Vector2 input = value.Get<Vector2>();
         float mouseX = input.x * _lookSpeed;
         float mouseY = input.y * _lookSpeed;
@@ -256,7 +282,7 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         Vector2 input = value.Get<Vector2>();
-        _moveInput = input;
+        _moveInput = GameplayInputBlocked ? Vector2.zero : input;
     }
 
     void OnLook(InputValue value)
@@ -266,7 +292,7 @@ public class PlayerController : MonoBehaviour
 
     void OnSprint(InputValue value)
     {
-        _isSprinting = value.isPressed && _stamina > 0f;
+        _isSprinting = !GameplayInputBlocked && value.isPressed && _stamina > 0f;
     }
 
     Transform GetPitchTransform()
@@ -314,7 +340,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTorch(InputValue value)
     {
-        if (!_isTorchEnabled) return; // Player need to find a torch ingame
+        if (GameplayInputBlocked || !_isTorchEnabled) return; // Player need to find a torch ingame
         if (TorchLight != null && value.isPressed)
         {
             bool isActive = TorchLight.activeSelf;

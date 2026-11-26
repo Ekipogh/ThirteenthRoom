@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum MonsterState { Roaming, Chasing, Searching, Attacking, Investigating }
+public enum MonsterState { Roaming, Chasing, Searching, Attacking, Investigating, Stunned }
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterController : MonoBehaviour
@@ -64,7 +64,7 @@ public class MonsterController : MonoBehaviour
         if (_agent == null || !_agent.isOnNavMesh) return;
         _noiseBonus = Mathf.Max(_noiseBonus, Mathf.Min(Mathf.Max(0f, Activity.MaximumNoiseBonus),
             strength * Mathf.Max(0f, Activity.NoiseBonusPerStrength)));
-        if (IsMaximumHunt || CurrentState == MonsterState.Chasing || CurrentState == MonsterState.Attacking) return;
+        if (IsStunned || IsMaximumHunt || CurrentState == MonsterState.Chasing || CurrentState == MonsterState.Attacking) return;
         if (CurrentState == MonsterState.Investigating && _agitationRemaining > 0f && strength < _agitationStrength) return;
         ChangeState(MonsterState.Investigating);
         _agitationOrigin = origin;
@@ -190,6 +190,33 @@ public class MonsterController : MonoBehaviour
     public Room CurrentRoom => _currentRoom;
     public MonsterState CurrentState { get; private set; }
     public bool IsGameplayActive => Playing;
+    public bool IsStunned => CurrentState == MonsterState.Stunned;
+    public event System.Action StunApplied;
+    public float StunSecondsRemaining => _stunRemaining;
+    float _stunRemaining;
+    bool _searchAfterStun;
+
+    public void ApplyStun(float seconds)
+    {
+        if (!Playing || !gameObject.activeInHierarchy || !float.IsFinite(seconds) || seconds <= 0f) return;
+        if (!IsStunned) _searchAfterStun = CurrentState == MonsterState.Chasing || CurrentState == MonsterState.Attacking || CurrentState == MonsterState.Searching;
+        _stunRemaining = seconds;
+        _impactApplied = true;
+        ChangeState(MonsterState.Stunned);
+        if (_agent != null && _agent.isOnNavMesh) { _agent.ResetPath(); _agent.isStopped = true; _agent.velocity = Vector3.zero; }
+        if (_animator != null) _animator.SetBool("Attack", false);
+        StunApplied?.Invoke();
+        MonsterAudioManager?.PlayPainSound();
+    }
+
+    void AdvanceStun(float deltaTime)
+    {
+        if (!Playing || !IsStunned) return;
+        _stunRemaining = Mathf.Max(0f, _stunRemaining - Mathf.Max(0f, deltaTime));
+        if (_stunRemaining > 0f) return;
+        // Search the last known location; only normal perception or maximum hunt may reveal the player again.
+        ChangeState(_searchAfterStun ? MonsterState.Searching : MonsterState.Roaming);
+    }
     public float MoveSpeed => _agent != null && _agent.isOnNavMesh ? _agent.velocity.magnitude : 0f;
 
     void Awake()
@@ -263,7 +290,7 @@ public class MonsterController : MonoBehaviour
         return CanSeePlayer(!nearby && CurrentState != MonsterState.Chasing);
     }
 
-    public bool CanAttackPlayer() => IsPlayerInAttackReach(attackReach);
+    public bool CanAttackPlayer() => !IsStunned && IsPlayerInAttackReach(attackReach);
 
     bool IsPlayerInAttackReach(float monsterReach)
     {
@@ -339,6 +366,13 @@ public class MonsterController : MonoBehaviour
             _roamAfter += Time.deltaTime;
             _roamPauseStarted += Time.deltaTime;
             _nextProgressCheck += Time.deltaTime;
+            return;
+        }
+        AdvanceStun(Time.deltaTime);
+        if (IsStunned)
+        {
+            _agent.isStopped = true;
+            _previousPosition = transform.position;
             return;
         }
         _agent.isStopped = false;
