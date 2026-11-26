@@ -191,6 +191,7 @@ public class MonsterController : MonoBehaviour
     public MonsterState CurrentState { get; private set; }
     public bool IsGameplayActive => Playing;
     public bool IsStunned => CurrentState == MonsterState.Stunned;
+    public event System.Action StunApplied;
     public float StunSecondsRemaining => _stunRemaining;
     float _stunRemaining;
     bool _searchAfterStun;
@@ -203,7 +204,9 @@ public class MonsterController : MonoBehaviour
         _impactApplied = true;
         ChangeState(MonsterState.Stunned);
         if (_agent != null && _agent.isOnNavMesh) { _agent.ResetPath(); _agent.isStopped = true; _agent.velocity = Vector3.zero; }
-        if (_animator != null) { _animator.SetBool("Attack", false); _animator.speed = 0f; }
+        if (_animator != null) _animator.SetBool("Attack", false);
+        StunApplied?.Invoke();
+        MonsterAudioManager?.PlayPainSound();
     }
 
     void AdvanceStun(float deltaTime)
@@ -211,7 +214,6 @@ public class MonsterController : MonoBehaviour
         if (!Playing || !IsStunned) return;
         _stunRemaining = Mathf.Max(0f, _stunRemaining - Mathf.Max(0f, deltaTime));
         if (_stunRemaining > 0f) return;
-        if (_animator != null) _animator.speed = 1f;
         // Search the last known location; only normal perception or maximum hunt may reveal the player again.
         ChangeState(_searchAfterStun ? MonsterState.Searching : MonsterState.Roaming);
     }

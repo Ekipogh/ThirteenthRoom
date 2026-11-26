@@ -188,13 +188,21 @@ public static class InventoryChecks
             var gameOverPanel = new GameObject("Hidden game-over panel"); gameOverPanel.transform.SetParent(f.Root.transform); gameOverPanel.SetActive(false);
             var eventObject = new GameObject("Existing EventSystem", typeof(EventSystem), typeof(UnityEngine.InputSystem.UI.InputSystemUIInputModule));
             eventObject.transform.SetParent(gameOverPanel.transform);
-            var ui = f.Player.gameObject.AddComponent<InventoryUI>(); ui.enabled = false; Call(ui, "Start");
+            var ui = f.Player.gameObject.AddComponent<InventoryUI>(); ui.enabled = false; Call(ui, "Start"); ui.enabled = true;
             Check(eventObject.activeInHierarchy && EventSystem.current == eventObject.GetComponent<EventSystem>(), "Inventory reuses the inactive game-over EventSystem");
             gameOverPanel.SetActive(true);
             Check(UnityEngine.Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None).Count(x => x.isActiveAndEnabled) == 1, "Showing game-over panel cannot activate a second EventSystem");
             eventObject.transform.SetParent(f.Root.transform);
             f.Items.SetInventoryOpen(true); Call(ui, "LateUpdate"); Canvas.ForceUpdateCanvases();
-            Check(ui.InventoryPanel.rect.width > 0 && ui.GridContent.childCount >= 2, "Inventory grid lays out actual owned items");
+            Check(ui.InventoryPanel.rect.width > 0 && ui.GridContent.childCount >= 2, "Inventory list lays out actual owned items");
+            Check(ui.ItemsContent.GetComponent<UnityEngine.UI.VerticalLayoutGroup>() != null, "Items use a single vertical list");
+            Check(InventoryBlurFeature.TryGetRadius(f.Camera, out float radius) && Mathf.Abs(radius - 8f) < .01f, "Open inventory enables blur only on its camera");
+            var unrelated = new GameObject("Unrelated camera", typeof(Camera)); unrelated.transform.SetParent(f.Root.transform);
+            Check(!InventoryBlurFeature.TryGetRadius(unrelated.GetComponent<Camera>(), out _), "Other cameras cannot inherit inventory blur");
+            f.Items.SetInventoryOpen(false);
+            Check(!InventoryBlurFeature.TryGetRadius(f.Camera, out _), "Closing immediately disables the blur pass");
+            f.Items.SetInventoryOpen(true);
+            Check(Get<TMPro.TextMeshProUGUI>(ui.InventoryPanel.Find("ActiveSlot9").GetComponent<InventoryCellUI>(), "_name").text == "", "Empty slots show no Empty label");
             var keyDefinition = ScriptableObject.CreateInstance<ItemDefinition>();
             keyDefinition.DisplayName = "Safe Key";
             keyDefinition.InventoryDetail = "An old key";
@@ -212,18 +220,20 @@ public static class InventoryChecks
                 Check(f.Items.Inventory.HasInstanceItem(keyDefinition, "private-safe-a") && !f.Items.Inventory.HasInstanceItem(keyDefinition, "wrong-safe"), "Display metadata preserves exact target matching");
                 Check(f.Items.Inventory.GetInventoryDetail(new InventoryEntry(keyDefinition, "private-safe-b")) == "Safe #3", "Keys retain distinct safe numbers");
                 f.Items.Slots.Assign(0, keyEntry); Call(ui, "LateUpdate");
+                ui.ShowSlotHint(keyEntry);
+                Check(Get<TMPro.TextMeshProUGUI>(ui, "_slotHint").text.Contains("Safe #2"), "Compact slot hover exposes its in-world detail");
                 var keyCell = ui.InventoryPanel.Find("ActiveSlot1").GetComponent<InventoryCellUI>();
                 var detail = Get<TMPro.TextMeshProUGUI>(keyCell, "_detail");
-                Check(detail.text == "Safe #2" && detail.gameObject.activeSelf, "Active slot displays safe detail without internal ID");
-                Check(ui.GridContent.GetComponentsInChildren<TMPro.TextMeshProUGUI>().Any(x => x.text == "Safe #2"), "Grid displays numbered key detail");
+                Check(detail.text == "Safe #2" && !detail.gameObject.activeSelf, "Compact slot retains detail without crowding its icon");
+                Check(ui.GridContent.GetComponentsInChildren<TMPro.TextMeshProUGUI>().Any(x => x.text == "Safe #2"), "List displays numbered key detail");
                 f.Items.Slots.Assign(1, keyEntry); Call(ui, "LateUpdate");
                 Check(!f.Items.Slots[0].HasValue && f.Items.Inventory.Quantity(keyEntry) == 1 && f.Items.Inventory.GetInventoryDetail(f.Items.Slots[1].Value) == "Safe #2", "Moving shortcut preserves detail and quantity");
                 keyCell.Bind(new InventoryEntry(keyDefinition), 1, false, f.Items.Inventory.GetInventoryDetail(new InventoryEntry(keyDefinition)));
                 Check(detail.text == "An old key", "Definition supplies fallback detail");
                 keyCell.Bind(keyEntry, 1, false, new string('W', 150));
-                Check(detail.textWrappingMode == TMPro.TextWrappingModes.NoWrap && detail.overflowMode == TMPro.TextOverflowModes.Ellipsis, "Long details use single-line ellipsis");
+                Check(detail.textWrappingMode == TMPro.TextWrappingModes.NoWrap && detail.overflowMode == TMPro.TextOverflowModes.Truncate, "Long details stay on a single clipped line");
                 keyCell.Bind(new InventoryEntry(gun), 1, false);
-                Check(!detail.gameObject.activeSelf && Get<TMPro.TextMeshProUGUI>(keyCell, "_name").rectTransform.anchoredPosition.y == 8, "Missing detail uses name-only layout");
+                Check(!detail.gameObject.activeSelf && !Get<TMPro.TextMeshProUGUI>(keyCell, "_name").gameObject.activeSelf, "Compact slots keep names out of the icon area");
                 keyCell.Bind(null, 0, false);
                 Check(!detail.gameObject.activeSelf, "Empty slots hide detail");
                 f.Items.Slots.Clear(1);
@@ -248,7 +258,16 @@ public static class InventoryChecks
             // Distinct targets exercise scrolling beyond the catalog size without adding content assets.
             for (int i = 0; i < 30; i++) f.Items.Inventory.AddInstanceItem(gun, "fixture-" + i);
             Call(ui, "LateUpdate"); Canvas.ForceUpdateCanvases();
-            Check(ui.GridContent.rect.height > 420, "Inventory grows beyond viewport and remains scrollable");
+            Check(ui.GridContent.rect.height > ((RectTransform)ui.GridContent.parent).rect.height, "Inventory grows beyond viewport and remains scrollable");
+            var scroll = ui.ItemsContent.GetComponentInParent<UnityEngine.UI.ScrollRect>();
+            scroll.OnScroll(new PointerEventData(EventSystem.current) { scrollDelta = new Vector2(0, -4) });
+            Check(scroll.verticalNormalizedPosition < 1f, "Mouse wheel scrolls the long list");
+            f.Items.SetInventoryOpen(true);
+            ui.enabled = false;
+            Check(!f.Items.IsInventoryOpen && !InventoryBlurFeature.TryGetRadius(f.Camera, out _), "Disabling UI closes inventory and disables blur");
+            ui.enabled = true; f.Items.SetInventoryOpen(true);
+            f.Manager.currentState = GameState.GameOver;
+            Check(!InventoryBlurFeature.TryGetRadius(f.Camera, out _), "Death disables blur before the next UI refresh");
         }
         return "UI and pickup passed";
     }

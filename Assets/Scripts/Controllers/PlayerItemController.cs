@@ -8,6 +8,7 @@ public class PlayerItemController : MonoBehaviour
 {
     PlayerInteractor _interactor;
     PlayerController _player;
+    PlayerAudioManager _audio;
     GameManager _manager;
     float _nextShot;
     CursorLockMode _previousLock;
@@ -28,6 +29,7 @@ public class PlayerItemController : MonoBehaviour
     void Start()
     {
         _manager = FindFirstObjectByType<GameManager>();
+        _audio = GetComponent<PlayerAudioManager>();
         Slots = new ActiveItemSlots(Inventory);
         Slots.Changed += Notify;
         Inventory.Changed += Notify;
@@ -60,7 +62,7 @@ public class PlayerItemController : MonoBehaviour
     void Update()
     {
         if (Slots == null) return;
-        if (!GameplayActive) { SetInventoryOpen(false); return; }
+        if (!GameplayActive) { _audio?.StopItemSounds(); SetInventoryOpen(false); return; }
         if (!string.IsNullOrEmpty(Feedback) && Time.unscaledTime >= _feedbackUntil) { Feedback = ""; Notify(); }
         var keyboard = Keyboard.current;
         if (keyboard != null)
@@ -80,6 +82,7 @@ public class PlayerItemController : MonoBehaviour
     {
         if (!CanUse(out var entry) || entry.Definition.UseEffect != ItemUseEffect.Gun) return false;
         int loaded = Inventory.Reload(entry.Definition);
+        if (loaded > 0) _audio?.PlayWeaponReload(entry.Definition.ReloadSound);
         ShowFeedback(loaded > 0 ? "Reloaded" : Inventory.LoadedRounds(entry.Definition) >= entry.Definition.MagazineCapacity ? "Already loaded" : "No ammunition");
         return loaded > 0;
     }
@@ -96,6 +99,7 @@ public class PlayerItemController : MonoBehaviour
         {
             if (!_player.RestoreStamina(item.StaminaRestored)) { ShowFeedback("Stamina is full"); return false; }
             Inventory.RemoveItem(item);
+            PlayUseFeedback(item);
             ShowFeedback("Stamina restored");
             return true;
         }
@@ -104,7 +108,7 @@ public class PlayerItemController : MonoBehaviour
         if (camera == null) return false;
         if (!Inventory.ConsumeLoadedRound(item)) { ShowFeedback("Empty - press R to reload"); return false; }
         _nextShot = Time.time + Mathf.Max(0f, item.ShotCooldown);
-        if (item.ShotAgitation != null) _manager?.ReportAgitation(transform.position, item.ShotAgitation);
+        PlayUseFeedback(item);
         var ray = new Ray(camera.transform.position, camera.transform.forward);
         var hits = Physics.RaycastAll(ray, Mathf.Max(0f, item.ShotRange), ~0, QueryTriggerInteraction.Collide);
         Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
@@ -121,8 +125,13 @@ public class PlayerItemController : MonoBehaviour
         ShowFeedback("Shot fired");
         return true;
     }
+    void PlayUseFeedback(ItemDefinition item)
+    {
+        _audio?.PlayItemUseSound(item.UseSound);
+        if (item.UseAgitation != null) _manager?.ReportAgitation(transform.position, item.UseAgitation);
+    }
     void ShowFeedback(string message) { Feedback = message; _feedbackUntil = Time.unscaledTime + 1.8f; Notify(); }
-    void OnDisable() { if (IsInventoryOpen) SetInventoryOpen(false); }
+    void OnDisable() { _audio?.StopItemSounds(); if (IsInventoryOpen) SetInventoryOpen(false); }
     void OnDestroy()
     {
         if (Slots != null) { Slots.Changed -= Notify; Slots.Dispose(); }

@@ -10,6 +10,7 @@ public class MonsterAudioManager : MonoBehaviour
     [SerializeField] GameObject AlertSoundsObject;
     [SerializeField] AudioSource ChaseAudioSource;
     [SerializeField] AudioSource BreathingAudioSource;
+    [SerializeField] GameObject PainSoundsObject;
 
     [SerializeField, Min(0.01f)] float VocalFadeDuration = 0.35f;
 
@@ -23,6 +24,7 @@ public class MonsterAudioManager : MonoBehaviour
 
     List<AudioSource> _footstepAudioSources;
     List<AudioSource> _alertSoundSources;
+    List<AudioSource> _painSoundSources;
     float _distanceTraveled;
 
     void Awake()
@@ -40,6 +42,11 @@ public class MonsterAudioManager : MonoBehaviour
         if (AlertSoundsObject != null)
         {
             _alertSoundSources.AddRange(AlertSoundsObject.GetComponentsInChildren<AudioSource>());
+        }
+        _painSoundSources = new();
+        if (PainSoundsObject != null)
+        {
+            _painSoundSources.AddRange(PainSoundsObject.GetComponentsInChildren<AudioSource>());
         }
     }
 
@@ -95,6 +102,21 @@ public class MonsterAudioManager : MonoBehaviour
             _alertPaused = false;
             alertSource.loop = false;
             alertSource.Play();
+        }
+    }
+
+    public void PlayPainSound()
+    {
+        if (_painSoundSources.Count == 0)
+        {
+            return;
+        }
+        int index = Random.Range(0, _painSoundSources.Count);
+        AudioSource painSource = _painSoundSources[index];
+        if (painSource.clip != null)
+        {
+            painSource.loop = false;
+            painSource.Play();
         }
     }
 

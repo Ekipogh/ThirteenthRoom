@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerAudioManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class PlayerAudioManager : MonoBehaviour
     [SerializeField] AudioSource GaspAudioSource;
     [SerializeField, Min(0f)] float GaspVolumeMultiplier = 3f;
     [SerializeField] AudioSource PickupAudioSource;
+
+    [Header("Item Sources")]
+    [SerializeField, FormerlySerializedAs("WeaponFireAudioSource")] AudioSource ItemUseAudioSource;
+    [SerializeField] AudioSource WeaponReloadAudioSource;
 
     [Header("Breathing Settings")]
     [SerializeField, Min(0.01f)] float BreathingFadeDuration = 0.35f;
@@ -241,6 +246,29 @@ public class PlayerAudioManager : MonoBehaviour
             footstepSource.PlayOneShot(footstepSource.clip);
         }
     }
+
+    public void PlayItemUseSound(AudioClip clip)
+    {
+        if (isActiveAndEnabled && clip != null && ItemUseAudioSource != null)
+            ItemUseAudioSource.PlayOneShot(clip);
+    }
+
+    public void PlayWeaponReload(AudioClip clip)
+    {
+        if (!isActiveAndEnabled || clip == null || WeaponReloadAudioSource == null) return;
+        // Reload remains instant; another valid reload restarts this sound instead of stacking voices.
+        WeaponReloadAudioSource.Stop();
+        WeaponReloadAudioSource.clip = clip;
+        WeaponReloadAudioSource.Play();
+    }
+
+    public void StopItemSounds()
+    {
+        ItemUseAudioSource?.Stop();
+        WeaponReloadAudioSource?.Stop();
+    }
+
+    void OnDisable() => StopItemSounds();
 
     public void PlayPickupSound(AudioClip clip)
     {

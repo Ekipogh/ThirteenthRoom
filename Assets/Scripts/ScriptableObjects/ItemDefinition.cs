@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum ItemUseEffect { None, StaminaPotion, Gun }
 
@@ -22,5 +23,11 @@ public class ItemDefinition : ScriptableObject
     [Min(0f)] public float ShotRange = 25f;
     [Min(0f)] public float ShotCooldown = 0.5f;
     [Min(0f)] public float StunSeconds = 3f;
-    public AgitationProfile ShotAgitation;
+    public AudioClip ReloadSound;
+
+    [Header("Use Feedback")]
+    [Tooltip("Optional sound played after a successful item use.")]
+    [FormerlySerializedAs("ShotSound")] public AudioClip UseSound;
+    [Tooltip("Optional noise reported to nearby monsters after a successful item use. Independent of the audible sound.")]
+    [FormerlySerializedAs("ShotAgitation")] public AgitationProfile UseAgitation;
 }
